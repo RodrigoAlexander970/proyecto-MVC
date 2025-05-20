@@ -1,13 +1,10 @@
 <?php
-	include_once('Producto.php');
-	include_once('nivelesCarrera.php');
-	include_once('contactos.php');
-	include_once('usuarios.php');
-	include_once('Response.php');
+	
+	include_once('Utilities/Response.php'); // Para definir los códigos de estado/respuesta
 
 	require 'vistas/VistaXML.php';
 	require 'vistas/VistaJson.php';
-	require 'utilidades/ExcepcionApi.php';
+	require 'Utilities/ExcepcionApi.php';
 
 	// Preparar manejo de excepciones
 	$formato = isset($_GET['formato']) ? $_GET['formato'] : 'json';
@@ -22,7 +19,8 @@
 	}
 
 	// Definir el encabezado de la respuesta
-	set_exception_handler(function ($exception) use ($vista) {
+	/*set_exception_handler(function ($exception) use ($vista) {
+		
 	    $cuerpo = array(
 	        "estado" => $exception->estado,
 	        "mensaje" => $exception->getMessage()
@@ -36,7 +34,7 @@
 	    $vista->imprimir($cuerpo);
 		}
 	);
-	
+	*/
 	// Arreglo con los recursos existentes de la api
 	$recursos_validos = array('medicos', 'pacientes', 'citas', 'especialidades', 'historiales');
 
@@ -57,73 +55,9 @@
 
 	// Obtenemos el método de la petición
 	$request_method = strtolower($_SERVER['REQUEST_METHOD']);
-
 	
-	/*
-	echo "<hr><br/><br/>"; 
-
-	function getproducto($id){
-		return "<br/>Se ejecutó getproducto: {$id} <br/>";
-	}
-
-	function postproducto($obj){
-		return "<br/>Se ejecutó postproducto <br/>";
-	}
-
-	function deleteproducto($id){
-		return "<br/>Se ejecutó deleteproducto <br/>";
-	}
-
-	function putproducto($obj){
-		return "<br/>Se ejecutó putproducto <br/>";
-	}
-	*/
-
-	/*
-	$resultado = call_user_func(strtolower($request_method . $recurso), $parameters[0]);
-
-	echo $resultado . "<br />";
-*/
-/*
-	
-	if (method_exists($recurso, $request_method)) {
-		$resultado = call_user_func(array($recurso, $request_method), $parameters[0]);
-
-		
-		//	GET localhost:8080/producto/2/3
-	
-		$nombre_clase = $recurso;   //$recurso='producto'
-		$nombre_clase::$request_method($parameters[0]);
-		//    producto::get(2);
-
-	}
-*/
-
-/*
-	echo "<br /> parameters[0]" . $parameters[0];
-	echo "<br /> isset: " . isset($parameters); 
-	echo "<br /> isnull: " . is_null($parameters);
-	echo "<br /> empty: " . empty($parameters);
-	echo "<br /> count: " . count($parameters)  . "<br />";
-
-	print "validar con empty: ";
-	print empty($parameters) ? "verdadero" : "falso";
-	print "<br />";
-
-	print "validar con isnull: ";
-	print is_null($parameters) ? "verdadero" : "falso";
-	print "<br />";
-*/
-
-/*
-get localhost/producto/par1/par2
-pathinfo = producto/par1/par2
-$recurso = producto
-$parameters [par1, par2]
-*/
-
-	$nombre_clase = $recurso;  
-
+	$nombre_clase = ucfirst($recurso) . 'Controller';  
+	require_once __DIR__ . '/Controllers/' . ucfirst($recurso) . 'Controller.php';
 	switch ($request_method){
 		case 'get':
 		case 'post':
@@ -134,13 +68,13 @@ $parameters [par1, par2]
 			$vista->imprimir($respuesta);
 			break;
 		}
-		default:
+		/*default:
 			// Método no aceptado
 			$vista->estado = 405;
 			$cuerpo = [
 				"estado" => ESTADO_METODO_NO_PERMITIDO,
 				"mensaje" => utf8_encode("Método no permitido")
 			];
-			$vista->imprimir($cuerpo);
+			$vista->imprimir($cuerpo);*/
 	}
 ?> 

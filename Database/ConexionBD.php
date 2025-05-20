@@ -4,7 +4,8 @@
  * para el manejo de la base de controladores
  */
 
-    require_once 'login_mysql.php';
+// Para cargar las credenciales de la base de datos
+require_once 'login_mysql.php';
 
 
 class ConexionBD
