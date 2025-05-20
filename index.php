@@ -1,32 +1,9 @@
 <?php
-
-	/***
-	 * Modificar el código para que las funciones sean métodos de una clase llamada Producto.
-	 * Usar una función php para llamar al método correspondiente de la clase Producto,
-	 * dependiendo del método http usado en la solicitud. Ejemplo:
-	 * 
-	 *     Petición				|		Método a ejecutar
-	 * -------------------------------------------------------------
-	 * GET localhost/producto/1       	Producto::get(10) 
-	 * POST localhost/producto/		  	Producto::post({"id":2, "nombre":"laptop", "precio":10000})
-	 *  body: 
-	 * 		{"id":2, 
-	 * 		 "nombre":"laptop", 
-	 * 		 "precio":10000}
-	 * 
-	 * PUT localhost/producto/		  	Producto::post({"id":2, "nombre":"Computadora de escritorio", "precio":15000})
-	 *  body: 
-	 * 		{"id":2, 
-	 * 		 "nombre":"Computadora de escritorio", 
-	 * 		 "precio":15000}
-	 * 
-	 * DELETE localhost/producto/2    	Producto::delete(2) 
-	 */
-
 	include_once('Producto.php');
 	include_once('nivelesCarrera.php');
 	include_once('contactos.php');
 	include_once('usuarios.php');
+	include_once('Response.php');
 
 	require 'vistas/VistaXML.php';
 	require 'vistas/VistaJson.php';
@@ -44,6 +21,7 @@
 			$vista = new VistaJson();
 	}
 
+	// Definir el encabezado de la respuesta
 	set_exception_handler(function ($exception) use ($vista) {
 	    $cuerpo = array(
 	        "estado" => $exception->estado,
@@ -58,38 +36,29 @@
 	    $vista->imprimir($cuerpo);
 		}
 	);
+	
+	// Arreglo con los recursos existentes de la api
+	$recursos_validos = array('medicos', 'pacientes', 'citas', 'especialidades', 'historiales');
 
-	$recursos_validos = array('producto', 'persona', 'nivelesCarrera', 'contactos', 'usuarios');
-/*
-	echo "Hola mundo<br/>";
-	echo $_GET['PATH_INFO'];
-	echo "<br/> {$_SERVER['REQUEST_METHOD'] } ";
-*/
-
+	// Obtenemos los parametros de la URL
 	$parameters = explode('/',$_GET['PATH_INFO']);
+
+	// Obtenemos el recurso
 	$recurso = $parameters[0];
 
-	//valido si el recurso es válido
+	// Validamos que el recurso sea válido
 	if (!in_array($recurso, $recursos_validos)) {
- 		//generar exception
-		//throw new ExcepcionApi(404, $e->getMessage());
- 		exit(0);
+ 		// Lanzamos una excepción
+		throw new ExcepcionApi(Response::STATUS_NOT_FOUND, "Recurso no encontrado");
 	}
 
+	// Elimniamos el recurso de la lista de parámetros
 	$parameters = array_slice($parameters, 1);
 
-	//$recurso = array_shift($parameters);
-	//echo "<br/><br/>" . $parameters . '<br/>';
-	//print_r($parameters);
-
-/*
-	echo "<br/><br/>";
-    print_r($parameters);
-	echo "<br/><br/>";
-*/
-
+	// Obtenemos el método de la petición
 	$request_method = strtolower($_SERVER['REQUEST_METHOD']);
 
+	
 	/*
 	echo "<hr><br/><br/>"; 
 
