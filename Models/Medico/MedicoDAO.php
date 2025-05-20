@@ -34,9 +34,8 @@ class MedicoDAO
             self::$conexion = ConexionBD::obtenerInstancia()->obtenerBD();
         }
     }
-    public function __construct()
-    {
-    }
+
+    public function __construct() { }
     /**
      * Obtiene todos los medicos de la base de datos.
      * @return array Arreglo de objetos Medico.

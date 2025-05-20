@@ -36,7 +36,7 @@
 	);
 	*/
 	// Arreglo con los recursos existentes de la api
-	$recursos_validos = array('medicos', 'pacientes', 'citas', 'especialidades', 'historiales');
+	$recursos_validos = array('medicos', 'pacientes', 'citas', 'especialidades', 'historiales', 'especialidades');
 
 	// Obtenemos los parametros de la URL
 	$parameters = explode('/',$_GET['PATH_INFO']);
