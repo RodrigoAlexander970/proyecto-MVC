@@ -1,15 +1,12 @@
 <?php
 include_once (__DIR__ . '/../Services/MedicosService.php');
-if (!class_exists('MedicosService')) {
-    echo "La clase MedicosService no existe después de incluir el archivo";
-    // También puedes imprimir cuáles clases están disponibles
-    print_r(get_declared_classes());
-}
 include_once(__DIR__.'/../Utilities/Response.php');
 include_once(__DIR__.'/../Utilities/ExcepcionApi.php');
 
 class MedicosController
 {
+
+
     // Almacena el servicio de médicos
     private static $service;
 
@@ -31,10 +28,16 @@ class MedicosController
     {
         self::init();
 
-        if (count($params) == 0) {
-            // Se obtienen todos los médicos
-            
-            return self::$service->obtener($params);
+        // Depende de la cantidad de parámetros, se obtienen diferentes resultados
+        switch(count($params)) {
+            // Se obtienen los médicos
+            case 0:
+            case 1:
+                return self::$service->obtener($params);
+            break;
+
+            default:
+                throw new ExcepcionApi(Response::STATUS_BAD_REQUEST, "Número de parámetros inválido");
         }
     }
 }

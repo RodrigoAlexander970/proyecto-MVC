@@ -34,7 +34,10 @@ class MedicosService
             // Se obtienen todos los médicos
             case 0:
                 return self::$dao->todos();
-            
+            break;
+            case 1:
+                return self::$dao->porID($params[0]);
+            break;
             // Se lanza error
             default:
                 throw new ExcepcionApi(Response::STATUS_TOO_MANY_PARAMETERS, "Número de parámetros inválido");

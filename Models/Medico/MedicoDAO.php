@@ -79,4 +79,42 @@ class MedicoDAO
         // Retornamos el arreglo de objetos Medico
         return $medicos;
     }
+
+    // Método para obtener un médico por su ID
+    public static function porID($id) {
+        self::init();
+
+        // Elaboramos la consulta
+        $sql = "SELECT * FROM ". self::$NOMBRE_TABLA . " WHERE ". self::$ID_MEDICO . " = ?";
+
+        // Preparamos la consulta
+        $stmt = self::$conexion->prepare($sql);
+        $stmt->bindParam(1, $id, PDO::PARAM_INT);
+
+        // Ejecutamos la consulta
+        $stmt -> execute();
+
+        // Obtenemos el resultado
+        $resultado = $stmt -> fetch(PDO::FETCH_ASSOC);
+
+        // Verificamos si se encontró al medico
+        if( !$resultado ) {
+            throw new ExcepcionApi(Response::STATUS_NOT_FOUND, "No se encontró el médico con ID: $id");
+        }
+        
+        // Convertimos a objeto Medico
+        $medico = new Medico();
+        $medico->setIdMedico($resultado[self::$ID_MEDICO]);
+        $medico->setIdEspecialidad($resultado[self::$ID_ESPECIALIDAD]);
+        $medico->setNombre($resultado[self::$NOMBRE]);
+        $medico->setApellidos($resultado[self::$APELLIDOS]);
+        $medico->setCedulaProfesional($resultado[self::$CEDULA_PROFESIONAL]);
+        $medico->setEmail($resultado[self::$EMAIL]);
+        $medico->setTelefono($resultado[self::$TELEFONO]);
+        $medico->setPassword($resultado[self::$PASSWORD]);
+        $medico->setFechaRegistro($resultado[self::$FECHA_REGISTRO]);
+        $medico->setActivo($resultado[self::$ACTIVO]);
+
+        return $medico;
+    }
 }

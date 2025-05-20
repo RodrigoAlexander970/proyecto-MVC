@@ -11,4 +11,5 @@ class Response
     const STATUS_TOO_MANY_PARAMETERS = 422;
 
     const STATUS_INTERNAL_SERVER_ERROR = 500;
+    const STATUS_BAD_REQUEST = 400;
 }
