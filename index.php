@@ -19,11 +19,11 @@
 	}
 
 	// Definir el encabezado de la respuesta
-	set_exception_handler(function ($exception) use ($vista) {
+	/*set_exception_handler(function ($exception) use ($vista) {
 		
 	    $cuerpo = array(
-	        "estado" => $exception->estado,
-	        "mensaje" => $exception->getMessage()
+	        "status" => $exception->status,
+	        "message" => $exception->getMessage()
 	    );
 	    if ($exception->getCode()) {
 	        $vista->estado = $exception->getCode();
@@ -34,7 +34,7 @@
 	    $vista->imprimir($cuerpo);
 		}
 	);
-	
+	*/
 	// Arreglo con los recursos existentes de la api
 	$recursos_validos = array('medicos', 'pacientes', 'citas', 'especialidades', 'historiales');
 

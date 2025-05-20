@@ -101,7 +101,7 @@ class MedicoDAO
         if( !$resultado ) {
             throw new ExcepcionApi(Response::STATUS_NOT_FOUND, "No se encontró el médico con ID: $id");
         }
-        
+
         // Convertimos a objeto Medico
         $medico = new Medico();
         $medico->setIdMedico($resultado[self::$ID_MEDICO]);
@@ -117,4 +117,136 @@ class MedicoDAO
 
         return $medico;
     }
+
+    /**
+     * Crea un medico en la base de datos
+     *  @param Medico $medico Objeto Medico a registrar
+     */
+
+     public static function crear($medico) {
+        self::init();
+
+        // Elaboramos la consulta
+        $sql = "INSERT INTO "
+        . self::$NOMBRE_TABLA . " ("
+        . self::$ID_ESPECIALIDAD . ", "
+        . self::$NOMBRE . ", "
+        . self::$APELLIDOS . ", "
+        . self::$CEDULA_PROFESIONAL . ", "
+        . self::$EMAIL . ", "
+        . self::$TELEFONO . ", "
+        . self::$PASSWORD 
+        . ") VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
+        // Preparamos la consulta
+        $stmt = self::$conexion->prepare($sql);
+        
+        // Recuperamos variables del objeto Medico
+        $idEspecialidad = $medico->getIdEspecialidad();
+        $nombre = $medico->getNombre();
+        $apellidos = $medico->getApellidos();
+        $cedulaProfesional = $medico->getCedulaProfesional();
+        $email = $medico->getEmail();
+        $telefono = $medico->getTelefono();
+        $password = $medico->getPassword();
+
+        // Vinculamos los parámetros a la consulta
+        $stmt->bindParam(1, $idEspecialidad, PDO::PARAM_INT);
+        $stmt->bindParam(2, $nombre, PDO::PARAM_STR);
+        $stmt->bindParam(3, $apellidos, PDO::PARAM_STR);
+        $stmt->bindParam(4, $cedulaProfesional, PDO::PARAM_STR);
+        $stmt->bindParam(5, $email, PDO::PARAM_STR);
+        $stmt->bindParam(6, $telefono, PDO::PARAM_STR);
+        $stmt->bindParam(7, $password, PDO::PARAM_STR);
+        
+        // Ejecutamos la consulta
+        $stmt->execute();
+
+        // Revisamos que se haya ejecutado con exito
+        if ($stmt->rowCount() > 0) {
+            // Obtenemos el ID del médico creado
+            $medico->setIdMedico(self::$conexion->lastInsertId());
+            return $medico;
+        } else {
+            return null;
+        }
+     }
+
+     /**
+      * Actualiza un médico en la base de datos
+      * @param Medico $medico Objeto Medico a actualizar
+      * @return bool true si se actualizó correctamente, false en caso contrario
+      */
+      public static function actualizar($medico) {
+        self::init();
+
+        // Elaboramos la consulta
+        $sql = "UPDATE ". self::$NOMBRE_TABLA . " SET "
+        . self::$ID_ESPECIALIDAD . " = ?, "
+        . self::$NOMBRE . " = ?, "
+        . self::$APELLIDOS . " = ?, "
+        . self::$CEDULA_PROFESIONAL . " = ?, "
+        . self::$EMAIL . " = ?, "
+        . self::$TELEFONO . " = ?, "
+        . self::$PASSWORD . " = ? WHERE ". self::$ID_MEDICO . " = ?";
+
+        // Preparamos la consulta
+        $stmt = self::$conexion->prepare($sql);
+
+        // Recuperamos variables del objeto Medico
+        $idMedico = $medico->getIdMedico();
+        $idEspecialidad = $medico->getIdEspecialidad();
+        $nombre = $medico->getNombre();
+        $apellidos = $medico->getApellidos();
+        $cedulaProfesional = $medico->getCedulaProfesional();
+        $email = $medico->getEmail();
+        $telefono = $medico->getTelefono();
+        $password = $medico->getPassword();
+
+        // Vinculamos los parámetros a la consulta
+        $stmt->bindParam(1, $idEspecialidad, PDO::PARAM_INT);
+        $stmt->bindParam(2, $nombre, PDO::PARAM_STR);
+        $stmt->bindParam(3, $apellidos, PDO::PARAM_STR);
+        $stmt->bindParam(4, $cedulaProfesional, PDO::PARAM_STR);
+        $stmt->bindParam(5, $email, PDO::PARAM_STR);
+        $stmt->bindParam(6, $telefono, PDO::PARAM_STR);
+        $stmt->bindParam(7, $password, PDO::PARAM_STR);
+        $stmt->bindParam(8, $idMedico, PDO::PARAM_INT);
+
+        
+        // Ejecutamos la consulta
+        $stmt->execute();
+
+        // Verificamos si se actualizó correctamente
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+      }
+
+     /**
+      * Elimina un médico de la base de datos
+      * @param int $id ID del médico a eliminar
+      * @return bool true si se eliminó correctamente, false en caso contrario
+      */
+      public static function borrar($id_medico){
+        self::init();
+
+        // Elaboramos la consulta
+        $sql = "DELETE FROM ". self::$NOMBRE_TABLA . " WHERE ". self::$ID_MEDICO . " = ?";
+        // Preparamos la consulta
+        $stmt = self::$conexion->prepare($sql);
+        $stmt->bindParam(1, $id_medico, PDO::PARAM_INT);
+
+        // Ejecutamos la consulta
+        $stmt->execute();
+
+        // Verificamos si se eliminó correctamente
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+      }
 }

@@ -4,12 +4,10 @@ class ExcepcionApi extends Exception
 {
     public $estado;
 
-    public function __construct($estado = 400, $mensaje, $codigo = 400)
+    public function __construct($status = 400, $message)
     {
-        $this->estado = $estado;
-        $this->message = $mensaje;
-        $this->code = $codigo;
+        $this->estado = $status;
+        $this->message = $message;
     }
-
 }
 ?>

@@ -14,11 +14,27 @@ class VistaJson extends VistaApi
      */
     public function imprimir($cuerpo)
     {
-        if ($this->estado) {
-            http_response_code($this->estado);
+        // Detecta si ya tiene la estructura estándar
+        $isStandard = is_array($cuerpo)
+            && array_key_exists('success', $cuerpo)
+            && array_key_exists('status', $cuerpo)
+            && array_key_exists('message', $cuerpo)
+            && array_key_exists('data', $cuerpo);
+
+        if (!$isStandard) {
+            $status = $this->estado ?: 200;
+            $success = $status >= 200 && $status < 300;
+            $cuerpo = [
+                "success" => $success,
+                "status" => $status,
+                "message" => $success ? "Operación exitosa" : "Error",
+                "data" => $cuerpo
+            ];
         }
+
+        http_response_code($cuerpo['status']);
         header('Content-Type: application/json; charset=utf8');
-        echo json_encode($cuerpo, JSON_PRETTY_PRINT);
+        echo json_encode($cuerpo, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         exit;
     }
 }
