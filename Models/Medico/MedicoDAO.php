@@ -26,8 +26,9 @@ class MedicoDAO
 
     // Conexión a la base de datos
     private static $conexion;
+
     // Instanciamos la conexión a la base de datos
-    
+
     public static function init(){
         if (self::$conexion === null) {
             self::$conexion = ConexionBD::obtenerInstancia()->obtenerBD();
