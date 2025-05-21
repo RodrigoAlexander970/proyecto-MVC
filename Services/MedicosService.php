@@ -5,119 +5,145 @@ include_once (__DIR__.'/../Utilities/Response.php');
 include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
 
 /**
- * Clase que representa el servicio de médicos.
- * Esta clase contiene métodos para interactuar con el DAO de médicos.
+ * Servicio para operaciones con médicos
  */
 class MedicosService
 {
-    private static $dao;
+    private $medicoDAO;
 
-    public static function init(){
-        if (self::$dao === null) {
-            self::$dao = new MedicoDAO();
-        }
-    }
+    public function __construct(MedicoDAO $medicoDAO = null) {
+        $this -> medicoDAO = $medicoDAO ?: new MedicoDAO();
+     }
 
-    public function __construct() { }
-
-    /**
-     * Método para obtener médicos de la base de datos.
-     * @param array $params Parámetros para la consulta.
-     * @return array|Response Resultado de la consulta.
+/**
+     * Obtiene médicos según los parámetros
+     * 
+     * @param array $params Parámetros de la consulta
+     * @return array|Medico Lista de médicos o un médico específico
+     * @throws ExcepcionApi Si los parámetros son inválidos
      */
-    public static function obtener($params)
+    public function obtener($params)
     {
-        self::init();
-
-        // Switch para determinar la acción en base al numero de parámetros
+        /* Switch para determinar la acción en base al numero de parámetros
+        * 0 parametros: devuelve todos los médicos
+        * 1 parámetro: devuelve un médico específico
+        * 2 o más parámetros: lanza un error
+        */
         switch( count($params) ) {
-            // Se obtienen todos los médicos
             case 0:
-                return self::$dao->todos();
+                return $this -> formatearRespuesta(
+                    Response::STATUS_OK,
+                    'Médicos obtenidos correctamente',
+                    $this->medicoDAO->todos()
+                );
             break;
-            case 1:
-                return self::$dao->porID($params[0]);
+                        case 1:
+                return $this->formatearRespuesta(
+                    Response::STATUS_OK,
+                    "Médico obtenido correctamente",
+                    $this->medicoDAO->porID($params[0])
+                );
             break;
-            // Se lanza error
             default:
-                throw new ExcepcionApi(Response::STATUS_TOO_MANY_PARAMETERS, "Número de parámetros inválido");
+                throw new ExcepcionApi(
+                    Response::STATUS_BAD_REQUEST, 
+                    "Número de parámetros inválido"
+                );
         }
     }
 
     /**
      * Método para crear un nuevo médico.
-     * @param Medico $medico Objeto médico a crear.
+     * @param Medico $medico Médico a crear.
+     * @return array Respuesta formateada
      */
-    public static function crear($medico)
+    public function crear($medico)
     {
-        self::init();
-
         // Llamamos a la función crear del DAO
-        $resultado = self::$dao->crear($medico);
+        $resultado = $this::$medicoDAO->crear($medico);
 
         // Verificamos si se creó correctamente
         if ($resultado) {
-            
-            $respuesta = [
-                "status" => Response::STATUS_CREATED,
-                "mensaje" => "Médico creado correctamente",
-                "data" => $resultado
-            ];
+            return $this->formatearRespuesta(
+                Response::STATUS_CREATED,
+                "Médico creado correctamente",
+                $resultado
+            );
         } else {
-            $respuesta = [
-                "status" => Response::STATUS_INTERNAL_SERVER_ERROR,
-                "mensaje" => "Error al crear el médico"
-            ];
+            throw new ExcepcionApi(
+                Response::STATUS_INTERNAL_SERVER_ERROR,
+                "Error al crear el médico"
+            );
         }
-
-        return $respuesta;
     }
 
     /**
-     * Actualiza un médico existente.
-     * @param Medico $medico Objeto médico con los datos actualizados.
+     * Actualiza un médico existente
+     * 
+     * @param Medico $medico Médico con datos actualizados
+     * @return array Respuesta formateada
      */
-
-    public static function actualizar($medico) {
-        self::init();
-
+    public function actualizar($medico) {
         // Llamamos a la función actualizar del DAO
-        $resultado = self::$dao->actualizar($medico);
+        $resultado = $this->medicoDAO->actualizar($medico);
 
         if ($resultado) {
-            $respuesta = [
-                "status" => Response::STATUS_OK,
-                "message" => "Médico actualizado correctamente"
-            ];
+            return $this->formatearRespuesta(
+                Response::STATUS_OK,
+                "Médico actualizado correctamente"
+            );
         } else {
-           throw new ExcepcionApi(Response::STATUS_INTERNAL_SERVER_ERROR, "Error al actualizar el médico");
+           throw new ExcepcionApi(
+            Response::STATUS_INTERNAL_SERVER_ERROR,
+            "Error al actualizar el médico");
         }
 
         return $respuesta;
     }
-    /**
-     * Método para borrar un médico.
-     * @param int $id ID del médico a borrar.
-     */
-    public static function borrar($id){
-        self::init();
 
+    /**
+     * Elimina un médico
+     * 
+     * @param int $id ID del médico a eliminar
+     * @return array Respuesta formateada
+     */
+    public function borrar($id){
         // Llamamos a la función borrar del DAO
-        $resultado = self::$dao->borrar($id);
+        $resultado = $this->medicoDAO->borrar($id);
 
         // Verificamos si se borró correctamente
         if ($resultado) {
-            $respuesta = [
-                "status" => Response::STATUS_OK,
-                "message" => "Médico borrado correctamente"
-            ];
+            return $this->formatearRespuesta(
+                Response::STATUS_OK,
+                "Médico borrado correctamente"
+            );
         } else {
-            $respuesta = [
-                "status" => Response::STATUS_INTERNAL_SERVER_ERROR,
-                "mensaje" => "Error al borrar el médico"
-            ];
+            throw new ExcepcionApi(
+                Response::STATUS_INTERNAL_SERVER_ERROR,
+                "Error al eliminar el médico"
+            );
         }
+    }
 
+    /**
+     * Formatea la respuesta para mantener consistencia
+     * 
+     * @param int $status Código de estado
+     * @param string $mensaje Mensaje descriptivo
+     * @param mixed $data Datos a incluir (opcional)
+     * @return array Respuesta formateada
+     */
+    private function formatearRespuesta($status, $mensaje, $data = null)
+    {
+        $respuesta = [
+            'status' => $status,
+            'mensaje' => $mensaje
+        ];
+        
+        if ($data !== null) {
+            $respuesta['data'] = $data;
+        }
+        
         return $respuesta;
     }
 }
