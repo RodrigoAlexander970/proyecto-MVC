@@ -15,8 +15,8 @@
 
 ### 🧬 Especialidades
 
-- [ ] `GET /especialidades` – Listar todas las especialidades  
-- [ ] `GET /especialidades/{id}` – Obtener detalles de una especialidad  
+- [X] `GET /especialidades` – Listar todas las especialidades  
+- [X] `GET /especialidades/{id}` – Obtener detalles de una especialidad  
 - [ ] `POST /especialidades` – Crear una nueva especialidad  
 - [ ] `PUT /especialidades/{id}` – Actualizar una especialidad  
 - [ ] `DELETE /especialidades/{id}` – Eliminar una especialidad  
