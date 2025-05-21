@@ -70,4 +70,33 @@ class EspecialidadDAO {
         // Retornamos el arreglo de objetos
         return $especialidades;
     }
+
+    /**
+     * Obtiene por ID
+     */
+    public static function porId($id) {
+        // Inicializamos la conexion
+        self::init();
+        
+        // Elaboramos la consulta
+        $sql = "SELECT * FROM ". self::$NOMBRE_TABLA . " WHERE ". self::$ID_ESPECIALIDAD . " = ?";
+
+        // Preparamos la consulta
+        $stmt = self::$conexion->prepare($sql);
+        $stmt->bindParam(1, $id, PDO::PARAM_INT);
+
+        // Ejecutamos la consulta
+        $stmt->execute();
+        // Obtenemos el resultado
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Creamos el objeto especialidad
+        $especialidad = new Especialidad();
+        // Llenamos el objeto
+        $especialidad -> setIdEspecialidad($resultado[self::$ID_ESPECIALIDAD]);
+        $especialidad -> setNombre($resultado[self::$NOMBRE]);
+        $especialidad -> setDescripcion($resultado[self::$DESCRIPCION]);
+        $especialidad -> setActivo($resultado[self::$ACTIVO]);
+        // Retornamos el objeto
+        return $especialidad;
+    }
 }

@@ -35,7 +35,7 @@ class EspecialidadesService {
             break;
 
             case 1:
-                return 'POR ID';
+                return self::$dao->porId($params[0]);
             break;
 
             default:
