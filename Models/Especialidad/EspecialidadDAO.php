@@ -56,6 +56,99 @@ class EspecialidadDAO {
         return $this -> mapearEspecialidad($resultado);
     }
 
+    /** Registra una especilidad en la base de datos
+     * @param Especialidad
+     * @return boolean
+     */
+    public function crear($especialidad) {
+        // Elaboramos la consulta
+        $sql = "INSERT INTO ". self::NOMBRE_TABLA . " ("
+        . self::NOMBRE . ", "
+        . self::DESCRIPCION . ") VALUES (?, ?)";
+
+        $stmt = $this->conexion->prepare($sql);
+
+        $nombre = $especialidad->getNombre();
+        $descripcion = $especialidad->getDescripcion();
+
+        $stmt->bindParam(1, $nombre, PDO::PARAM_STR);
+        $stmt->bindParam(2, $descripcion, PDO::PARAM_STR);
+        try {
+            // Ejecutamos la consulta
+            $stmt->execute();
+            // Revisamos que se haya ejecutado con exito
+            if ($stmt->rowCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            throw new ExcepcionApi(Response::STATUS_INTERNAL_SERVER_ERROR, "Error al crear la especialidad");
+        }
+    }
+
+    /**
+     * Actualiza una especialidad en la base de datos
+     * @param Especialidad
+     * @return boolean
+     */
+    public function actualizar($especialidad) {
+
+        // Verificar primero si la especialidad existe
+        $especialidadExiste = $this->porID($especialidad->getIdEspecialidad());
+        
+        if (!$especialidadExiste) {
+            throw new ExcepcionApi(Response::STATUS_NOT_FOUND, "Especialidad no encontrada");
+        }
+
+        // Elaboramos la consulta
+        $sql = "UPDATE ". self::NOMBRE_TABLA . " SET "
+        . self::NOMBRE . " = ?, "
+        . self::DESCRIPCION . " = ? WHERE ". self::ID_ESPECIALIDAD . " = ?";
+
+        $stmt = $this->conexion->prepare($sql);
+
+        $idEspecialidad = $especialidad->getIdEspecialidad();
+        $nombre = $especialidad->getNombre();
+        $descripcion = $especialidad->getDescripcion();
+
+        $stmt->bindParam(1, $nombre, PDO::PARAM_STR);
+        $stmt->bindParam(2, $descripcion, PDO::PARAM_STR);
+        $stmt->bindParam(3, $idEspecialidad, PDO::PARAM_INT);
+
+        // Ejecutamos la consulta
+        $stmt->execute();
+        // Revisamos que se actualizado correctamente
+
+        if($stmt->rowCount() > 0){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    /**
+     * Elimina una especialidad
+     * @param int
+     * @return boolean
+     */
+    public function borrar($id_medico) {
+        // Elaboramos la consulta
+        $sql = "DELETE FROM ". self::NOMBRE_TABLA . " WHERE ". self::ID_ESPECIALIDAD . " = ?";
+
+        // Preparamos la consulta
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bindParam(1, $id_medico, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Revisamos que se haya eliminado correctamente
+        if($stmt->rowCount() > 0){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     /**
      * Procesa múltiples resultados de la base de datos
      * @param array $resultados Resultados a procesar
