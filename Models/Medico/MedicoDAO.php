@@ -78,7 +78,7 @@ class MedicoDAO
         . self::APELLIDOS . ", "
         . self::CEDULA_PROFESIONAL . ", "
         . self::EMAIL . ", "
-        . self::TELEFONO . ") VALUES (?, ?, ?, ?, ?, ?, ?)";
+        . self::TELEFONO . ") VALUES (?, ?, ?, ?, ?, ?)";
         
         // Preparamos la consulta
         $stmt = $this->conexion->prepare($sql);

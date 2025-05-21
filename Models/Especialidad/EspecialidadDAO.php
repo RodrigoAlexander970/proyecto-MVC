@@ -119,7 +119,6 @@ class EspecialidadDAO {
         // Ejecutamos la consulta
         $stmt->execute();
         // Revisamos que se actualizado correctamente
-
         if($stmt->rowCount() > 0){
             return true;
         } else{
@@ -132,21 +131,31 @@ class EspecialidadDAO {
      * @param int
      * @return boolean
      */
-    public function borrar($id_medico) {
+    public function borrar($id_especialidad) {
         // Elaboramos la consulta
         $sql = "DELETE FROM ". self::NOMBRE_TABLA . " WHERE ". self::ID_ESPECIALIDAD . " = ?";
 
         // Preparamos la consulta
         $stmt = $this->conexion->prepare($sql);
-        $stmt->bindParam(1, $id_medico, PDO::PARAM_INT);
-        $stmt->execute();
+        $stmt->bindParam(1, $id_especialidad, PDO::PARAM_INT);
 
-        // Revisamos que se haya eliminado correctamente
-        if($stmt->rowCount() > 0){
-            return true;
-        } else {
-            return false;
+        try{
+            $stmt->execute();
+
+            // Revisamos que se haya eliminado correctamente
+            if($stmt->rowCount() > 0){
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+        // Verifica si es un error de integridad referencial (código 23000)
+        if ($e->getCode() == '23000') {
+            return null;
         }
+        // Otros errores, relanza la excepción
+        throw $e;
+    }
     }
     
     /**
