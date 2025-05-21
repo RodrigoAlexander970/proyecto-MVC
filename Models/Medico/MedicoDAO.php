@@ -55,7 +55,7 @@ class MedicoDAO
         $stmt -> execute();
 
         // Obtenemos el resultado
-        $resultado = $stmt -> fetch(PDO::FETCH_ASSOC);
+        $resultado = $stmt -> fetchAll(PDO::FETCH_ASSOC);
 
         // Verificamos si se encontró al medico
         if( !$resultado ) {
@@ -216,6 +216,7 @@ class MedicoDAO
      */
     private function mapearMedico($resultado)
     {
+
         $medico = new Medico();
         $medico->setIdMedico($resultado[self::ID_MEDICO]);
         $medico->setIdEspecialidad($resultado[self::ID_ESPECIALIDAD]);
