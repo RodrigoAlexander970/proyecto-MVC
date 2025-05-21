@@ -14,43 +14,37 @@ class VistaJson extends VistaApi
      */
     public function imprimir($cuerpo)
     {
-        // Detecta si ya tiene la estructura estándar
-        $isStandard = is_array($cuerpo)
-            && array_key_exists('success', $cuerpo)
-            && array_key_exists('status', $cuerpo)
-            && array_key_exists('message', $cuerpo)
-            && array_key_exists('data', $cuerpo);
-
-        if (!$isStandard) {
-            $status = $this->estado ?: 200;
-            $success = $status >= 200 && $status < 300;
-            $cuerpo = [
-                "success" => $success,
-                "status" => $status,
-                "message" => $success ? "Operación exitosa" : "Error",
-                "data" => $cuerpo
-            ];
+        if ($this->estado) {
+            http_response_code($this->estado);
         }
 
-        http_response_code($cuerpo['status']);
         header('Content-Type: application/json; charset=utf8');
-        echo json_encode($cuerpo, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        echo json_encode($cuerpo, JSON_PRETTY_PRINT);
+        exit;
+    }
+
+    /**
+     * Envía una respuesta al cliente
+     * 
+     * @param int $status Código de estado HTTP
+     * @param string $mensaje Mensaje descriptivo
+     * @param mixed $data Datos a incluir en la respuesta (opcional)
+     */
+    function responder($status, $mensaje, $data = null)
+    {
+        http_response_code($status);
+
+        $response = [
+            'status' => $status,
+            'mensaje' => $mensaje
+        ];
+
+        if ($data !== null) {
+            $response['data'] = $data;
+        }
+        
+        header('Content-Type: application/json; charset=utf8');
+        echo json_encode($response, JSON_PRETTY_PRINT);
         exit;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

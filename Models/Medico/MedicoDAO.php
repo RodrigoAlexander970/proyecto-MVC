@@ -1,5 +1,5 @@
 <?php
-include_once(__DIR__.'/../Utilities/ExcepcionApi.php');
+include_once(__DIR__.'/../../Utilities/ExcepcionApi.php');
 include_once(__DIR__.'/../../Utilities/Response.php');
 include_once(__DIR__.'/../../Database/ConexionBD.php');
 include_once(__DIR__.'/Medico.php');
@@ -24,9 +24,9 @@ class MedicoDAO
     // Conexión a la base de datos
     private $conexion;
 
-    public function __construct() {
+    public function __construct(PDO $conexion = null) {
         // Inicializamos la conexión a la base de datos
-        $this->conexion = ConexionBD::obtenerInstancia()->obtenerBD();
+        $this->conexion = $conexion ?: ConexionBD::obtenerInstancia()->obtenerBD();
      }
 
     /**
@@ -50,7 +50,7 @@ class MedicoDAO
         // Elaboramos la consulta
         $sql = "SELECT * FROM ". self::NOMBRE_TABLA . " WHERE ". self::ID_MEDICO . " = ?";
 
-        $stmt = self::$conexion->prepare($sql);
+        $stmt = $this->conexion->prepare($sql);
         $stmt->bindParam(1, $id, PDO::PARAM_INT);
         $stmt -> execute();
 
@@ -70,7 +70,7 @@ class MedicoDAO
      * @param Medico $medico Objeto Medico a registrar
      * @return boolean 
      */
-     public static function crear($medico) {
+     public function crear($medico) {
         // Elaboramos la consulta
         $sql = "INSERT INTO ". self::NOMBRE_TABLA . " ("
         . self::ID_ESPECIALIDAD . ", "
@@ -81,7 +81,7 @@ class MedicoDAO
         . self::TELEFONO . ") VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         // Preparamos la consulta
-        $stmt = self::$conexion->prepare($sql);
+        $stmt = $this->conexion->prepare($sql);
         
         // Recuperamos variables del objeto Medico
         $idEspecialidad = $medico->getIdEspecialidad();
@@ -137,7 +137,7 @@ class MedicoDAO
         . self::TELEFONO . " = ? WHERE ". self::ID_MEDICO . " = ?";
 
         // Preparamos la consulta
-        $stmt = self::$conexion->prepare($sql);
+        $stmt = $this->conexion->prepare($sql);
 
         // Recuperamos variables del objeto Medico
         $idMedico = $medico->getIdMedico();
