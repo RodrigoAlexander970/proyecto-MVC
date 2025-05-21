@@ -1,3 +1,6 @@
+
+DROP DATABASE IF EXISTS gestion_citas_medicas;
+
 CREATE DATABASE IF NOT EXISTS gestion_citas_medicas;
 USE gestion_citas_medicas;
 
@@ -16,7 +19,6 @@ CREATE TABLE medicos (
     cedula_profesional VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     telefono VARCHAR(20),
-    password VARCHAR(255) NOT NULL,
     fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
     activo BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (id_especialidad) REFERENCES especialidades(id_especialidad)
@@ -31,7 +33,6 @@ CREATE TABLE pacientes (
     email VARCHAR(100) UNIQUE,
     telefono VARCHAR(20) NOT NULL,
     direccion TEXT,
-    password VARCHAR(255) NOT NULL,
     fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
     activo BOOLEAN DEFAULT TRUE
 );
@@ -150,34 +151,34 @@ INSERT INTO especialidades (nombre, descripcion) VALUES
 ('Psiquiatría', 'Especialidad en salud mental'),
 ('Odontología', 'Especialidad en salud bucodental');
 
-INSERT INTO medicos (id_especialidad, nombre, apellidos, cedula_profesional, email, telefono, password) VALUES
-(1, 'Carlos', 'González Pérez', 'MG-12345', 'carlos.gonzalez@clinica.com', '555-123-4567', '$2y$10$abcdefghijklmnopqrstuv'),
-(2, 'Laura', 'Martínez Rodríguez', 'CA-23456', 'laura.martinez@clinica.com', '555-234-5678', '$2y$10$abcdefghijklmnopqrstuv'),
-(3, 'Ricardo', 'López Sánchez', 'PE-34567', 'ricardo.lopez@clinica.com', '555-345-6789', '$2y$10$abcdefghijklmnopqrstuv'),
-(4, 'Sofía', 'Ramírez García', 'DE-45678', 'sofia.ramirez@clinica.com', '555-456-7890', '$2y$10$abcdefghijklmnopqrstuv'),
-(5, 'Miguel', 'Torres Díaz', 'GI-56789', 'miguel.torres@clinica.com', '555-567-8901', '$2y$10$abcdefghijklmnopqrstuv'),
-(6, 'Ana', 'Fernández López', 'TR-67890', 'ana.fernandez@clinica.com', '555-678-9012', '$2y$10$abcdefghijklmnopqrstuv'),
-(7, 'Javier', 'Gómez Ruiz', 'NE-78901', 'javier.gomez@clinica.com', '555-789-0123', '$2y$10$abcdefghijklmnopqrstuv'),
-(8, 'Elena', 'Castro Moreno', 'OF-89012', 'elena.castro@clinica.com', '555-890-1234', '$2y$10$abcdefghijklmnopqrstuv'),
-(9, 'Daniel', 'Vargas Jiménez', 'PS-90123', 'daniel.vargas@clinica.com', '555-901-2345', '$2y$10$abcdefghijklmnopqrstuv'),
-(10, 'Patricia', 'Ortega Navarro', 'OD-01234', 'patricia.ortega@clinica.com', '555-012-3456', '$2y$10$abcdefghijklmnopqrstuv');
+INSERT INTO medicos (id_especialidad, nombre, apellidos, cedula_profesional, email, telefono) VALUES
+(1, 'Carlos', 'González Pérez', 'MG-12345', 'carlos.gonzalez@clinica.com', '555-123-4567'),
+(2, 'Laura', 'Martínez Rodríguez', 'CA-23456', 'laura.martinez@clinica.com', '555-234-5678'),
+(3, 'Ricardo', 'López Sánchez', 'PE-34567', 'ricardo.lopez@clinica.com', '555-345-6789'),
+(4, 'Sofía', 'Ramírez García', 'DE-45678', 'sofia.ramirez@clinica.com', '555-456-7890'),
+(5, 'Miguel', 'Torres Díaz', 'GI-56789', 'miguel.torres@clinica.com', '555-567-8901'),
+(6, 'Ana', 'Fernández López', 'TR-67890', 'ana.fernandez@clinica.com', '555-678-9012'),
+(7, 'Javier', 'Gómez Ruiz', 'NE-78901', 'javier.gomez@clinica.com', '555-789-0123'),
+(8, 'Elena', 'Castro Moreno', 'OF-89012', 'elena.castro@clinica.com', '555-890-1234'),
+(9, 'Daniel', 'Vargas Jiménez', 'PS-90123', 'daniel.vargas@clinica.com', '555-901-2345'),
+(10, 'Patricia', 'Ortega Navarro', 'OD-01234', 'patricia.ortega@clinica.com', '555-012-3456');
 
-INSERT INTO pacientes (nombre, apellidos, fecha_nacimiento, genero, email, telefono, direccion, password) VALUES
-('Juan', 'Pérez Soto', '1985-03-15', 'M', 'juan.perez@email.com', '555-111-2222', 'Calle Principal 123', '$2y$10$abcdefghijklmnopqrstuv'),
-('María', 'García López', '1990-07-20', 'F', 'maria.garcia@email.com', '555-222-3333', 'Avenida Central 456', '$2y$10$abcdefghijklmnopqrstuv'),
-('Pedro', 'Martínez Gómez', '1978-12-03', 'M', 'pedro.martinez@email.com', '555-333-4444', 'Boulevard Norte 789', '$2y$10$abcdefghijklmnopqrstuv'),
-('Ana', 'López Hernández', '1995-05-25', 'F', 'ana.lopez@email.com', '555-444-5555', 'Calle Sur 234', '$2y$10$abcdefghijklmnopqrstuv'),
-('Luis', 'Rodríguez Castro', '1982-09-10', 'M', 'luis.rodriguez@email.com', '555-555-6666', 'Avenida Este 567', '$2y$10$abcdefghijklmnopqrstuv'),
-('Carmen', 'Torres Vargas', '1973-06-28', 'F', 'carmen.torres@email.com', '555-666-7777', 'Calle Poniente 890', '$2y$10$abcdefghijklmnopqrstuv'),
-('Roberto', 'Díaz Morales', '1988-02-12', 'M', 'roberto.diaz@email.com', '555-777-8888', 'Boulevard Sur 123', '$2y$10$abcdefghijklmnopqrstuv'),
-('Laura', 'Fernández Rivas', '1992-11-07', 'F', 'laura.fernandez@email.com', '555-888-9999', 'Avenida Norte 456', '$2y$10$abcdefghijklmnopqrstuv'),
-('Miguel', 'Sánchez Ortega', '1980-04-18', 'M', 'miguel.sanchez@email.com', '555-999-0000', 'Calle Oriente 789', '$2y$10$abcdefghijklmnopqrstuv'),
-('Sofía', 'Ramírez Mendoza', '1997-08-30', 'F', 'sofia.ramirez@email.com', '555-000-1111', 'Boulevard Oeste 234', '$2y$10$abcdefghijklmnopqrstuv'),
-('Jorge', 'Gómez Estrada', '1975-01-22', 'M', 'jorge.gomez@email.com', '555-112-2233', 'Avenida Principal 567', '$2y$10$abcdefghijklmnopqrstuv'),
-('Claudia', 'Jiménez Rojas', '1991-10-05', 'F', 'claudia.jimenez@email.com', '555-223-3344', 'Calle Central 890', '$2y$10$abcdefghijklmnopqrstuv'),
-('Fernando', 'Ortiz Castillo', '1983-07-14', 'M', 'fernando.ortiz@email.com', '555-334-4455', 'Boulevard Principal 123', '$2y$10$abcdefghijklmnopqrstuv'),
-('Isabel', 'Núñez Pacheco', '1979-03-27', 'F', 'isabel.nunez@email.com', '555-445-5566', 'Avenida Sur 456', '$2y$10$abcdefghijklmnopqrstuv'),
-('Raúl', 'Herrera Méndez', '1994-06-09', 'M', 'raul.herrera@email.com', '555-556-6677', 'Calle Norte 789', '$2y$10$abcdefghijklmnopqrstuv');
+INSERT INTO pacientes (nombre, apellidos, fecha_nacimiento, genero, email, telefono, direccion) VALUES
+('Juan', 'Pérez Soto', '1985-03-15', 'M', 'juan.perez@email.com', '555-111-2222', 'Calle Principal 123'),
+('María', 'García López', '1990-07-20', 'F', 'maria.garcia@email.com', '555-222-3333', 'Avenida Central 456'),
+('Pedro', 'Martínez Gómez', '1978-12-03', 'M', 'pedro.martinez@email.com', '555-333-4444', 'Boulevard Norte 789'),
+('Ana', 'López Hernández', '1995-05-25', 'F', 'ana.lopez@email.com', '555-444-5555', 'Calle Sur 234'),
+('Luis', 'Rodríguez Castro', '1982-09-10', 'M', 'luis.rodriguez@email.com', '555-555-6666', 'Avenida Este 567'),
+('Carmen', 'Torres Vargas', '1973-06-28', 'F', 'carmen.torres@email.com', '555-666-7777', 'Calle Poniente 890'),
+('Roberto', 'Díaz Morales', '1988-02-12', 'M', 'roberto.diaz@email.com', '555-777-8888', 'Boulevard Sur 123'),
+('Laura', 'Fernández Rivas', '1992-11-07', 'F', 'laura.fernandez@email.com', '555-888-9999', 'Avenida Norte 456'),
+('Miguel', 'Sánchez Ortega', '1980-04-18', 'M', 'miguel.sanchez@email.com', '555-999-0000', 'Calle Oriente 789'),
+('Sofía', 'Ramírez Mendoza', '1997-08-30', 'F', 'sofia.ramirez@email.com', '555-000-1111', 'Boulevard Oeste 234'),
+('Jorge', 'Gómez Estrada', '1975-01-22', 'M', 'jorge.gomez@email.com', '555-112-2233', 'Avenida Principal 567'),
+('Claudia', 'Jiménez Rojas', '1991-10-05', 'F', 'claudia.jimenez@email.com', '555-223-3344', 'Calle Central 890'),
+('Fernando', 'Ortiz Castillo', '1983-07-14', 'M', 'fernando.ortiz@email.com', '555-334-4455', 'Boulevard Principal 123'),
+('Isabel', 'Núñez Pacheco', '1979-03-27', 'F', 'isabel.nunez@email.com', '555-445-5566', 'Avenida Sur 456'),
+('Raúl', 'Herrera Méndez', '1994-06-09', 'M', 'raul.herrera@email.com', '555-556-6677', 'Calle Norte 789');
 
 INSERT INTO horarios_disponibles (id_medico, dia_semana, hora_inicio, hora_fin) VALUES
 (1, 'Lunes', '08:00:00', '14:00:00'),

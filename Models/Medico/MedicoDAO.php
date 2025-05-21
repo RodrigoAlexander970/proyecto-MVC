@@ -1,5 +1,5 @@
 <?php
-
+include_once(__DIR__.'/../Utilities/ExcepcionApi.php');
 include_once(__DIR__.'/../../Utilities/Response.php');
 include_once(__DIR__.'/../../Database/ConexionBD.php');
 include_once(__DIR__.'/Medico.php');
@@ -9,89 +9,49 @@ include_once(__DIR__.'/Medico.php');
  */
 class MedicoDAO
 {
-    // Nombre de la tabla
-    private static $NOMBRE_TABLA = 'medicos';
-
-    // Nombre de los campos
-    private static $ID_MEDICO = 'id_medico';
-    private static $ID_ESPECIALIDAD = 'id_especialidad';
-    private static $NOMBRE = 'nombre';
-    private static $APELLIDOS = 'apellidos';
-    private static $CEDULA_PROFESIONAL = 'cedula_profesional';
-    private static $EMAIL = 'email';
-    private static $TELEFONO = 'telefono';
-    private static $PASSWORD = 'password';
-    private static $FECHA_REGISTRO = 'fecha_registro';
-    private static $ACTIVO = 'activo';
+    // Constantes de la base de datos
+    const NOMBRE_TABLA = 'medicos';
+    const ID_MEDICO = 'id_medico';
+    const ID_ESPECIALIDAD = 'id_especialidad';
+    const NOMBRE = 'nombre';
+    const APELLIDOS = 'apellidos';
+    const CEDULA_PROFESIONAL = 'cedula_profesional';
+    const EMAIL = 'email';
+    const TELEFONO = 'telefono';
+    const FECHA_REGISTRO = 'fecha_registro';
+    const ACTIVO = 'activo';
 
     // Conexión a la base de datos
-    private static $conexion;
+    private $conexion;
 
-    // Instanciamos la conexión a la base de datos
+    public function __construct() {
+        // Inicializamos la conexión a la base de datos
+        $this->conexion = ConexionBD::obtenerInstancia()->obtenerBD();
+     }
 
-    public static function init(){
-        if (self::$conexion === null) {
-            self::$conexion = ConexionBD::obtenerInstancia()->obtenerBD();
-        }
-    }
-
-    public function __construct() { }
     /**
      * Obtiene todos los medicos de la base de datos.
      * @return array Arreglo de objetos Medico.
      */
-    public static function todos(){
-
-        self::init();
-
+    public function todos(){
         // Elaboramos la consulta
-        $sql = "SELECT * FROM ". self::$NOMBRE_TABLA;
-
-        // Preparamos la consulta
-        $stmt = self::$conexion->prepare($sql);
-
-        // Ejecutamos la consulta
+        $sql = "SELECT * FROM ". self::NOMBRE_TABLA;
+        $stmt = $this->conexion->prepare($sql);
         $stmt->execute();
 
         // Obtenemos los resultados
         $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Creamos un arreglo de objetos Medico
-        $medicos = array();
-
-        foreach ($resultados as $resultado) {
-            $medico = new Medico();
-            $medico->setIdMedico($resultado[self::$ID_MEDICO]);
-            $medico->setIdEspecialidad($resultado[self::$ID_ESPECIALIDAD]);
-            $medico->setNombre($resultado[self::$NOMBRE]);
-            $medico->setApellidos($resultado[self::$APELLIDOS]);
-            $medico->setCedulaProfesional($resultado[self::$CEDULA_PROFESIONAL]);
-            $medico->setEmail($resultado[self::$EMAIL]);
-            $medico->setTelefono($resultado[self::$TELEFONO]);
-            $medico->setPassword($resultado[self::$PASSWORD]);
-            $medico->setFechaRegistro($resultado[self::$FECHA_REGISTRO]);
-            $medico->setActivo($resultado[self::$ACTIVO]);
-
-            // Agregamos el objeto Medico al arreglo
-            array_push($medicos, $medico);
-        }
-
-        // Retornamos el arreglo de objetos Medico
-        return $medicos;
+        
+        return $this -> procesarResultados($resultados);
     }
 
     // Método para obtener un médico por su ID
-    public static function porID($id) {
-        self::init();
-
+    public function porID($id) {
         // Elaboramos la consulta
-        $sql = "SELECT * FROM ". self::$NOMBRE_TABLA . " WHERE ". self::$ID_MEDICO . " = ?";
+        $sql = "SELECT * FROM ". self::NOMBRE_TABLA . " WHERE ". self::ID_MEDICO . " = ?";
 
-        // Preparamos la consulta
         $stmt = self::$conexion->prepare($sql);
         $stmt->bindParam(1, $id, PDO::PARAM_INT);
-
-        // Ejecutamos la consulta
         $stmt -> execute();
 
         // Obtenemos el resultado
@@ -99,44 +59,26 @@ class MedicoDAO
 
         // Verificamos si se encontró al medico
         if( !$resultado ) {
-            throw new ExcepcionApi(Response::STATUS_NOT_FOUND, "No se encontró el médico con ID: $id");
+           return null;
         }
 
-        // Convertimos a objeto Medico
-        $medico = new Medico();
-        $medico->setIdMedico($resultado[self::$ID_MEDICO]);
-        $medico->setIdEspecialidad($resultado[self::$ID_ESPECIALIDAD]);
-        $medico->setNombre($resultado[self::$NOMBRE]);
-        $medico->setApellidos($resultado[self::$APELLIDOS]);
-        $medico->setCedulaProfesional($resultado[self::$CEDULA_PROFESIONAL]);
-        $medico->setEmail($resultado[self::$EMAIL]);
-        $medico->setTelefono($resultado[self::$TELEFONO]);
-        $medico->setPassword($resultado[self::$PASSWORD]);
-        $medico->setFechaRegistro($resultado[self::$FECHA_REGISTRO]);
-        $medico->setActivo($resultado[self::$ACTIVO]);
-
-        return $medico;
+        return $this -> procesarResultados($resultado);
     }
 
     /**
      * Crea un medico en la base de datos
-     *  @param Medico $medico Objeto Medico a registrar
+     * @param Medico $medico Objeto Medico a registrar
+     * @return boolean 
      */
-
      public static function crear($medico) {
-        self::init();
-
         // Elaboramos la consulta
-        $sql = "INSERT INTO "
-        . self::$NOMBRE_TABLA . " ("
-        . self::$ID_ESPECIALIDAD . ", "
-        . self::$NOMBRE . ", "
-        . self::$APELLIDOS . ", "
-        . self::$CEDULA_PROFESIONAL . ", "
-        . self::$EMAIL . ", "
-        . self::$TELEFONO . ", "
-        . self::$PASSWORD 
-        . ") VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO ". self::NOMBRE_TABLA . " ("
+        . self::ID_ESPECIALIDAD . ", "
+        . self::NOMBRE . ", "
+        . self::APELLIDOS . ", "
+        . self::CEDULA_PROFESIONAL . ", "
+        . self::EMAIL . ", "
+        . self::TELEFONO . ") VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         // Preparamos la consulta
         $stmt = self::$conexion->prepare($sql);
@@ -148,7 +90,6 @@ class MedicoDAO
         $cedulaProfesional = $medico->getCedulaProfesional();
         $email = $medico->getEmail();
         $telefono = $medico->getTelefono();
-        $password = $medico->getPassword();
 
         // Vinculamos los parámetros a la consulta
         $stmt->bindParam(1, $idEspecialidad, PDO::PARAM_INT);
@@ -157,18 +98,18 @@ class MedicoDAO
         $stmt->bindParam(4, $cedulaProfesional, PDO::PARAM_STR);
         $stmt->bindParam(5, $email, PDO::PARAM_STR);
         $stmt->bindParam(6, $telefono, PDO::PARAM_STR);
-        $stmt->bindParam(7, $password, PDO::PARAM_STR);
         
-        // Ejecutamos la consulta
-        $stmt->execute();
-
-        // Revisamos que se haya ejecutado con exito
-        if ($stmt->rowCount() > 0) {
-            // Obtenemos el ID del médico creado
-            $medico->setIdMedico(self::$conexion->lastInsertId());
-            return $medico;
-        } else {
-            return null;
+        try {
+            // Ejecutamos la consulta
+            $stmt->execute();
+            // Revisamos que se haya ejecutado con exito
+            if ($stmt->rowCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            throw new ExcepcionApi(Response::STATUS_INTERNAL_SERVER_ERROR, "Error al crear el médico");
         }
      }
 
@@ -177,18 +118,23 @@ class MedicoDAO
       * @param Medico $medico Objeto Medico a actualizar
       * @return bool true si se actualizó correctamente, false en caso contrario
       */
-      public static function actualizar($medico) {
-        self::init();
+      public function actualizar($medico) {
 
+        // Verificar primero si el médico existe
+        $medicoExistente = $this->porID($medico->getIdMedico());
+        
+        if (!$medicoExistente) {
+            throw new ExcepcionApi(Response::STATUS_NOT_FOUND, "Médico no encontrado");
+        }
+    
         // Elaboramos la consulta
-        $sql = "UPDATE ". self::$NOMBRE_TABLA . " SET "
-        . self::$ID_ESPECIALIDAD . " = ?, "
-        . self::$NOMBRE . " = ?, "
-        . self::$APELLIDOS . " = ?, "
-        . self::$CEDULA_PROFESIONAL . " = ?, "
-        . self::$EMAIL . " = ?, "
-        . self::$TELEFONO . " = ?, "
-        . self::$PASSWORD . " = ? WHERE ". self::$ID_MEDICO . " = ?";
+        $sql = "UPDATE ". self::NOMBRE_TABLA . " SET "
+        . self::ID_ESPECIALIDAD . " = ?, "
+        . self::NOMBRE . " = ?, "
+        . self::APELLIDOS . " = ?, "
+        . self::CEDULA_PROFESIONAL . " = ?, "
+        . self::EMAIL . " = ?, "
+        . self::TELEFONO . " = ? WHERE ". self::ID_MEDICO . " = ?";
 
         // Preparamos la consulta
         $stmt = self::$conexion->prepare($sql);
@@ -201,7 +147,6 @@ class MedicoDAO
         $cedulaProfesional = $medico->getCedulaProfesional();
         $email = $medico->getEmail();
         $telefono = $medico->getTelefono();
-        $password = $medico->getPassword();
 
         // Vinculamos los parámetros a la consulta
         $stmt->bindParam(1, $idEspecialidad, PDO::PARAM_INT);
@@ -210,10 +155,8 @@ class MedicoDAO
         $stmt->bindParam(4, $cedulaProfesional, PDO::PARAM_STR);
         $stmt->bindParam(5, $email, PDO::PARAM_STR);
         $stmt->bindParam(6, $telefono, PDO::PARAM_STR);
-        $stmt->bindParam(7, $password, PDO::PARAM_STR);
-        $stmt->bindParam(8, $idMedico, PDO::PARAM_INT);
+        $stmt->bindParam(7, $idMedico, PDO::PARAM_INT);
 
-        
         // Ejecutamos la consulta
         $stmt->execute();
 
@@ -226,17 +169,15 @@ class MedicoDAO
       }
 
      /**
-      * Elimina un médico de la base de datos
+      * Elimina un médico
       * @param int $id ID del médico a eliminar
       * @return bool true si se eliminó correctamente, false en caso contrario
       */
-      public static function borrar($id_medico){
-        self::init();
-
+      public function borrar($id_medico){
         // Elaboramos la consulta
-        $sql = "DELETE FROM ". self::$NOMBRE_TABLA . " WHERE ". self::$ID_MEDICO . " = ?";
+        $sql = "DELETE FROM ". self::NOMBRE_TABLA . " WHERE ". self::ID_MEDICO . " = ?";
         // Preparamos la consulta
-        $stmt = self::$conexion->prepare($sql);
+        $stmt = $this->conexion->prepare($sql);
         $stmt->bindParam(1, $id_medico, PDO::PARAM_INT);
 
         // Ejecutamos la consulta
@@ -249,4 +190,49 @@ class MedicoDAO
             return false;
         }
       }
+
+    /**
+     * Procesa múltiples resultados de la base de datos
+     * 
+     * @param array $resultados Resultados a procesar
+     * @return array Lista de objetos Medico
+     */
+    private function procesarResultados($resultados)
+    {
+        $medicos = [];
+        
+        foreach ($resultados as $resultado) {
+            $medicos[] = $this->mapearMedico($resultado);
+        }
+        
+        return $medicos;
+    }
+    
+    /**
+     * Mapea un resultado de base de datos a un objeto Medico
+     * 
+     * @param array $resultado Fila de la base de datos
+     * @return Medico Objeto médico
+     */
+    private function mapearMedico($resultado)
+    {
+        $medico = new Medico();
+        $medico->setIdMedico($resultado[self::ID_MEDICO]);
+        $medico->setIdEspecialidad($resultado[self::ID_ESPECIALIDAD]);
+        $medico->setNombre($resultado[self::NOMBRE]);
+        $medico->setApellidos($resultado[self::APELLIDOS]);
+        $medico->setCedulaProfesional($resultado[self::CEDULA_PROFESIONAL]);
+        $medico->setEmail($resultado[self::EMAIL]);
+        $medico->setTelefono($resultado[self::TELEFONO]);
+        
+        if (isset($resultado[self::FECHA_REGISTRO])) {
+            $medico->setFechaRegistro($resultado[self::FECHA_REGISTRO]);
+        }
+        
+        if (isset($resultado[self::ACTIVO])) {
+            $medico->setActivo($resultado[self::ACTIVO]);
+        }
+        
+        return $medico;
+    }
 }
