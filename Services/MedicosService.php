@@ -31,14 +31,14 @@ class MedicosService
         */
         switch( count($params) ) {
             case 0:
-                return $this -> formatearRespuesta(
+                return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     'Médicos obtenidos correctamente',
                     $this->medicoDAO->todos()
                 );
             break;
-                        case 1:
-                return $this->formatearRespuesta(
+            case 1:
+                return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     "Médico obtenido correctamente",
                     $this->medicoDAO->porID($params[0])
@@ -64,7 +64,7 @@ class MedicosService
 
         // Verificamos si se creó correctamente
         if ($resultado) {
-            return $this->formatearRespuesta(
+            return Response::formatearRespuesta(
                 Response::STATUS_CREATED,
                 "Médico creado correctamente",
                 $resultado
@@ -88,7 +88,7 @@ class MedicosService
         $resultado = $this->medicoDAO->actualizar($medico);
 
         if ($resultado) {
-            return $this->formatearRespuesta(
+            return Response::formatearRespuesta(
                 Response::STATUS_OK,
                 "Médico actualizado correctamente"
             );
@@ -113,7 +113,7 @@ class MedicosService
 
         // Verificamos si se borró correctamente
         if ($resultado) {
-            return $this->formatearRespuesta(
+            return Response::formatearRespuesta(
                 Response::STATUS_OK,
                 "Médico borrado correctamente"
             );
@@ -123,27 +123,5 @@ class MedicosService
                 "Error al eliminar el médico"
             );
         }
-    }
-
-    /**
-     * Formatea la respuesta para mantener consistencia
-     * 
-     * @param int $status Código de estado
-     * @param string $mensaje Mensaje descriptivo
-     * @param mixed $data Datos a incluir (opcional)
-     * @return array Respuesta formateada
-     */
-    private function formatearRespuesta($status, $mensaje, $data = null)
-    {
-        $respuesta = [
-            'status' => $status,
-            'mensaje' => $mensaje
-        ];
-        
-        if ($data !== null) {
-            $respuesta['data'] = $data;
-        }
-        
-        return $respuesta;
     }
 }

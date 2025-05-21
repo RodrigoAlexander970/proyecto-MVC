@@ -5,41 +5,49 @@ include_once (__DIR__.'/../Utilities/Response.php');
 include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
 
 /**
- * Clase que representa el servicio de las especialidades
+ * Servicio para operaciones con especialidades
  * Interactua con el DAO de Especialidad
  */
 class EspecialidadesService {
-    private static $dao;
+    private $especialidadDAO;
 
-    public static function init(){
-        if (self::$dao === null) {
-            self::$dao = new EspecialidadDAO();
-        }
-    }
-
-    public function __construct() { }
+    public function __construct(EspecialidadDAO $especialidadDAO = null) {
+        $this -> especialidadDAO = $especialidadDAO ?: new EspecialidadDAO();
+     }
     
     /**
-     * Obtiene los registros de Especialidad
+     * Obtiene especialidades según los parámetros
+     * 
+     * @param array $params Parámetros de la consulta
+     * @return array|Especialidad Lista de especialidades o una especialidad específico
+     * @throws ExcepcionApi Si los parámetros son inválidos
      */
-    public static function obtener($params) {
-        // Inicializamos 
-        self::init();
-
+    public function obtener($params) {
         // 0 parametros para todos
         // 1 parametro para subrecurso
 
         switch(count($params)) {
             case 0:
-                return self::$dao->todos();
+                return Response::formatearRespuesta(
+                    Response::STATUS_OK,
+                    'Especialidades obtenidas correctamente',
+                    $this->especialidadDAO->todos()
+                );
             break;
 
             case 1:
-                return self::$dao->porId($params[0]);
+                return Response::formatearRespuesta(
+                    Response::STATUS_OK,
+                    'Especialidad obtenida correctamente',
+                    $this->especialidadDAO->porId($params[0])
+                );
             break;
 
             default:
-                throw new ExcepcionApi(Response::STATUS_TOO_MANY_PARAMETERS, 'Ruta no reconocida');
+                throw new ExcepcionApi(
+                    Response::STATUS_TOO_MANY_PARAMETERS,
+                    'Ruta no reconocida'
+                );
         }
     }
 }

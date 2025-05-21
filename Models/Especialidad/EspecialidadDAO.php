@@ -28,7 +28,7 @@ class EspecialidadDAO {
     public function todos() {
         // Elaboramos la consulta
         $sql = "SELECT * FROM ". self::NOMBRE_TABLA;
-        $stmt = self::$conexion->prepare($sql);
+        $stmt = $this->conexion->prepare($sql);
         $stmt->execute();
 
         // Obtenemos los resultados
@@ -46,7 +46,7 @@ class EspecialidadDAO {
         $sql = "SELECT * FROM ". self::NOMBRE_TABLA . " WHERE ". self::ID_ESPECIALIDAD . " = ?";
 
         // Preparamos la consulta
-        $stmt = self::$conexion->prepare($sql);
+        $stmt = $this->conexion->prepare($sql);
         $stmt->bindParam(1, $id, PDO::PARAM_INT);
         $stmt->execute();
 
