@@ -4,18 +4,19 @@ include_once(__DIR__.'/../Utilities/Response.php');
 include_once(__DIR__.'/../Utilities/ExcepcionApi.php');
 include_once(__DIR__.'/../Services/HorariosService.php');
 include_once(__DIR__.'/../Models/Medico/Medico.php');
+
+/**
+ * Controlador para la gestión de médicos.
+ */
 class MedicosController
 {
-    private $recursos_validos = ['horarios'];
-
-    // Almacena el servicio de médicos
-    private static $service;
-    private static $horariosService;
+    private static $medicosService; // Servicio de médicos
+    private static $horariosService; // Servicio de horarios
 
     public static function init()
     {
-        if (self::$service === null) {
-            self::$service = new MedicosService();
+        if (self::$medicosService === null) {
+            self::$medicosService = new MedicosService();
         }
 
         if (self::$horariosService === null) {
@@ -49,7 +50,7 @@ class MedicosController
             case 0:
             case 1:
                 // Llamamos a la función obtener del servicio
-                return self::$service->obtener($params);
+                return self::$medicosService->obtener($params);
             break;
 
             case 2:
@@ -97,7 +98,7 @@ class MedicosController
         $medico -> setPassword($medicoJSON->password);
         
         // Obtenemos los datos del body
-        return self::$service->crear($medico);
+        return self::$medicosService->crear($medico);
     }
 
     /**
@@ -124,7 +125,7 @@ class MedicosController
         $medico -> setTelefono($medicoJSON->telefono);
         $medico -> setPassword($medicoJSON->password);
 
-        $response = self::$service->actualizar($medico);
+        $response = self::$medicosService->actualizar($medico);
 
         return $response;
     }
@@ -138,7 +139,7 @@ class MedicosController
 
         // Comprobamos que solo se haya recibido un parámetro (id)
         if(count($params) == 1 ){
-            $response = self::$service->borrar($params[0]);
+            $response = self::$medicosService->borrar($params[0]);
             return $response;
         }
         else {
