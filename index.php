@@ -74,7 +74,7 @@
 			$vista->responder(
 				$respuesta['status'],
 				$respuesta['mensaje'],
-				$respuesta['data']
+				$respuesta['data'] ?? null
 			);
 			break;
 		}
