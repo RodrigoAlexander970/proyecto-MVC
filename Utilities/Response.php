@@ -24,6 +24,7 @@ class Response
     public static function formatearRespuesta($status, $mensaje, $data = null)
     {
         $respuesta = [
+            'success' => true,
             'status' => $status,
             'mensaje' => $mensaje
         ];

@@ -60,7 +60,7 @@ class MedicosService
     public function crear($medico)
     {
         // Llamamos a la función crear del DAO
-        $resultado = $this::$medicoDAO->crear($medico);
+        $resultado = $this->medicoDAO->crear($medico);
 
         // Verificamos si se creó correctamente
         if ($resultado) {

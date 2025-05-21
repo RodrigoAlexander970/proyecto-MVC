@@ -50,4 +50,57 @@ class EspecialidadesService {
                 );
         }
     }
+
+    /**
+     * Crea una nueva especialidad
+     * @param Especialidad Especialidad a crear
+     * @return array Respuesta
+     */
+    public function crear($especialidad){
+        $resultado = $this->especialidadDAO->crear($especialidad);
+
+        // Verificamos si se creó correctamente
+        if($resultado) {
+            return Response::formatearRespuesta(
+                Response::STATUS_CREATED,
+                'Especialidad creada correctamente'
+            );
+        } else {
+            throw new ExcepcionApi(
+                Response::STATUS_INTERNAL_SERVER_ERROR,
+                "Error al crear la especialidad"
+            );
+        }
+    }
+
+    public function actualizar($especialidad) {
+        $resultado = $this->especialidadDAO->actualizar($especialidad);
+
+        if($resultado) {
+            return Response::formatearRespuesta(
+                Response::STATUS_OK,
+                'Especialidad actualizada correctamente'
+            );
+        } else {
+           throw new ExcepcionApi(
+            Response::STATUS_INTERNAL_SERVER_ERROR,
+            "Error al actualizar la especialidad");
+        }
+    }
+
+    public function borrar($id) {
+        $seBorro = $this->especialidadDAO->borrar($id);
+
+        if($seBorro) {
+            return Response::formatearRespuesta(
+                Response::STATUS_OK,
+                'Especialidad eliminada correctamente'
+            );
+        } else {
+            throw new ExcepcionApi(
+                Response::STATUS_INTERNAL_SERVER_ERROR,
+                "Error al eliminar el médico"
+            );
+        }
+    }
 }
