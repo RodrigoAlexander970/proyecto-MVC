@@ -1,8 +1,8 @@
 <?php
 include_once (__DIR__ . '/../Services/EspecialidadesService.php');
+include_once(__DIR__.'/../Models/Especialidad/Especialidad.php');
 include_once(__DIR__.'/../Utilities/Response.php');
 include_once(__DIR__.'/../Utilities/ExcepcionApi.php');
-include_once(__DIR__.'/../Models/Especialidad/Especialidad.php');
 
 /**
  * Clase que 
@@ -10,26 +10,24 @@ include_once(__DIR__.'/../Models/Especialidad/Especialidad.php');
 
  class EspecialidadesController {
     // Almacena el servicio de médicos
-    private static $service;
+    private $especialidadesService;
 
-    public static function init()
-    {
-        if (self::$service === null) {
-            self::$service = new EspecialidadesService();
-        }
+    public function __construct(EspecialidadesService $especialidadesService = null) {
+        $this->especialidadesService = $especialidadesService ?: new EspecialidadesService();
     }
 
     /**
-     * Procesa entradas get
+     * Procesa la solicitud GET
+     * 
+     * @param array $params Parámetros de la solicitud
+     * @return array|object Respuesta para el cliente
+     * @throws ExcepcionApi Si el recurso no es válido
      */
-
-    public static function get($params){
-        self::init();
-
+    public function get($params){
         switch(count($params)) {
             case 0:
             case 1:
-                return self::$service->obtener($params);
+                return $this->especialidadesService->obtener($params);
             break;
         }
     }

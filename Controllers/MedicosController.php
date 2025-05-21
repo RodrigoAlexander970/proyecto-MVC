@@ -1,8 +1,8 @@
 <?php
 include_once(__DIR__ . '/../Services/MedicosService.php');
+include_once(__DIR__ . '/../Services/HorariosService.php');
 include_once(__DIR__ . '/../Utilities/Response.php');
 include_once(__DIR__ . '/../Utilities/ExcepcionApi.php');
-include_once(__DIR__ . '/../Services/HorariosService.php');
 include_once(__DIR__ . '/../Models/Medico/Medico.php');
 
 /**
