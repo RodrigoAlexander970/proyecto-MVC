@@ -38,10 +38,17 @@ class MedicosService
                 );
             break;
             case 1:
+                $medico = $this->medicoDAO->porID($params[0]);
+                if ($medico === null) {
+                    return Response::formatearRespuesta(
+                        Response::STATUS_NOT_FOUND,
+                        "Médico no encontrado"
+                    );
+                }
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     "Médico obtenido correctamente",
-                    $this->medicoDAO->porID($params[0])
+                    $medico
                 );
             break;
             default:
