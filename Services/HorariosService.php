@@ -18,6 +18,113 @@ class HorariosService
      }
 
      /**
+      * Obtiene horarios según los parametros
+      */
+      public function obtener($params) {
+        switch(count($params)) {
+            case 0:
+                return Response::formatearRespuesta(
+                    Response::STATUS_OK,
+                    'Horarios obtenidos correctamente',
+                    $this->horarioDAO->todos()
+                );
+            break;
+
+            case 1:
+                if(!self::existe($params[0])) {
+                    return Response::formatearRespuesta(
+                        Response::STATUS_NOT_FOUND,
+                        "Horario no encontrado"
+                    );
+                }
+
+                return Response::formatearRespuesta(
+                    Response::STATUS_OK,
+                    "Horario obtenido correctamente",
+                    $this->horarioDAO->porId($params[0])
+                );
+            break;
+            default:
+                throw new ExcepcionApi(
+                    Response::STATUS_BAD_REQUEST, 
+                    "Número de parámetros inválido"
+                );
+            }
+        }
+      
+    /**
+     * Crea un nuevo horario
+     */
+    public function crear($horario) {
+        $resultado = $this->horarioDAO->crear($horario);
+
+        // Verificamos si se creó correctamente
+        if ($resultado) {
+            return Response::formatearRespuesta(
+                Response::STATUS_CREATED,
+                "Horario creado correctamente",
+                $resultado
+            );
+        } else {
+            throw new ExcepcionApi(
+                Response::STATUS_INTERNAL_SERVER_ERROR,
+                "Error al crear el horario"
+            );
+        }
+    }
+
+
+    public function actualizar($horario) {
+
+        if(!self::existe($horario->getIdHorario())){
+            throw new ExcepcionApi(
+                Response::STATUS_NOT_FOUND,
+                "Horario no existente"
+            );
+        }
+        
+        // Llamamos a la función actualizar del DAO
+        $resultado = $this->horarioDAO->actualizar($horario);
+
+        if ($resultado) {
+            return Response::formatearRespuesta(
+                Response::STATUS_OK,
+                "Horario actualizado correctamente"
+            );
+        } else {
+           throw new ExcepcionApi(
+            Response::STATUS_INTERNAL_SERVER_ERROR,
+            "Error al actualizar el horario");
+        }
+
+        return $respuesta;
+    }
+
+    public function borrar($id) {
+        
+        if(!self::existe($id)){
+            throw new ExcepcionApi(
+                Response::STATUS_NOT_FOUND,
+                "Horario no existente"
+            );
+        }
+
+        $seBorro = $this->horarioDAO->borrar($id);
+
+        if ($seBorro === 'constraint_violation') {
+            throw new ExcepcionApi(
+                Response::STATUS_CONFLICT,
+                "No se puede eliminar el horario porque tiene elementos asociados."
+            );
+        } elseif ($seBorro) {
+            return Response::formatearRespuesta(
+                Response::STATUS_OK,
+                'Horario eliminado correctamente'
+            );
+        } 
+    }
+
+     /**
       * Obtiene horarios segun el ID del médico.
       * @param int ID del médico
       * @return array Lista de horarios del médico
@@ -45,5 +152,14 @@ class HorariosService
             "Horarios obtenidos correctamente",
             $horarios
         );
+    }
+
+    private function existe($id) {
+        $horario = $this->horarioDAO->porId($id);
+        if($horario){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

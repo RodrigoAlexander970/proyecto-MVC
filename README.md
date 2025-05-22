@@ -18,11 +18,12 @@
 - [X] `GET /especialidades` – Listar todas las especialidades  
 - [X] `GET /especialidades/{id}` – Obtener detalles de una especialidad  
 - [X] `POST /especialidades` – Crear una nueva especialidad  
-- [ ] `PUT /especialidades/{id}` – Actualizar una especialidad  
-- [ ] `DELETE /especialidades/{id}` – Eliminar una especialidad  
+- [X] `PUT /especialidades/{id}` – Actualizar una especialidad  
+- [X] `DELETE /especialidades/{id}` – Eliminar una especialidad  
 - [ ] `GET /especialidades/{id}/medicos` – Listar médicos por especialidad  
 
 ```
+OBJETO JSON:
 {
     "id_especialidad": 1, (NO SE MANDA)
     "nombre": "Nombre especialidad", (OBLIGATORIO)
@@ -46,14 +47,25 @@
 
 ### ⏰ Horarios
 
-- [ ] `GET /horarios` – Listar todos los horarios  
-- [ ] `GET /horarios/{id}` – Obtener un horario específico  
-- [ ] `POST /horarios` – Crear un nuevo horario  
-- [ ] `PUT /horarios/{id}` – Actualizar un horario existente  
-- [ ] `DELETE /horarios/{id}` – Eliminar un horario  
+- [X] `GET /horarios` – Listar todos los horarios  
+- [X] `GET /horarios/{id}` – Obtener un horario específico  
+- [X] `POST /horarios` – Crear un nuevo horario  
+- [X] `PUT /horarios/{id}` – Actualizar un horario existente  
+- [X] `DELETE /horarios/{id}` – Eliminar un horario  
 - [ ] `GET /horarios/disponibles` – Listar horarios disponibles (con filtros)  
 - [ ] `GET /medicos/{id}/horarios` – Listar horarios de un médico específico  
 
+```  
+OBJETO JSON:
+    {
+        "id_horario": 1, (SOLO SE RECIBE)
+        "id_medico": 1, (RELACION CON EL MEDICO)
+        "dia_semana": "DIA", (Lunes, Martes, Miercoles, Jueves, Viernes)
+        "hora_inicio": "08:00:00",
+        "hora_fin": "14:00:00",
+        "activo": 1 (SOLO AL ACTUALIZAR)
+    }
+```
 ---
 
 ### 📅 Citas
