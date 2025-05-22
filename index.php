@@ -1,6 +1,8 @@
 <?php
 	
 	include_once('Utilities/Response.php'); // Para definir los códigos de estado/respuesta
+	
+	// Definimos los encabezados de la respuesta
 	header("Access-Control-Allow-Origin: *");
 	header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 	header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
@@ -21,23 +23,8 @@
 			$vista = new VistaJson();
 	}
 
-	// Definir el encabezado de la respuesta
-	/*set_exception_handler(function ($exception) use ($vista) {
-		
-	    $cuerpo = array(
-	        "status" => $exception->status,
-	        "message" => $exception->getMessage()
-	    );
-	    if ($exception->getCode()) {
-	        $vista->estado = $exception->getCode();
-	    } else {
-	        $vista->estado = 500;
-	    }
-
-	    $vista->imprimir($cuerpo);
-		}
-	);
-	*/
+	// Definimos el manejador de excepciones
+	definirManejadorExcepciones($vista);
 
 	// Arreglo con los recursos existentes de la api
 	$recursos_validos = array('medicos', 'pacientes', 'citas', 'especialidades', 'historiales', 'especialidades');
@@ -72,8 +59,8 @@
 			$respuesta = $controller->$request_method($parameters);
 			//devolver la vista de la respuesta
 			$vista->responder(
-				$respuesta['status'],
-				$respuesta['mensaje'],
+				$respuesta['status'] ?? null,
+				$respuesta['mensaje'] ?? null,
 				$respuesta['data'] ?? null
 			);
 			break;
@@ -86,5 +73,24 @@
 				"mensaje" => utf8_encode("Método no permitido")
 			];
 			$vista->imprimir($cuerpo);*/
+	}
+
+
+
+	/**
+	 * Definición de la función de manejo de excepciones
+	 */
+	function definirManejadorExcepciones($vista) {
+		set_exception_handler(function ($exception) use ($vista) {
+		
+			$cuerpo = array(
+				"success" => false,
+				"status" => $exception->status,
+				"message" => $exception->getMessage()
+			);
+
+			$vista->imprimir($cuerpo);
+			}
+		);
 	}
 ?> 
