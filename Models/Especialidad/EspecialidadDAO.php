@@ -151,11 +151,11 @@ class EspecialidadDAO {
         } catch (PDOException $e) {
         // Verifica si es un error de integridad referencial (código 23000)
         if ($e->getCode() == '23000') {
-            return null;
+            return 'constraint_violation';
         }
-        // Otros errores, relanza la excepción
-        throw $e;
-    }
+            // Otros errores, relanza la excepción
+            throw $e;
+        }
     }
     
     /**

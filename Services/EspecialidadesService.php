@@ -91,15 +91,20 @@ class EspecialidadesService {
     public function borrar($id) {
         $seBorro = $this->especialidadDAO->borrar($id);
 
-        if($seBorro) {
+        if ($seBorro === 'constraint_violation') {
+            throw new ExcepcionApi(
+                Response::STATUS_CONFLICT,
+                "No se puede eliminar la especialidad porque tiene elementos asociados."
+            );
+        } elseif ($seBorro) {
             return Response::formatearRespuesta(
                 Response::STATUS_OK,
                 'Especialidad eliminada correctamente'
             );
         } else {
             throw new ExcepcionApi(
-                Response::STATUS_INTERNAL_SERVER_ERROR,
-                "Error al eliminar el médico"
+                Response::STATUS_NOT_FOUND,
+                "Especialidad no encontrada"
             );
         }
     }

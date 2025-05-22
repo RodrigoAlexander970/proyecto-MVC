@@ -3,9 +3,10 @@
 class ExcepcionApi extends Exception
 {
     public $estado;
-
-    public function __construct($status = 400, $message)
+    public $success;
+    public function __construct($status = 400, $message = "Error en la API")
     {
+        $this->success = false;
         $this->estado = $status;
         $this->message = $message;
     }
