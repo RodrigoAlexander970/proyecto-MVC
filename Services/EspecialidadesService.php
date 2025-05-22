@@ -73,7 +73,22 @@ class EspecialidadesService {
         }
     }
 
+    /**
+     * Actualiza un registro de especialidad
+     * @param Especialidad Registro a actualizar
+     * @return Respuesta formateada
+     * @throws ExcepcionApi
+     */
     public function actualizar($especialidad) {
+
+        // Revisamos si no existe
+        if(!self::existe($especialidad->getIdEspecialidad())){
+            throw new ExcepcionApi(
+                Response::STATUS_NOT_FOUND,
+                "Especialidad no existente"
+            );
+        }
+
         $resultado = $this->especialidadDAO->actualizar($especialidad);
 
         if($resultado) {
@@ -106,6 +121,20 @@ class EspecialidadesService {
                 Response::STATUS_NOT_FOUND,
                 "Especialidad no encontrada"
             );
+        }
+    }
+
+    /**
+     * Comprueba si existe un registro en la base de datos
+     * @param int ID del registro
+     * @return bool true si existe | false si no existe
+     */
+    private function existe($id){
+        $especialidad = $this->especialidadDAO->porId($id);
+        if($especialidad){
+            return true;
+        } else {
+            return false;
         }
     }
 }

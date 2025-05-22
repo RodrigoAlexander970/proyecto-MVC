@@ -22,6 +22,14 @@
 - [ ] `DELETE /especialidades/{id}` – Eliminar una especialidad  
 - [ ] `GET /especialidades/{id}/medicos` – Listar médicos por especialidad  
 
+```
+{
+    "id_especialidad": 1, (NO SE MANDA)
+    "nombre": "Nombre especialidad", (OBLIGATORIO)
+    "descripcion": "Descripcion especialidad", (OBLIGATORIO)
+    "activo": 1 (NO SE MANDA)
+}
+```
 ---
 
 ### 🧑‍🤝‍🧑 Pacientes

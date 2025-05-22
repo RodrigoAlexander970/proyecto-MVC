@@ -53,7 +53,12 @@ class EspecialidadDAO {
         // Obtenemos el resultado
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        return $this -> mapearEspecialidad($resultado);
+        if($resultado) {
+            return $this -> mapearEspecialidad($resultado);
+        } else {
+            return null;
+        }
+        
     }
 
     /** Registra una especilidad en la base de datos
