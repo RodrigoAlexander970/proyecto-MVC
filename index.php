@@ -24,7 +24,7 @@
 	}
 
 	// Definimos el manejador de excepciones
-	definirManejadorExcepciones($vista);
+	//definirManejadorExcepciones($vista);
 
 	// Arreglo con los recursos existentes de la api
 	$recursos_validos = array('medicos', 'pacientes', 'citas', 'especialidades', 'historiales', 'especialidades');
@@ -85,7 +85,7 @@
 		
 			$cuerpo = array(
 				"success" => false,
-				"status" => $exception->status,
+				"status" => $exception->status ?? '500',
 				"message" => $exception->getMessage()
 			);
 

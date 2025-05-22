@@ -3,69 +3,76 @@ include_once(__DIR__.'/../../Utilities/Response.php');
 include_once(__DIR__.'/../../Database/ConexionBD.php');
 include_once(__DIR__.'/Horario.php');
 
+/**
+ * Clase que enlaza la base de datos con la tabla Horario.
+ */
 class HorarioDAO {
-    // Nombre de la tabla
-    private static $NOMBRE_TABLA = 'horarios_disponibles';
-
-    // Campos de la tabla
-    private static $ID_HORARIO = 'id_horario';
-    private static $ID_MEDICO = 'id_medico';
-    private static $DIA_SEMANA = 'dia_semana';
-    private static $HORA_INICIO = 'hora_inicio';
-    private static $HORA_FIN = 'hora_fin';
-    private static $ACTIVO = 'activo';
+    // Constantes de la base de datos
+    const NOMBRE_TABLA = 'horarios_disponibles';
+    const ID_HORARIO = 'id_horario';
+    const ID_MEDICO = 'id_medico';
+    const DIA_SEMANA = 'dia_semana';
+    const HORA_INICIO = 'hora_inicio';
+    const HORA_FIN = 'hora_fin';
+    const ACTIVO = 'activo';
 
     // Conexión a la base de datos
-    private static $conexion;
+    private $conexion;
 
-    /**
-     * Instancia la base de datos
-     */
-    public static function init(){
-        if (self::$conexion === null) {
-            self::$conexion = ConexionBD::obtenerInstancia()->obtenerBD();
-        }
-    }
-
-    public function __construct() { }
+    public function __construct(PDO $conexion = null) {
+        // Inicializamos la conexión a la base de datos
+        $this->conexion = $conexion ?: ConexionBD::obtenerInstancia()->obtenerBD();
+     }
 
     /**
      * Obtiene todos los horarios de un medico en especifico
      * @param $id_medico La ID del medico seleccionado
      */
-    public static function porMedico($id_medico) {
-        // Inicializamos la conexion
-        self::init();
-
+    public function porMedico($id_medico) {
         // Elaboramos la consulta
-        $sql = "SELECT * FROM ". self::$NOMBRE_TABLA . " WHERE " . self::$ID_MEDICO ." = ?";
+        $sql = "SELECT * FROM ". self::NOMBRE_TABLA . " WHERE " . self::ID_MEDICO ." = ?";
 
         // Preparamos la consulta
-        $stmt = self::$conexion->prepare($sql);
+        $stmt = $this->conexion->prepare($sql);
         $stmt -> bindParam(1,$id_medico, PDO::PARAM_INT);
-
-        // Ejecutamos la consulta
         $stmt -> execute();
 
         // Obtenemos los resultados
         $resultados = $stmt -> fetchAll(PDO::FETCH_ASSOC);
 
-        // // Creamos un arreglo de objetos Medico
-        $horarios = array();
+        return $this -> procesarResultados($resultados);
+    }
 
-        foreach ($resultados as $resultado) {
-            $horario = new Horario();
-            $horario->setIdHorario($resultado[self::$ID_HORARIO]);
-            $horario->setIdMedico($resultado[self::$ID_MEDICO]);
-            $horario->setDiaSemana($resultado[self::$DIA_SEMANA]);
-            $horario->setHoraInicio($resultado[self::$HORA_INICIO]);
-            $horario->setHoraFin($resultado[self::$HORA_FIN]);
-            $horario->setActivo($resultado[self::$ACTIVO]);
+    /**
+     * Procesa múltiples resultados de la base de datos
+     * @param array Resultados a procesar
+     * @return array Lista de objetos Horario
+     */
+    private function procesarResultados($resultados) {
+        $horarios = [];
 
-            // Agregamos el objeto Horario al arreglo
-            array_push($horarios, $horario);
+        foreach($resultados as $resultado) {
+            $horarios[] = $this->mapearHorario($resultado);
         }
 
         return $horarios;
+    }
+
+    /**
+     * Mapea los resultados de la base de datos a un objeto Horario
+     * @param array Filas de la base de datos
+     * @return Horario Objeto horario
+     */
+    private function mapearHorario($resultado)
+    {
+        $horario = new Horario();
+        $horario->setIdHorario($resultado[self::ID_MEDICO]);
+        $horario->setIdMedico($resultado[self::ID_MEDICO]);
+        $horario->setDiaSemana($resultado[self::DIA_SEMANA]);
+        $horario->setHoraInicio($resultado[self::HORA_INICIO]);
+        $horario->setHoraFin($resultado[self::HORA_FIN]);
+        $horario->setActivo($resultado[self::ACTIVO]);
+
+        return $horario;
     }
 }

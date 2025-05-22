@@ -3,27 +3,47 @@ include_once (__DIR__.'/../Models/Horario/Horario.php');
 include_once (__DIR__.'/../Models/Horario/HorarioDAO.php');
 include_once (__DIR__.'/../Utilities/Response.php');
 include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
+include_once (__DIR__.'/MedicosService.php');
 
 /**
- * Clase que representa el servicio de horarios.
- * Esta clase contiene métodos para interactuar con el DAO de horarios.
+ * Servicio para operaciones con horarios.
  */
 class HorariosService
 {
-    private static $dao;
+    private $horarioDAO;
+    private $medicosService;
+    public function __construct(HorarioDAO $horarioDAO = null, MedicosService $medicosService = null) {
+        $this -> horarioDAO = $horarioDAO ?: new HorarioDAO();
+        $this -> medicosService = $medicosService ?: new MedicosService();
+     }
 
-    public static function init(){
-        if (self::$dao === null) {
-            self::$dao = new HorarioDAO();
-        }
-    }
-
-    public function __construct() { }
-
-    public static function porMedico($id_medico)
+     /**
+      * Obtiene horarios segun el ID del médico.
+      * @param int ID del médico
+      * @return array Lista de horarios del médico
+      * @throws ExcepcionApi Si el ID del médico es inválido
+      */
+    public function porMedico($id_medico)
     {
-        self::init();
-        
-        return self::$dao->porMedico($id_medico);
+        // Comprobamos que exista el  medico
+        $medicoExiste = $this->medicosService->obtener([$id_medico]);
+
+        if (!$medicoExiste) {
+            throw new ExcepcionApi(Response::STATUS_NOT_FOUND, "Médico no encontrado");
+        }
+
+        $horarios = $this->horarioDAO->porMedico($id_medico);
+        if ($horarios === null) {
+            return Response::formatearRespuesta(
+                Response::STATUS_NOT_FOUND,
+                "Horarios no encontrados"
+            );
+        }
+
+        return Response::formatearRespuesta(
+            Response::STATUS_OK,
+            "Horarios obtenidos correctamente",
+            $horarios
+        );
     }
 }
