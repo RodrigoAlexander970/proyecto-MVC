@@ -109,7 +109,7 @@ class ReporteController{
             $reporte[$especialidad_id]['estadisticas']['total_horas_semana'] += $row['horas_dia'];
             
             // Días con cobertura
-            if (!in_array($row['dia'], $reporte[$especialidad_id]['estadisticas']['dias_con_cobertura'])) {
+            if (!in_array($row['dia_semana'], $reporte[$especialidad_id]['estadisticas']['dias_con_cobertura'])) {
                 $reporte[$especialidad_id]['estadisticas']['dias_con_cobertura'][] = $row['dia_semana'];
             }
             
