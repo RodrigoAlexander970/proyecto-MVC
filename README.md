@@ -8,7 +8,7 @@
 - [X] `PUT /medicos/{id}` – Actualizar información de un médico  
 - [X] `DELETE /medicos/{id}` – Eliminar un médico  
 - [X] `GET /medicos/{id}/horarios` – Obtener los horarios de un médico en específico  
-- [ ] `GET /medicos/{id}/pacientes` – Listar pacientes de un médico específico  
+- [X] `GET /medicos/{id}/pacientes` – Listar pacientes de un médico específico  
 
 ---
 
