@@ -2,7 +2,6 @@
 include_once(__DIR__.'/../../Utilities/ExcepcionApi.php');
 include_once(__DIR__.'/../../Utilities/Response.php');
 include_once(__DIR__.'/../../Database/ConexionBD.php');
-include_once(__DIR__.'/Paciente.php');
 
 class PacienteDAO {
     // Constantes de la base de datos
@@ -18,6 +17,10 @@ class PacienteDAO {
     const FECHA_REGISTRO = 'fecha_registro';
     const ACTIVO = 'activo';
 
+    // Variables para el objeto
+    const campos_obligatorios = ['nombre', 'apellidos', 'fecha_nacimiento', 'genero', 'telefono', 'email', 'direccion'];
+    const campos_opcionales = ['activo'];
+
     // Conexión a la base de datos
     private $conexion;
 
@@ -27,7 +30,7 @@ class PacienteDAO {
 
      /**
       * Obtiene todos  los pacientes
-      * @return array|Paciente Arreglo de objetos Paciente
+      * @return array Arreglo de objetos Paciente
       */
       public function todos() {
         //Elaboramos la consulta
@@ -38,57 +41,29 @@ class PacienteDAO {
         // Obtenemos los resultados
         $resultados = $stmt -> fetchAll(PDO::FETCH_ASSOC);
 
-        return $this -> procesarResultados($resultados);
+        return $resultados;
       }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
       /**
-     * Procesa múltiples resultados de la base de datos
-     * @param array $resultados Resultados a procesar
-     * @return array Lista de objetos Paciente
-     */
-    private function procesarResultados($resultados) {
-        $pacientes = [];
-        
-        foreach ($resultados as $resultado) {
-            $pacientes[] = $this -> mapearPaciente($resultado);
+       * Obtiene un paciente en especifico
+       * @param int ID del paciente a buscar
+       * @return array Datos del paciente
+       */
+      public function porId($id_paciente){
+        $sql = "SELECT * FROM " . self::NOMBRE_TABLA . " WHERE " . self::ID_PACIENTE . " = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bindParam(1, $id_paciente, PDO::PARAM_INT);
+        $stmt -> execute();
+
+        // Obtenemos el resultado
+        $resultado = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+
+        // Verificamos si se encontró al medico
+        if( !$resultado ) {
+           return null;
         }
 
-        return $pacientes;
-    }
-
-    /**
-     * Mapea un resultado de base de datos a un objeto Especialidad
-     * 
-     * @param array $resultado Fila de la base de datos
-     * @return Especialidad Objeto especialidad
-     */
-    private function mapearPaciente($resultado)
-    {
-        $paciente = new Paciente();
-        $paciente->setIdPaciente($resultado[self::ID_PACIENTE]);
-        $paciente->setNombre($resultado[self::NOMBRE]);
-        $paciente->setApellidos($resultado[self::APELLIDOS]);
-        $paciente->setFechaNacimiento($resultado[self::FECHA_NACIMIENTO]);
-        $paciente->setGenero($resultado[self::GENERO]);
-        $paciente->setEmail($resultado[self::EMAIL]);
-        $paciente->setTelefono($resultado[self::TELEFONO]);
-        $paciente->setDireccion($resultado[self::DIRECCION]);
-        $paciente->setFechaRegistro($resultado[self::FECHA_REGISTRO]);
-        $paciente->setActivo($resultado[self::ACTIVO]);
-        
-        return $paciente;
-    }
+        // Retornamos el objeto
+        return $resultado;
+      }
 }

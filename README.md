@@ -8,7 +8,6 @@
 - [X] `PUT /medicos/{id}` – Actualizar información de un médico  
 - [X] `DELETE /medicos/{id}` – Eliminar un médico  
 - [X] `GET /medicos/{id}/horarios` – Obtener los horarios de un médico en específico  
-- [ ] `GET /medicos/{id}/citas` – Listar citas de un médico específico  
 - [ ] `GET /medicos/{id}/pacientes` – Listar pacientes de un médico específico  
 
 ---
@@ -52,7 +51,6 @@ OBJETO JSON:
 - [X] `POST /horarios` – Crear un nuevo horario  
 - [X] `PUT /horarios/{id}` – Actualizar un horario existente  
 - [X] `DELETE /horarios/{id}` – Eliminar un horario  
-- [ ] `GET /horarios/disponibles` – Listar horarios disponibles (con filtros)  
 - [ ] `GET /medicos/{id}/horarios` – Listar horarios de un médico específico  
 
 ```  
@@ -77,39 +75,6 @@ OBJETO JSON:
 - [ ] `DELETE /citas/{id}` – Cancelar una cita  
 - [ ] `PATCH /citas/{id}/estado` – Actualizar estado de una cita  
 - [ ] `GET /citas/fecha/{fecha}` – Listar citas por fecha  
-
----
-
-### 📝 Historiales Clínicos
-
-- [ ] `GET /historiales` – Listar historiales clínicos (con filtros)  
-- [ ] `GET /historiales/{id}` – Obtener un historial clínico específico  
-- [ ] `POST /historiales` – Crear un nuevo registro en historial  
-- [ ] `PUT /historiales/{id}` – Actualizar un historial clínico  
-- [ ] `GET /citas/{id}/historial` – Obtener historial asociado a una cita  
-- [ ] `GET /historiales/{id}/medicamentos` – Listar medicamentos de un historial  
-- [ ] `POST /historiales/{id}/medicamentos` – Agregar medicamento a un historial  
-
----
-
-### 💊 Medicamentos
-
-- [ ] `GET /medicamentos` – Listar todos los medicamentos  
-- [ ] `GET /medicamentos/{id}` – Obtener detalles de un medicamento específico  
-- [ ] `POST /medicamentos` – Registrar un nuevo medicamento  
-- [ ] `PUT /medicamentos/{id}` – Actualizar información de un medicamento  
-- [ ] `DELETE /medicamentos/{id}` – Eliminar un medicamento  
-
----
-
-### 💳 Pagos
-
-- [ ] `GET /pagos` – Listar todos los pagos  
-- [ ] `GET /pagos/{id}` – Obtener detalles de un pago específico  
-- [ ] `POST /pagos` – Registrar un nuevo pago  
-- [ ] `PUT /pagos/{id}` – Actualizar información de un pago  
-- [ ] `GET /citas/{id}/pagos` – Obtener pagos de una cita específica  
-- [ ] `GET /pacientes/{id}/pagos` – Listar pagos de un paciente  
 
 ---
 

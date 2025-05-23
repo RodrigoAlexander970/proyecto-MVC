@@ -1,5 +1,4 @@
 <?php
-include_once (__DIR__.'/../Models/Paciente/Paciente.php');
 include_once (__DIR__.'/../Models/Paciente/PacienteDAO.php');
 include_once (__DIR__.'/../Utilities/Response.php');
 include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
@@ -36,10 +35,21 @@ class PacientesService {
             break;
 
             case 1:
+                $paciente = $this->pacienteDAO->porId($params[0]);
+                 
+                // Revisamos si el paciente no existe
+                if($paciente == null) {
+                    throw new ExcepcionApi(
+                        Response::STATUS_NOT_FOUND,
+                        "Paciente no encontrado"
+                    );
+                }
+
+                // Devolvemos el paciente
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     'Especialidad obtenida correctamente',
-                    'Por ID'
+                    $paciente
                 );
             break;
 

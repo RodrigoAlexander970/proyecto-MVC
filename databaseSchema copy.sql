@@ -63,50 +63,6 @@ CREATE TABLE citas (
     FOREIGN KEY (id_medico) REFERENCES medicos(id_medico)
 );
 
-CREATE TABLE historiales_clinicos (
-    id_historial INT AUTO_INCREMENT PRIMARY KEY,
-    id_paciente INT NOT NULL,
-    id_cita INT,
-    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
-    diagnostico TEXT NOT NULL,
-    tratamiento TEXT,
-    observaciones TEXT,
-    id_medico INT NOT NULL,
-    FOREIGN KEY (id_paciente) REFERENCES pacientes(id_paciente),
-    FOREIGN KEY (id_cita) REFERENCES citas(id_cita),
-    FOREIGN KEY (id_medico) REFERENCES medicos(id_medico)
-);
-
-CREATE TABLE medicamentos (
-    id_medicamento INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    descripcion TEXT,
-    activo BOOLEAN DEFAULT TRUE
-);
-
-CREATE TABLE historial_medicamentos (
-    id_historial INT NOT NULL,
-    id_medicamento INT NOT NULL,
-    dosis VARCHAR(100) NOT NULL,
-    frecuencia VARCHAR(100) NOT NULL,
-    duracion VARCHAR(100) NOT NULL,
-    observaciones TEXT,
-    PRIMARY KEY (id_historial, id_medicamento),
-    FOREIGN KEY (id_historial) REFERENCES historiales_clinicos(id_historial),
-    FOREIGN KEY (id_medicamento) REFERENCES medicamentos(id_medicamento)
-);
-
-CREATE TABLE pagos (
-    id_pago INT AUTO_INCREMENT PRIMARY KEY,
-    id_cita INT NOT NULL,
-    monto DECIMAL(10,2) NOT NULL,
-    metodo_pago ENUM('Efectivo', 'Tarjeta', 'Transferencia', 'Seguro médico') NOT NULL,
-    fecha_pago DATETIME DEFAULT CURRENT_TIMESTAMP,
-    estado ENUM('Pendiente', 'Pagado', 'Cancelado') DEFAULT 'Pendiente',
-    referencia VARCHAR(100),
-    FOREIGN KEY (id_cita) REFERENCES citas(id_cita)
-);
-
 CREATE TABLE roles (
     id_rol INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL UNIQUE,
@@ -129,15 +85,6 @@ CREATE TABLE usuarios (
     FOREIGN KEY (id_paciente) REFERENCES pacientes(id_paciente)
 );
 
-CREATE TABLE logs_acceso (
-    id_log INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT NOT NULL,
-    fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
-    accion VARCHAR(255) NOT NULL,
-    ip VARCHAR(50),
-    detalles TEXT,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
-);
 
 INSERT INTO especialidades (nombre, descripcion) VALUES
 ('Medicina General', 'Atención médica primaria y preventiva'),
@@ -224,43 +171,6 @@ INSERT INTO citas (id_paciente, id_medico, fecha, hora_inicio, hora_fin, motivo,
 (4, 5, '2025-05-23', '09:00:00', '09:30:00', 'Consulta ginecológica', 'Completada'),
 (5, 4, '2025-05-24', '11:00:00', '11:30:00', 'Seguimiento tratamiento dermatológico', 'Completada');
 
-INSERT INTO medicamentos (nombre, descripcion) VALUES
-('Paracetamol', 'Analgésico y antipirético'),
-('Ibuprofeno', 'Antiinflamatorio no esteroideo'),
-('Amoxicilina', 'Antibiótico betalactámico'),
-('Omeprazol', 'Inhibidor de la bomba de protones'),
-('Loratadina', 'Antihistamínico'),
-('Atorvastatina', 'Estatina para reducir el colesterol'),
-('Metformina', 'Antidiabético oral'),
-('Losartán', 'Antagonista del receptor de angiotensina II'),
-('Alprazolam', 'Ansiolítico'),
-('Levotiroxina', 'Hormona tiroidea sintética');
-
-INSERT INTO historiales_clinicos (id_paciente, id_cita, diagnostico, tratamiento, observaciones, id_medico) VALUES
-(1, 11, 'Ansiedad leve', 'Reposo y técnicas de relajación', 'Programar seguimiento en 1 mes', 2),
-(2, 12, 'Desarrollo normal', 'Continuar con plan de alimentación', 'Próximo control en 3 meses', 3),
-(3, 13, 'Hipertensión controlada', 'Continuar con medicación actual', 'Reducir consumo de sal', 1),
-(4, 14, 'Examen ginecológico normal', 'No requiere tratamiento', 'Próxima revisión anual', 5),
-(5, 15, 'Dermatitis atópica en remisión', 'Continuar con crema hidratante', 'Evitar alérgenos conocidos', 4);
-
-INSERT INTO historial_medicamentos (id_historial, id_medicamento, dosis, frecuencia, duracion, observaciones) VALUES
-(1, 9, '0.5mg', 'Una vez al día', '2 semanas', 'Tomar antes de dormir'),
-(2, 2, '100mg/5ml', 'Cada 8 horas si hay fiebre', '3 días', 'Administrar después de las comidas'),
-(3, 8, '50mg', 'Una vez al día', 'Indefinido', 'Tomar por la mañana'),
-(5, 5, '10mg', 'Una vez al día', '1 mes', 'Tomar por la mañana');
-
-INSERT INTO pagos (id_cita, monto, metodo_pago, estado, referencia) VALUES
-(11, 800.00, 'Efectivo', 'Pagado', 'EFECTIVO-20250522-001'),
-(12, 900.00, 'Tarjeta', 'Pagado', 'TARJ-20250521-002'),
-(13, 600.00, 'Transferencia', 'Pagado', 'TRANS-20250522-003'),
-(14, 1200.00, 'Seguro médico', 'Pagado', 'SEG-20250523-004'),
-(15, 800.00, 'Efectivo', 'Pagado', 'EFECTIVO-20250524-005'),
-(1, 600.00, 'Efectivo', 'Pendiente', NULL),
-(2, 900.00, 'Tarjeta', 'Pendiente', NULL),
-(3, 600.00, 'Seguro médico', 'Pendiente', NULL),
-(4, 800.00, 'Transferencia', 'Pendiente', NULL),
-(5, 800.00, 'Efectivo', 'Pendiente', NULL);
-
 INSERT INTO roles (nombre, descripcion) VALUES
 ('admin', 'Administrador del sistema con acceso total'),
 ('medico', 'Médico con acceso a sus pacientes y citas'),
@@ -274,11 +184,3 @@ INSERT INTO usuarios (username, password, email, id_rol, id_medico, id_paciente)
 ('recepcion1', '$2y$10$abcdefghijklmnopqrstuv', 'recepcion1@clinica.com', 3, NULL, NULL),
 ('juan.perez', '$2y$10$abcdefghijklmnopqrstuv', 'juan.perez@email.com', 4, NULL, 1),
 ('maria.garcia', '$2y$10$abcdefghijklmnopqrstuv', 'maria.garcia@email.com', 4, NULL, 2);
-
-INSERT INTO logs_acceso (id_usuario, accion, ip, detalles) VALUES
-(1, 'Inicio de sesión', '192.168.1.100', 'Acceso desde navegador Chrome'),
-(2, 'Inicio de sesión', '192.168.1.101', 'Acceso desde navegador Firefox'),
-(3, 'Inicio de sesión', '192.168.1.102', 'Acceso desde navegador Safari'),
-(1, 'Consulta de citas', '192.168.1.100', 'Consulta de citas del día'),
-(2, 'Consulta de paciente', '192.168.1.101', 'Consulta historial del paciente ID 1'),
-(4, 'Registro de cita', '192.168.1.103', 'Registro de nueva cita ID 10');
