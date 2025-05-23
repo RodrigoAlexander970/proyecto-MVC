@@ -19,6 +19,13 @@ class CitasService {
                     $this->citasDAO->todos()
                 );
             break;
+            case 1:
+                return Response::formatearRespuesta(
+                    Response::STATUS_OK,
+                    'AAAAAAAAAA',
+                    $this->citasDAO->porID($params[0])
+                );
+            break;
         }
      }
 }

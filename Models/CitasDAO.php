@@ -1,9 +1,10 @@
 <?php
+include_once(__DIR__.'/DAO.php');
 include_once(__DIR__.'/../Utilities/ExcepcionApi.php');
 include_once(__DIR__.'/../Utilities/Response.php');
 include_once(__DIR__.'/../Database/ConexionBD.php');
 
-class CitasDAO {
+class CitasDAO extends DAO {
     // Constante de la base de datos
     const NOMBRE_TABLA = "citas";
     const ID_PACIENTE = "id_paciente";
@@ -16,19 +17,20 @@ class CitasDAO {
     const OBSERVACIONES = "observaciones";
     const FECHA_REGISTRO = "fecha_registro";
 
-    private $conexion;
     public function __construct (PDO $conexion = null) {
-        $this->conexion = $conexion ?: ConexionBD::obtenerInstancia()->obtenerBD();
+        parent::__construct($conexion);
+        $this->NOMBRE_TABLA = 'citas';
+        $this->LLAVE_PRIMARIA = 'id_cita';
+        $this->campos = ['hola'];
     }
 
-    public function todos() {
-        $sql = "SELECT * FROM ". self::NOMBRE_TABLA;
-        $stmt = $this->conexion->prepare($sql);
-        $stmt -> execute();
+    public function actualizar($data)
+    {
+        
+    }
 
-        // Obtenemos los resultados
-        $resultados = $stmt -> fetchAll(PDO::FETCH_ASSOC);
-
-        return $resultados;
+    public function crear($data)
+    {
+        
     }
 }
