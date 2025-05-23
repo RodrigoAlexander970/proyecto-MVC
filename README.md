@@ -35,7 +35,7 @@ OBJETO JSON:
 ### 🧑‍🤝‍🧑 Pacientes
 
 - [X] `GET /pacientes` – Listar todos los pacientes  
-- [ ] `GET /pacientes/{id}` – Obtener detalles de un paciente específico  
+- [X] `GET /pacientes/{id}` – Obtener detalles de un paciente específico  
 - [ ] `POST /pacientes` – Registrar un nuevo paciente  
 - [ ] `PUT /pacientes/{id}` – Actualizar información de un paciente  
 - [ ] `DELETE /pacientes/{id}` – Desactivar un paciente  
