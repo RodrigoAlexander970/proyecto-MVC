@@ -9,7 +9,7 @@ include_once(__DIR__.'/../Utilities/ExcepcionApi.php');
  */
 
  class EspecialidadesController {
-    // Almacena el servicio de médicos
+    // Almacena el servicio de especialidades
     private $especialidadesService;
 
     public function __construct(EspecialidadesService $especialidadesService = null) {

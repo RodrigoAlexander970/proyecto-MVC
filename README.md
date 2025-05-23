@@ -68,7 +68,7 @@ OBJETO JSON:
 
 ### 📅 Citas
 
-- [ ] `GET /citas` – Listar todas las citas  
+- [X] `GET /citas` – Listar todas las citas  
 - [ ] `GET /citas/{id}` – Obtener detalles de una cita específica  
 - [ ] `POST /citas` – Programar una nueva cita  
 - [ ] `PUT /citas/{id}` – Actualizar información de una cita  
@@ -104,12 +104,3 @@ OBJETO JSON:
 - [ ] `POST /reportes/enviar-email` – Enviar reporte por email  
 
 ---
-
-### 📁 Archivos
-
-- [ ] `POST /archivos/upload` – Subir un archivo  
-- [ ] `GET /archivos/{id}` – Descargar un archivo  
-- [ ] `DELETE /archivos/{id}` – Eliminar un archivo  
-- [ ] `POST /pacientes/{id}/archivos` – Subir archivo para un paciente  
-- [ ] `GET /pacientes/{id}/archivos` – Listar archivos de un paciente  
-- [ ] `GET /historiales/{id}/archivos` – Listar archivos de un historial clínico  
