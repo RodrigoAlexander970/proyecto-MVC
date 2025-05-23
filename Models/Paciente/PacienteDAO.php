@@ -66,4 +66,22 @@ class PacienteDAO {
         // Retornamos el objeto
         return $resultado;
       }
+
+
+
+
+      /**
+       * Devuelve los pacientes en especifico de un medico
+       */
+      public function porMedico($id_medico) {
+        $sql = "SELECT DISTINCT p.*
+                FROM " . self::NOMBRE_TABLA . " p
+                INNER JOIN citas c ON p.id_paciente = c.id_paciente
+                WHERE c.id_medico = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bindParam(1, $id_medico, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultados;
+    }
 }

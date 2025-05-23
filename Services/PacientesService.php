@@ -1,5 +1,6 @@
 <?php
 include_once (__DIR__.'/../Models/Paciente/PacienteDAO.php');
+include_once (__DIR__.'/MedicosService.php');
 include_once (__DIR__.'/../Utilities/Response.php');
 include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
 
@@ -9,9 +10,10 @@ include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
  */
 class PacientesService {
     private $pacienteDAO;
-
+    private $medicosService;
     public function __construct(PacienteDAO $pacienteDAO = null) {
         $this -> pacienteDAO = $pacienteDAO ?: new PacienteDao();
+        $this -> medicosService = new MedicosService();
      }
 
      /**
@@ -59,6 +61,23 @@ class PacientesService {
                     'Ruta no reconocida'
                 );
         }
+    }
+
+    /**
+     * Obtiene los pacientes de un medico en especifico
+     * @param int ID del medico
+     * @return array Respuesta
+     * @throws ExcepcionApi
+     */
+    public function porMedico($id_medico) {
+        // Buscamos si existe el medico
+        $medico = $this->medicosService->obtener([$id_medico]);
+
+        return Response::formatearRespuesta(
+            Response::STATUS_OK,
+            "Pacientes conseguidos",
+            $this->pacienteDAO->porMedico($id_medico)
+        );
     }
 }
     

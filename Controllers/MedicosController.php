@@ -1,6 +1,7 @@
 <?php
 include_once(__DIR__ . '/../Services/MedicosService.php');
 include_once(__DIR__ . '/../Services/HorariosService.php');
+include_once(__DIR__. '/../Services/PacientesService.php');
 include_once(__DIR__ . '/../Utilities/Response.php');
 include_once(__DIR__ . '/../Utilities/ExcepcionApi.php');
 include_once(__DIR__ . '/../Models/Medico/Medico.php');
@@ -12,6 +13,7 @@ class MedicosController
 {
     private $medicosService; // Servicio de médicos
     private $horariosService; // Servicio de horarios
+    private $pacientesService; // Servicio de pacientes
     private $recursosValidos = ['horarios', 'citas', 'pacientes'];
     /**
      * Constructor de la clase MedicosController.
@@ -19,10 +21,12 @@ class MedicosController
      */
     public function __construct(
         MedicosService $medicosService = null,
-        HorariosService $horariosService = null
+        HorariosService $horariosService = null,
+        PacientesService $pacientesService = null
     ) {
         $this->medicosService = $medicosService ?: new MedicosService();
         $this->horariosService = $horariosService ?: new HorariosService();
+        $this->pacientesService = $pacientesService ?: new PacientesService();
     }
 
     /**
@@ -59,8 +63,8 @@ class MedicosController
                         return ['message' => 'Funcionalidad de citas no implementada'];
                     
                     case 'pacientes':
-                        // Implementación pendiente
-                        return ['message' => 'Funcionalidad de pacientes no implementada'];
+                        // Llamamos al servicio de pacientes
+                        return $this->pacientesService->porMedico($params[0]);
                 }
             
             default:

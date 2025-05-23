@@ -40,7 +40,7 @@ class MedicosService
             case 1:
                 $medico = $this->medicoDAO->porID($params[0]);
                 if ($medico === null) {
-                    return Response::formatearRespuesta(
+                    throw new ExcepcionApi(
                         Response::STATUS_NOT_FOUND,
                         "Médico no encontrado"
                     );
