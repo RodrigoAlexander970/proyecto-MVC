@@ -24,14 +24,11 @@ class ReporteController{
                 m.apellidos as apellidos_medico,
                 m.id_especialidad,
                 e.nombre as nombre_especialidad,
-                e.descripcion as descripcion_especialidad,
-                -- Calcular horas trabajadas por día
-                TIME_TO_SEC(TIMEDIFF(h.hora_fin, h.hora_inicio)) / 3600 as horas_dia
+                e.descripcion as descripcion_especialidad
             FROM horarios_disponibles h
             INNER JOIN medicos m ON h.id_medico = m.id_medico
             INNER JOIN especialidades e ON m.id_especialidad = e.id_especialidad 
-            ORDER BY m.nombre, h.id_medico, 
-                FIELD(h.dia_semana, 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo')";
+            ORDER BY FIELD(h.dia_semana, 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo')";
             
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute();
@@ -57,8 +54,26 @@ class ReporteController{
     
     private function procesarDatosReporte($resultados) {
         $reporte = [];
-        $dias_semana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-        
+
+        foreach($resultados as $row){
+            // Inicializamos el día si no existe
+            if(!isset($reporte[$row['dia_semana']])){
+                $reporte[$row['dia_semana']] = [];
+            }
+
+            //Inicializamos la especialidad
+            if(!isset($reporte[$row['dia_semana']][$row['nombre_especialidad']])){
+                $reporte[$row['dia_semana']][$row['nombre_especialidad']] = [];
+            }
+
+            $reporte[$row['dia_semana']][$row['nombre_especialidad']][] = [
+                'hora_inicio' => $row['hora_inicio'],
+                'hora_fin' => $row['hora_fin'],
+                'nombre_medico' => $row['nombre_medico'],
+                'apellidos_medico' => $row['apellidos_medico'],
+            ];
+        }
+        /*
         foreach ($resultados as $row) {
             $especialidad_id = $row['id_especialidad'];
             $especialidad_nombre = $row['nombre_especialidad'];
@@ -109,7 +124,7 @@ class ReporteController{
             $reporte[$especialidad_id]['estadisticas']['total_horas_semana'] += $row['horas_dia'];
             
             // Días con cobertura
-            if (!in_array($row['dia_semana'], $reporte[$especialidad_id]['estadisticas']['dias_con_cobertura'])) {
+            if (!in_array($row['dia'], $reporte[$especialidad_id]['estadisticas']['dias_con_cobertura'])) {
                 $reporte[$especialidad_id]['estadisticas']['dias_con_cobertura'][] = $row['dia_semana'];
             }
             
@@ -137,56 +152,7 @@ class ReporteController{
             
             $reporte_final[] = $especialidad;
         }
-        
-        return $reporte_final;
-    }
-    
-    // Método adicional para obtener resumen general
-    public function obtenerResumenGeneral() {
-        try {
-            $sql = "SELECT 
-                COUNT(DISTINCT e.id) as total_especialidades,
-                COUNT(DISTINCT h.medico) as total_medicos,
-                COUNT(h.id_horario) as total_horarios,
-                SUM(TIME_TO_SEC(TIMEDIFF(h.fecha_fin, h.fecha_inicio)) / 3600) as total_horas_semana
-            FROM horarios_disponibles h
-            INNER JOIN medicos_especialidades me ON h.medico = me.medico_nombre
-            INNER JOIN especialidades e ON me.especialidad_id = e.id";
-            
-            $stmt = $this->conexion->prepare($sql);
-            $stmt->execute();
-            $resumen = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            return [
-                'success' => true,
-                'data' => [
-                    'total_especialidades' => (int)$resumen['total_especialidades'],
-                    'total_medicos' => (int)$resumen['total_medicos'],
-                    'total_horarios' => (int)$resumen['total_horarios'],
-                    'total_horas_semana' => round($resumen['total_horas_semana'], 2),
-                    'promedio_horas_por_medico' => round($resumen['total_horas_semana'] / $resumen['total_medicos'], 2)
-                ]
-            ];
-            
-        } catch (PDOException $e) {
-            return [
-                'success' => false,
-                'error' => 'Error al obtener resumen: ' . $e->getMessage()
-            ];
-        }
+        */
+        return $reporte;
     }
 }
-
-// Ejemplo de uso:
-/*
-$reporte = new ReporteDisponibilidad($conexion);
-$resultado = $reporte->obtenerReporteDisponibilidadPorEspecialidad();
-
-if ($resultado['success']) {
-    header('Content-Type: application/json');
-    echo json_encode($resultado['data']);
-} else {
-    http_response_code(500);
-    echo json_encode(['error' => $resultado['error']]);
-}
-*/
