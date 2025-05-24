@@ -10,6 +10,7 @@ class Especialidad extends DAO {
     const ACTIVO = 'activo';
 
     public function __construct() {
+        parent::__construct();
         $this->NOMBRE_TABLA = 'especialidades';
         $this->LLAVE_PRIMARIA = 'id_especialidad';
         $this->camposRequeridos = ['nombre', 'descripcion'];

@@ -1,6 +1,6 @@
 <?php
 include_once (__DIR__ . '/../Services/EspecialidadesService.php');
-include_once(__DIR__.'/../Models/Especialidad/Especialidad.php');
+include_once(__DIR__.'/../Models/Especialidad.php');
 include_once(__DIR__.'/../Utilities/Response.php');
 include_once(__DIR__.'/../Utilities/ExcepcionApi.php');
 
@@ -45,9 +45,10 @@ include_once(__DIR__.'/../Utilities/ExcepcionApi.php');
         $this -> validarDatosEspecialidad($especialidadData);
 
         // Creamos el objeto Especialidad
-        $especialidad = new Especialidad();
-        $especialidad->setNombre($especialidadData->nombre);
-        $especialidad->setDescripcion($especialidadData->descripcion);
+        $especialidad = [
+            'nombre' => $especialidadData->nombre,
+            'descripcion' => $especialidadData->descripcion
+        ];
 
         // Registramos la especialidad
         return $this->especialidadesService->crear($especialidad);
@@ -70,10 +71,11 @@ include_once(__DIR__.'/../Utilities/ExcepcionApi.php');
         $this -> validarDatosEspecialidad($especialidadData);
 
         // Creamos el objeto Especialidad
-        $especialidad = new Especialidad();
-        $especialidad->setIdEspecialidad($params[0]);
-        $especialidad->setNombre($especialidadData->nombre);
-        $especialidad->setDescripcion($especialidadData->descripcion);
+        $especialidad = [
+            'id_especialidad' => $params[0],
+            'nombre' => $especialidadData->nombre,
+            'descripcion' => $especialidadData->descripcion
+        ];
 
         return $this->especialidadesService->actualizar($especialidad);
     }
