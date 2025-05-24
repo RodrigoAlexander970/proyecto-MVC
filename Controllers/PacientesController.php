@@ -8,8 +8,8 @@ class PacientesController {
     // Almacena el servicio de médicos
     private $pacientesService;
 
-    public function __construct(PacientesService $pacientesService = null) {
-        $this->pacientesService = $pacientesService ?: new PacientesService();
+    public function __construct() {
+        $this->pacientesService = new PacientesService();
     }
 
     /**

@@ -7,8 +7,8 @@ class CitasController {
     // Almacenamos el serviico de horarios
     private $citasService;
 
-    public function __construct(CitasService $citasService = null) {
-        $this->citasService = $citasService ?: new CitasService();
+    public function __construct() {
+        $this->citasService = new CitasService();
     }
 
     /**

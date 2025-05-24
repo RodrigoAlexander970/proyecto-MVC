@@ -11,8 +11,9 @@ include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
 class PacientesService {
     private $paciente;
     private $medicosService;
-    public function __construct(Paciente $paciente = null) {
-        $this -> paciente = $paciente ?: new Paciente();
+    
+    public function __construct() {
+        $this -> paciente = new Paciente();
         $this -> medicosService = new MedicosService();
      }
 

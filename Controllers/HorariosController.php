@@ -1,14 +1,13 @@
 <?php
 include_once (__DIR__ . '/../Services/HorariosService.php');
-include_once(__DIR__.'/../Models/Horario/Horario.php');
 include_once(__DIR__.'/../Utilities/Response.php');
 include_once(__DIR__.'/../Utilities/ExcepcionApi.php');
 
 class HorariosController {
     private $horariosService;
 
-    public function __construct(EspecialidadesService $horariosService = null) {
-        $this->horariosService = $horariosService ?: new HorariosService();
+    public function __construct() {
+        $this->horariosService = new HorariosService();
     }
 
     public function get($params) {
@@ -24,11 +23,12 @@ class HorariosController {
         $horarioData = $this->getRequestBody();
         $this -> validarDatosHorario($horarioData);
 
-        $horario = new Horario();
-        $horario->setIdMedico($horarioData->id_medico);
-        $horario->setDiaSemana($horarioData->dia_semana);
-        $horario->setHoraInicio($horarioData->hora_inicio);
-        $horario->setHoraFin($horarioData->hora_fin);
+        $horario = [
+            'id_medico'   => $horarioData->id_medico,
+            'dia_semana'  => $horarioData->dia_semana,
+            'hora_inicio' => $horarioData->hora_inicio,
+            'hora_fin'    => $horarioData->hora_fin
+        ];
 
 
         return $this->horariosService->crear($horario);
@@ -43,13 +43,14 @@ class HorariosController {
         $horarioData = $this->getRequestBody();
         $this -> validarDatosHorario($horarioData);
 
-        $horario = new Horario();
-        $horario->setIdHorario($params[0]);
-        $horario->setIdMedico($horarioData->id_medico);
-        $horario->setDiaSemana($horarioData->dia_semana);
-        $horario->setHoraInicio($horarioData->hora_inicio);
-        $horario->setHoraFin($horarioData->hora_fin);
-        $horario->setActivo($horarioData->activo);
+        $horario = [
+            'id_horario'  => $params[0],
+            'id_medico'   => $horarioData->id_medico,
+            'dia_semana'  => $horarioData->dia_semana,
+            'hora_inicio' => $horarioData->hora_inicio,
+            'hora_fin'    => $horarioData->hora_fin,
+            'activo'      => $horarioData->activo
+        ];
 
         return $this->horariosService->actualizar($horario);
     }

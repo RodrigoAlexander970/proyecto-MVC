@@ -1,19 +1,17 @@
 <?php
-include_once (__DIR__ . '/../Services/EspecialidadesService.php');
 include_once(__DIR__.'/../Models/Especialidad.php');
+
+include_once (__DIR__ . '/../Services/EspecialidadesService.php');
+
 include_once(__DIR__.'/../Utilities/Response.php');
 include_once(__DIR__.'/../Utilities/ExcepcionApi.php');
-
-/**
- * Clase que 
- */
 
  class EspecialidadesController {
     // Almacena el servicio de especialidades
     private $especialidadesService;
 
-    public function __construct(EspecialidadesService $especialidadesService = null) {
-        $this->especialidadesService = $especialidadesService ?: new EspecialidadesService();
+    public function __construct() {
+        $this->especialidadesService = new EspecialidadesService();
     }
 
     /**

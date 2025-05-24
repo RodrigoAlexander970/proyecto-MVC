@@ -1,10 +1,12 @@
 <?php
+include_once(__DIR__ . '/../Models/Medico/Medico.php');
+
 include_once(__DIR__ . '/../Services/MedicosService.php');
 include_once(__DIR__ . '/../Services/HorariosService.php');
 include_once(__DIR__. '/../Services/PacientesService.php');
+
 include_once(__DIR__ . '/../Utilities/Response.php');
 include_once(__DIR__ . '/../Utilities/ExcepcionApi.php');
-include_once(__DIR__ . '/../Models/Medico/Medico.php');
 
 /**
  * Controlador para la gestión de médicos.
@@ -19,14 +21,10 @@ class MedicosController
      * Constructor de la clase MedicosController.
      * Inicializa el servicio de médicos.
      */
-    public function __construct(
-        MedicosService $medicosService = null,
-        HorariosService $horariosService = null,
-        PacientesService $pacientesService = null
-    ) {
-        $this->medicosService = $medicosService ?: new MedicosService();
-        $this->horariosService = $horariosService ?: new HorariosService();
-        $this->pacientesService = $pacientesService ?: new PacientesService();
+    public function __construct() {
+        $this->medicosService = new MedicosService();
+        $this->horariosService = new HorariosService();
+        $this->pacientesService = new PacientesService();
     }
 
     /**
@@ -86,13 +84,14 @@ class MedicosController
         $this->validarDatosMedico($medicoData);
         
         // Creamos el objeto médico
-        $medico = new Medico();
-        $medico->setIdEspecialidad($medicoData->id_especialidad);
-        $medico->setNombre($medicoData->nombre);
-        $medico->setApellidos($medicoData->apellidos);
-        $medico->setCedulaProfesional($medicoData->cedula_profesional);
-        $medico->setEmail($medicoData->email);
-        $medico->setTelefono($medicoData->telefono);
+        $medico = [
+            'id_especialidad' => $medicoData->id_especialidad,
+            'nombre' => $medicoData->nombre,
+            'apellidos' => $medicoData->apellidos,
+            'cedula_profesional' => $medicoData->cedula_profesional,
+            'email' => $medicoData->email,
+            'telefono' => $medicoData->telefono
+        ];
 
         // Creamos el médico
         return $this->medicosService->crear($medico);
@@ -116,14 +115,15 @@ class MedicosController
         $this->validarDatosMedico($medicoData);
         
         // Creamos el objeto médico
-        $medico = new Medico();
-        $medico->setIdMedico($params[0]);
-        $medico->setIdEspecialidad($medicoData->id_especialidad);
-        $medico->setNombre($medicoData->nombre);
-        $medico->setApellidos($medicoData->apellidos);
-        $medico->setCedulaProfesional($medicoData->cedula_profesional);
-        $medico->setEmail($medicoData->email);
-        $medico->setTelefono($medicoData->telefono);
+        $medico = [
+            'id_medico' => $params[0],
+            'id_especialidad' => $medicoData->id_especialidad,
+            'nombre' => $medicoData->nombre,
+            'apellidos' => $medicoData->apellidos,
+            'cedula_profesional' => $medicoData->cedula_profesional,
+            'email' => $medicoData->email,
+            'telefono' => $medicoData->telefono
+        ];
 
         return $this->medicosService->actualizar($medico);
     }
