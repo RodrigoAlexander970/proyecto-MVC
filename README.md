@@ -97,10 +97,7 @@ OBJETO JSON:
 
 - [ ] `GET /reportes/citas-por-medico` – Reporte de citas por médico  
 - [ ] `GET /reportes/citas-por-especialidad` – Reporte de citas por especialidad  
-- [ ] `GET /reportes/ingresos` – Reporte de ingresos (filtrable por período)  
 - [ ] `GET /reportes/pacientes-frecuentes` – Reporte de pacientes frecuentes  
 - [ ] `GET /reportes/ocupacion-medicos` – Reporte de ocupación de médicos  
-- [ ] `POST /reportes/generar-pdf` – Generar reporte en formato PDF  
-- [ ] `POST /reportes/enviar-email` – Enviar reporte por email  
 
 ---
