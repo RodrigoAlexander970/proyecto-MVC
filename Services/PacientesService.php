@@ -1,5 +1,5 @@
 <?php
-include_once (__DIR__.'/../Models/Paciente/PacienteDAO.php');
+include_once (__DIR__.'/../Models/Paciente.php');
 include_once (__DIR__.'/MedicosService.php');
 include_once (__DIR__.'/../Utilities/Response.php');
 include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
@@ -9,10 +9,10 @@ include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
  * Interactua con el DAO de Paciente
  */
 class PacientesService {
-    private $pacienteDAO;
+    private $paciente;
     private $medicosService;
-    public function __construct(PacienteDAO $pacienteDAO = null) {
-        $this -> pacienteDAO = $pacienteDAO ?: new PacienteDao();
+    public function __construct(Paciente $paciente = null) {
+        $this -> paciente = $paciente ?: new Paciente();
         $this -> medicosService = new MedicosService();
      }
 
@@ -32,12 +32,12 @@ class PacientesService {
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     'Pacientes obtenidos correctamente',
-                    $this->pacienteDAO->todos()
+                    $this->paciente->todos()
                 );
             break;
 
             case 1:
-                $paciente = $this->pacienteDAO->porId($params[0]);
+                $paciente = $this->paciente->porId($params[0]);
                  
                 // Revisamos si el paciente no existe
                 if($paciente == null) {
@@ -76,7 +76,7 @@ class PacientesService {
         return Response::formatearRespuesta(
             Response::STATUS_OK,
             "Pacientes conseguidos",
-            $this->pacienteDAO->porMedico($id_medico)
+            $this->paciente->porMedico($id_medico)
         );
     }
 }

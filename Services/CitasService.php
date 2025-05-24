@@ -1,13 +1,13 @@
 <?php
-include_once (__DIR__.'/../Models/CitasDAO.php');
+include_once (__DIR__.'/../Models/Citas.php');
 include_once (__DIR__.'/../Utilities/Response.php');
 include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
 
 class CitasService {
-    private $citasDAO;
+    private $citas;
 
-    public function __construct(Citas $citasDAO = null) {
-        $this -> citasDAO = $citasDAO ?: new CitasDAO();
+    public function __construct(Citas $citas = null) {
+        $this -> citas = $citas ?: new Citas();
      }
 
      public function obtener($params) {
@@ -16,14 +16,14 @@ class CitasService {
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     'Citas obtenidas correctamente',
-                    $this->citasDAO->todos()
+                    $this->citas->todos()
                 );
             break;
             case 1:
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     'AAAAAAAAAA',
-                    $this->citasDAO->porID($params[0])
+                    $this->citas->porID($params[0])
                 );
             break;
         }

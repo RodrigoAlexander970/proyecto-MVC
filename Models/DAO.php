@@ -1,7 +1,7 @@
 <?php
 // Incluye la conexion a la base de datos
 include_once(__DIR__.'/../Database/ConexionBD.php');
-include_once(__DIR__.'/../../Utilities/ExcepcionApi.php');
+include_once(__DIR__.'/../Utilities/ExcepcionApi.php');
 /**
  * Clase abstracta DAO (Data Access Object).
  *

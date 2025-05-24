@@ -1,6 +1,5 @@
 <?php
-include_once (__DIR__.'/../Models/Especialidad/Especialidad.php');
-include_once (__DIR__.'/../Models/Especialidad/EspecialidadDAO.php');
+include_once (__DIR__.'/../Models/Especialidad.php');
 include_once (__DIR__.'/../Utilities/Response.php');
 include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
 
@@ -9,10 +8,10 @@ include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
  * Interactua con el DAO de Especialidad
  */
 class EspecialidadesService {
-    private $especialidadDAO;
+    private $especialidad;
 
-    public function __construct(EspecialidadDAO $especialidadDAO = null) {
-        $this -> especialidadDAO = $especialidadDAO ?: new EspecialidadDAO();
+    public function __construct(Especialidad $especialidad = null) {
+        $this -> especialidad = $especialidad ?: new Especialidad();
      }
     
     /**
@@ -31,7 +30,7 @@ class EspecialidadesService {
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     'Especialidades obtenidas correctamente',
-                    $this->especialidadDAO->todos()
+                    $this->especialidad->todos()
                 );
             break;
 
@@ -39,7 +38,7 @@ class EspecialidadesService {
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     'Especialidad obtenida correctamente',
-                    $this->especialidadDAO->porId($params[0])
+                    $this->especialidad->porId($params[0])
                 );
             break;
 
@@ -57,7 +56,7 @@ class EspecialidadesService {
      * @return array Respuesta
      */
     public function crear($especialidad){
-        $resultado = $this->especialidadDAO->crear($especialidad);
+        $resultado = $this->especialidad->crear($especialidad);
 
         // Verificamos si se creó correctamente
         if($resultado) {
@@ -89,7 +88,7 @@ class EspecialidadesService {
             );
         }
 
-        $resultado = $this->especialidadDAO->actualizar($especialidad);
+        $resultado = $this->especialidad->actualizar($especialidad);
 
         if($resultado) {
             return Response::formatearRespuesta(
@@ -104,7 +103,7 @@ class EspecialidadesService {
     }
 
     public function borrar($id) {
-        $seBorro = $this->especialidadDAO->borrar($id);
+        $seBorro = $this->especialidad->borrar($id);
 
         if ($seBorro === 'constraint_violation') {
             throw new ExcepcionApi(
@@ -130,7 +129,7 @@ class EspecialidadesService {
      * @return bool true si existe | false si no existe
      */
     private function existe($id){
-        $especialidad = $this->especialidadDAO->porId($id);
+        $especialidad = $this->especialidad->porId($id);
         if($especialidad){
             return true;
         } else {

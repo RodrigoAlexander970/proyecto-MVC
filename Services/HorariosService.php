@@ -1,6 +1,5 @@
 <?php
-include_once (__DIR__.'/../Models/Horario/Horario.php');
-include_once (__DIR__.'/../Models/Horario/HorarioDAO.php');
+include_once (__DIR__.'/../Models/Horario.php');
 include_once (__DIR__.'/../Utilities/Response.php');
 include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
 include_once (__DIR__.'/MedicosService.php');
@@ -10,10 +9,10 @@ include_once (__DIR__.'/MedicosService.php');
  */
 class HorariosService
 {
-    private $horarioDAO;
+    private $horario;
     private $medicosService;
-    public function __construct(HorarioDAO $horarioDAO = null, MedicosService $medicosService = null) {
-        $this -> horarioDAO = $horarioDAO ?: new HorarioDAO();
+    public function __construct(Horario $horario = null, MedicosService $medicosService = null) {
+        $this -> horario = $horario ?: new Horario();
         $this -> medicosService = $medicosService ?: new MedicosService();
      }
 
@@ -26,7 +25,7 @@ class HorariosService
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     'Horarios obtenidos correctamente',
-                    $this->horarioDAO->todos()
+                    $this->horario->todos()
                 );
             break;
 
@@ -41,7 +40,7 @@ class HorariosService
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     "Horario obtenido correctamente",
-                    $this->horarioDAO->porId($params[0])
+                    $this->horario->porId($params[0])
                 );
             break;
             default:
@@ -56,7 +55,7 @@ class HorariosService
      * Crea un nuevo horario
      */
     public function crear($horario) {
-        $resultado = $this->horarioDAO->crear($horario);
+        $resultado = $this->horario->crear($horario);
 
         // Verificamos si se creó correctamente
         if ($resultado) {
@@ -84,7 +83,7 @@ class HorariosService
         }
         
         // Llamamos a la función actualizar del DAO
-        $resultado = $this->horarioDAO->actualizar($horario);
+        $resultado = $this->horario->actualizar($horario);
 
         if ($resultado) {
             return Response::formatearRespuesta(
@@ -109,7 +108,7 @@ class HorariosService
             );
         }
 
-        $seBorro = $this->horarioDAO->borrar($id);
+        $seBorro = $this->horario->borrar($id);
 
         if ($seBorro === 'constraint_violation') {
             throw new ExcepcionApi(
@@ -139,7 +138,7 @@ class HorariosService
             throw new ExcepcionApi(Response::STATUS_NOT_FOUND, "Médico no encontrado");
         }
 
-        $horarios = $this->horarioDAO->porMedico($id_medico);
+        $horarios = $this->horario->porMedico($id_medico);
         if ($horarios === null) {
             return Response::formatearRespuesta(
                 Response::STATUS_NOT_FOUND,
@@ -155,7 +154,7 @@ class HorariosService
     }
 
     private function existe($id) {
-        $horario = $this->horarioDAO->porId($id);
+        $horario = $this->horario->porId($id);
         if($horario){
             return true;
         } else {

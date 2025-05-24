@@ -1,6 +1,5 @@
 <?php
-include_once (__DIR__.'/../Models/Medico/Medico.php');
-include_once (__DIR__.'/../Models/Medico/MedicoDAO.php');
+include_once (__DIR__.'/../Models/Medico.php');
 include_once (__DIR__.'/../Utilities/Response.php');
 include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
 
@@ -9,10 +8,10 @@ include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
  */
 class MedicosService
 {
-    private $medicoDAO;
+    private $medico;
 
-    public function __construct(MedicoDAO $medicoDAO = null) {
-        $this -> medicoDAO = $medicoDAO ?: new MedicoDAO();
+    public function __construct(Medico $medico = null) {
+        $this -> medico = $medico ?: new Medico();
      }
 
 /**
@@ -34,11 +33,11 @@ class MedicosService
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     'Médicos obtenidos correctamente',
-                    $this->medicoDAO->todos()
+                    $this->medico->todos()
                 );
             break;
             case 1:
-                $medico = $this->medicoDAO->porID($params[0]);
+                $medico = $this->medico->porID($params[0]);
                 if ($medico === null) {
                     throw new ExcepcionApi(
                         Response::STATUS_NOT_FOUND,
@@ -67,7 +66,7 @@ class MedicosService
     public function crear($medico)
     {
         // Llamamos a la función crear del DAO
-        $resultado = $this->medicoDAO->crear($medico);
+        $resultado = $this->medico->crear($medico);
 
         // Verificamos si se creó correctamente
         if ($resultado) {
@@ -92,7 +91,7 @@ class MedicosService
      */
     public function actualizar($medico) {
         // Llamamos a la función actualizar del DAO
-        $resultado = $this->medicoDAO->actualizar($medico);
+        $resultado = $this->medico->actualizar($medico);
 
         if ($resultado) {
             return Response::formatearRespuesta(
@@ -116,7 +115,7 @@ class MedicosService
      */
     public function borrar($id){
         // Llamamos a la función borrar del DAO
-        $resultado = $this->medicoDAO->borrar($id);
+        $resultado = $this->medico->borrar($id);
 
         // Verificamos si se borró correctamente
         if ($resultado) {

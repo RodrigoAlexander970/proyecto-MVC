@@ -5,7 +5,7 @@ include_once(__DIR__.'/DAO.php');
 /**
  * Clase que enlaza la base de datos con la tabla Medico.
  */
-class MedicoDAO extends DAO
+class Medico extends DAO
 {
     // Constantes de la base de datos
     const NOMBRE_TABLA = 'medicos';
@@ -83,7 +83,7 @@ class MedicoDAO extends DAO
       public function actualizar($medico) {
 
         // Verificar primero si el médico existe
-        $medicoExistente = $this->porID($medico->getIdMedico());
+        $medicoExistente = $this->porID($medico['id_medico']);
         
         if (!$medicoExistente) {
             throw new ExcepcionApi(Response::STATUS_NOT_FOUND, "Médico no encontrado");
