@@ -12,7 +12,6 @@ class Horario extends DAO {
     const DIA_SEMANA = 'dia_semana';
     const HORA_INICIO = 'hora_inicio';
     const HORA_FIN = 'hora_fin';
-    const ACTIVO = 'activo';
 
     public function __construct() {
         parent::__construct();
@@ -71,8 +70,7 @@ class Horario extends DAO {
         . self::ID_MEDICO . " = ?,"
         . self::DIA_SEMANA . " = ?,"
         . self::HORA_INICIO . " = ?,"
-        . self::HORA_FIN . " = ?,"
-        . self::ACTIVO . " = ? WHERE " . self::ID_HORARIO . " = ?";
+        . self::HORA_FIN . " = ? WHERE " . self::ID_HORARIO . " = ?";
 
         $stmt = $this -> conexion -> prepare($sql);
 
@@ -87,8 +85,7 @@ class Horario extends DAO {
         $stmt->bindParam(2, $dia_semana, PDO::PARAM_STR);
         $stmt->bindParam(3, $hora_inicio, PDO::PARAM_STR);
         $stmt->bindParam(4, $hora_fin, PDO::PARAM_STR);
-        $stmt->bindParam(5, $activo, PDO::PARAM_BOOL);
-        $stmt->bindParam(6, $id_horario, PDO::PARAM_INT);
+        $stmt->bindParam(5, $id_horario, PDO::PARAM_INT);
 
                 // Ejecutamos la consulta
         $stmt->execute();

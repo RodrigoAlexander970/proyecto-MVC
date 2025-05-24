@@ -11,9 +11,9 @@ class HorariosService
 {
     private $horario;
     private $medicosService;
-    public function __construct(Horario $horario = null, MedicosService $medicosService = null) {
-        $this -> horario = $horario ?: new Horario();
-        $this -> medicosService = $medicosService ?: new MedicosService();
+    public function __construct() {
+        $this -> horario = new Horario();
+        $this -> medicosService = new MedicosService();
      }
 
      /**
@@ -75,7 +75,7 @@ class HorariosService
 
     public function actualizar($horario) {
 
-        if(!self::existe($horario->getIdHorario())){
+        if(!self::existe($horario['id_horario'])){
             throw new ExcepcionApi(
                 Response::STATUS_NOT_FOUND,
                 "Horario no existente"

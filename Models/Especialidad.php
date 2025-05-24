@@ -55,7 +55,7 @@ class Especialidad extends DAO {
     public function actualizar($especialidad) {
 
         // Verificar primero si la especialidad existe
-        $especialidadExiste = $this->porID($especialidad->getIdEspecialidad());
+        $especialidadExiste = $this->porID($especialidad['id_especialidad']);
         
         if (!$especialidadExiste) {
             throw new ExcepcionApi(Response::STATUS_NOT_FOUND, "Especialidad no encontrada");

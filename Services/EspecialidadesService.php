@@ -81,7 +81,7 @@ class EspecialidadesService {
     public function actualizar($especialidad) {
 
         // Revisamos si no existe
-        if(!self::existe($especialidad->getIdEspecialidad())){
+        if(!self::existe($especialidad['id_especialidad'])){
             throw new ExcepcionApi(
                 Response::STATUS_NOT_FOUND,
                 "Especialidad no existente"

@@ -48,8 +48,7 @@ class HorariosController {
             'id_medico'   => $horarioData->id_medico,
             'dia_semana'  => $horarioData->dia_semana,
             'hora_inicio' => $horarioData->hora_inicio,
-            'hora_fin'    => $horarioData->hora_fin,
-            'activo'      => $horarioData->activo
+            'hora_fin'    => $horarioData->hora_fin
         ];
 
         return $this->horariosService->actualizar($horario);

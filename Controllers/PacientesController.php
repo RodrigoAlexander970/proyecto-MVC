@@ -1,6 +1,5 @@
 <?php
 include_once (__DIR__ . '/../Services/PacientesService.php');
-include_once(__DIR__.'/../Models/Paciente/Paciente.php');
 include_once(__DIR__.'/../Utilities/Response.php');
 include_once(__DIR__.'/../Utilities/ExcepcionApi.php');
 

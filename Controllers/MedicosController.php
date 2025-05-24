@@ -1,6 +1,4 @@
 <?php
-include_once(__DIR__ . '/../Models/Medico/Medico.php');
-
 include_once(__DIR__ . '/../Services/MedicosService.php');
 include_once(__DIR__ . '/../Services/HorariosService.php');
 include_once(__DIR__. '/../Services/PacientesService.php');

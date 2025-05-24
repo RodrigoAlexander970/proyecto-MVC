@@ -51,7 +51,7 @@ class PacientesService {
                 // Devolvemos el paciente
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
-                    'Especialidad obtenida correctamente',
+                    'Paciente obtenido correctamente',
                     $paciente
                 );
             break;

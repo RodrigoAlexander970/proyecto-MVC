@@ -22,7 +22,7 @@ class CitasService {
             case 1:
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
-                    'AAAAAAAAAA',
+                    'Cita obtenida correctamente',
                     $this->citas->porID($params[0])
                 );
             break;
