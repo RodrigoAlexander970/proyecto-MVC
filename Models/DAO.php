@@ -71,8 +71,15 @@ abstract class DAO
         $sql = "DELETE FROM {$this->NOMBRE_TABLA} WHERE {$this->LLAVE_PRIMARIA} = ?";
         $stmt = $this->conexion->prepare($sql);
         $stmt->bindParam(1, $id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->rowCount() > 0;
+        try {
+            $stmt->execute();
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            if ($e->getCode() == '23000') { 
+                throw new ExcepcionApi(409, "No se puede eliminar el registro porque existen registros relacionados.", $e->getCode());
+            }
+            throw $e;
+        }
     }
 
     /**
