@@ -1,7 +1,7 @@
 <?php
 // Incluye la conexion a la base de datos
 include_once(__DIR__.'/../Database/ConexionBD.php');
-
+include_once(__DIR__.'/../../Utilities/ExcepcionApi.php');
 /**
  * Clase abstracta DAO (Data Access Object).
  *
@@ -16,7 +16,7 @@ abstract class DAO
     protected $conexion;
     protected $NOMBRE_TABLA;
     protected $LLAVE_PRIMARIA;
-    protected $campos;
+    protected $camposRequeridos; 
 
     /**
      * Constructor de la clase DAO.
@@ -84,4 +84,13 @@ abstract class DAO
     // Métodos abstractos para crear y actualizar, porque dependen de los campos
     abstract public function crear($data);
     abstract public function actualizar($data);
+
+    /**
+     * Obtiene los campos requeridos para la entidad.
+     *
+     * @return array Lista de campos que son obligatorios.
+     */
+    public function getRequiredFields() {
+        return $this->camposRequeridos;
+    }
 }

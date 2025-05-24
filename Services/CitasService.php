@@ -6,7 +6,7 @@ include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
 class CitasService {
     private $citasDAO;
 
-    public function __construct(CitasDAO $citasDAO = null) {
+    public function __construct(Citas $citasDAO = null) {
         $this -> citasDAO = $citasDAO ?: new CitasDAO();
      }
 

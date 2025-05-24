@@ -1,0 +1,30 @@
+<?php
+include_once(__DIR__ . '/DAO.php');
+
+class Citas extends DAO
+{
+    // Constante de la base de datos
+    const NOMBRE_TABLA = 'citas';
+    const ID_CITA = 'id_cita';
+    const ID_PACIENTE = "id_paciente";
+    const ID_MEDICO = "id_medico";
+    const FECHA = "fecha";
+    const HORA_INICIO = "hora_inicio";
+    const HORA_FIN = "hora_fin";
+    const MOTIVO = "motivo";
+    const ESTADO = "estado";
+    const OBSERVACIONES = "observaciones";
+    const FECHA_REGISTRO = "fecha_registro";
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->NOMBRE_TABLA = self::NOMBRE_TABLA;
+        $this->LLAVE_PRIMARIA = self::ID_CITA;
+        $this->camposRequeridos = ['id_paciente', 'id_medico', 'fecha', 'hora_inicio', 'hora_fin', 'motivo', 'estado', 'observaciones'];
+    }
+
+    public function actualizar($data) {}
+
+    public function crear($data) {}
+}
