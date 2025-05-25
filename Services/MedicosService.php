@@ -1,17 +1,16 @@
 <?php
 include_once (__DIR__.'/../Models/Medico.php');
-include_once (__DIR__.'/../Utilities/Response.php');
-include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
 
 /**
  * Servicio para operaciones con médicos
  */
-class MedicosService
+class MedicosService extends Service
 {
     private $medico;
 
-    public function __construct(Medico $medico = null) {
-        $this -> medico = $medico ?: new Medico();
+    public function __construct() {
+        $this -> medico = new Medico();
+        parent::__construct($this->medico);
      }
 
 /**
@@ -38,12 +37,14 @@ class MedicosService
             break;
             case 1:
                 $medico = $this->medico->porID($params[0]);
+
                 if ($medico === null) {
                     throw new ExcepcionApi(
                         Response::STATUS_NOT_FOUND,
                         "Médico no encontrado"
                     );
                 }
+
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     "Médico obtenido correctamente",

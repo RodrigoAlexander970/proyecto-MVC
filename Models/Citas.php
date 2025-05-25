@@ -24,7 +24,7 @@ class Citas extends DAO
         $this->camposRequeridos = ['id_paciente', 'id_medico', 'fecha', 'hora_inicio', 'hora_fin', 'motivo', 'estado', 'observaciones'];
     }
 
-    public function actualizar($data) {}
-
     public function crear($data) {}
+
+    public function actualizar($data) {}
 }

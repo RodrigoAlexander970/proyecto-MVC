@@ -1,13 +1,11 @@
 <?php
 include_once (__DIR__.'/../Models/Especialidad.php');
-include_once (__DIR__.'/../Utilities/Response.php');
-include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
 
 /**
  * Servicio para operaciones con especialidades
  * Interactua con el DAO de Especialidad
  */
-class EspecialidadesService {
+class EspecialidadesService extends Service {
     private $especialidad;
 
     public function __construct(Especialidad $especialidad = null) {
@@ -120,20 +118,6 @@ class EspecialidadesService {
                 Response::STATUS_NOT_FOUND,
                 "Especialidad no encontrada"
             );
-        }
-    }
-
-    /**
-     * Comprueba si existe un registro en la base de datos
-     * @param int ID del registro
-     * @return bool true si existe | false si no existe
-     */
-    private function existe($id){
-        $especialidad = $this->especialidad->porId($id);
-        if($especialidad){
-            return true;
-        } else {
-            return false;
         }
     }
 }
