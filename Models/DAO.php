@@ -16,7 +16,7 @@ abstract class DAO
     protected $conexion;
     protected $NOMBRE_TABLA;
     protected $LLAVE_PRIMARIA;
-    protected $camposRequeridos; 
+    protected $camposTabla; 
 
     /**
      * Constructor de la clase DAO.
@@ -82,15 +82,98 @@ abstract class DAO
         }
     }
 
-    /**
-     * Métodos abstractos que deben ser implementados por las clases hijas para crear y actualizar registros.
-     *
-     * @param array $data Datos necesarios para crear o actualizar el registro.
-     * @return mixed El resultado de la operación, dependiendo de la implementación.
+        /**
+     * Crea un nuevo registro en la base de datos
+     * @param array $data Datos del registro
+     * @return bool true si se creó correctamente, false en caso contrario
      */
-    // Métodos abstractos para crear y actualizar, porque dependen de los campos
-    abstract public function crear($data);
-    abstract public function actualizar($id, $data);
+    public function crear($data)
+    {
+        $placeholders = str_repeat('?,', count($this->camposTabla) - 1) . '?';
+        
+        $sql = "INSERT INTO {$this->NOMBRE_TABLA} (" 
+             . implode(', ', $this->camposTabla) 
+             . ") VALUES ($placeholders)";
+
+        $stmt = $this->conexion->prepare($sql);
+        
+        $this->bindearParametros($stmt, $data, $this->camposTabla);
+
+        try {
+            $stmt->execute();
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            throw new ExcepcionApi(Response::STATUS_INTERNAL_SERVER_ERROR, "Error al crear el registro:" . $e->getMessage());
+        }
+    }
+
+    /**
+     * Actualiza un registro existente en la base de datos
+     * @param mixed $id ID del registro a actualizar
+     * @param array $data Datos a actualizar
+     * @return bool true si se actualizó correctamente, false en caso contrario
+     */
+    public function actualizar($id, $data)
+    {
+        // Verificar si el registro existe
+        if (!$this->porID($id)) {
+            throw new ExcepcionApi(Response::STATUS_NOT_FOUND, "Registro no encontrado");
+        }
+
+        $setClause = implode(' = ?, ', $this->camposTabla) . ' = ?';
+        
+        $sql = "UPDATE {$this->NOMBRE_TABLA} SET $setClause WHERE {$this->LLAVE_PRIMARIA} = ?";
+        
+        $stmt = $this->conexion->prepare($sql);
+        
+        // Bindear los campos de datos
+        $this->bindearParametros($stmt, $data, $this->camposTabla);
+        
+        // Bindear el ID para el WHERE
+        $stmt->bindParam(count($this->camposTabla) + 1, $id, PDO::PARAM_INT);
+        
+        try {
+            $stmt->execute();
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            throw new ExcepcionApi(Response::STATUS_INTERNAL_SERVER_ERROR, "Error al actualizar el registro");
+        }
+    }
+
+    /**
+     * Bindea los parámetros a la consulta preparada
+     * @param PDOStatement $stmt Consulta preparada
+     * @param array $data Datos a bindear
+     * @param array $campos Campos en el orden correcto
+     */
+    protected function bindearParametros($stmt, $data, $campos)
+    {
+        foreach ($campos as $index => $campo) {
+            $valor = $data[$campo] ?? null;
+            $tipo = $this->obtenerTipoPDO($campo, $valor);
+            $stmt->bindValue($index + 1, $valor, $tipo);
+        }
+    }
+
+    /**
+     * Determina el tipo de datos PDO para un campo
+     * @param string $campo Nombre del campo
+     * @param mixed $valor Valor del campo
+     * @return int Constante PDO::PARAM_*
+     */
+    protected function obtenerTipoPDO($campo, $valor)
+    {
+        if (is_int($valor)) {
+            return PDO::PARAM_INT;
+        } elseif (is_bool($valor)) {
+            return PDO::PARAM_BOOL;
+        } elseif (is_null($valor)) {
+            return PDO::PARAM_NULL;
+        } else {
+            return PDO::PARAM_STR;
+        }
+    }
+
 
     /**
      * Obtiene los campos requeridos para la entidad.
@@ -98,6 +181,6 @@ abstract class DAO
      * @return array Lista de campos que son obligatorios.
      */
     public function getRequiredFields() {
-        return $this->camposRequeridos;
+        return $this->camposTabla;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 include_once (__DIR__.'/../Models/Paciente.php');
-include_once (__DIR__.'/MedicosService.php');
+//include_once (__DIR__.'/MedicosService.php');
 include_once (__DIR__.'/Service.php');
 
 /**
@@ -13,7 +13,7 @@ class PacientesService extends Service{
     
     public function __construct() {
         $this -> paciente = new Paciente();
-        $this -> medicosService = new MedicosService();
+        //$this -> medicosService = new MedicosService();
         parent::__construct($this->paciente);
      }
 
@@ -145,12 +145,12 @@ class PacientesService extends Service{
      */
     public function porMedico($id_medico) {
         // Buscamos si existe el medico
-        $medico = $this->medicosService->obtener([$id_medico]);
+        //$medico = $this->medicosService->obtener([$id_medico]);
 
         return Response::formatearRespuesta(
             Response::STATUS_OK,
             "Pacientes conseguidos",
-            $this->paciente->porMedico($id_medico)
+            //$this->paciente->porMedico($id_medico)
         );
     }
 }

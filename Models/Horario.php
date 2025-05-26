@@ -64,7 +64,7 @@ class Horario extends DAO {
        * @param Horario Horario a actualizar
        * @return bool true si se actualizo correctamente, false en caso contrario
        */
-      public function actualizar($horario) {
+      public function actualizar($id,$horario) {
         // Elaboramos la consulta
         $sql = "UPDATE ". self::NOMBRE_TABLA . " SET "
         . self::ID_MEDICO . " = ?,"
