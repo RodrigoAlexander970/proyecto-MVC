@@ -30,4 +30,32 @@ class Citas extends DAO
                             'estado',
                             'observaciones'];
     }
+
+    public function porMedico($id_medico) {
+        $sql = 'SELECT * FROM ' . self::NOMBRE_TABLA . ' WHERE ' . self::ID_MEDICO . ' = ?';
+
+        // Preparamos la consulta
+        $stmt = $this->conexion->prepare($sql);
+        $stmt -> bindParam(1,$id_medico, PDO::PARAM_INT);
+        $stmt -> execute();
+
+        // Obtenemos los resultados
+        $resultados = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+
+        return $resultados;
+    }
+
+    public function porPaciente($idPaciente) {
+        $sql = 'SELECT * FROM ' . self::NOMBRE_TABLA . ' WHERE ' . self::ID_PACIENTE . ' = ?';
+
+        // Preparamos la consulta
+        $stmt = $this->conexion->prepare($sql);
+        $stmt -> bindParam(1,$idPaciente, PDO::PARAM_INT);
+        $stmt -> execute();
+
+        // Obtenemos los resultados
+        $resultados = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+
+        return $resultados;
+    }
 }

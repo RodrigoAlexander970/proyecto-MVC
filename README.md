@@ -7,9 +7,9 @@
 - [X] `POST /medicos` – Registrar un nuevo médico  
 - [X] `PUT /medicos/{id}` – Actualizar información de un médico  
 - [X] `DELETE /medicos/{id}` – Eliminar un médico  
-- [] `GET /medicos/{id}/horarios` – Obtener los horarios de un médico en específico  
-- [] `GET /medicos/{id}/citas` - Obtener las citas de un medico
-- [] `GET /medicos/{id}/pacientes` – Listar pacientes de un médico específico  
+- [X] `GET /medicos/{id}/horarios` – Obtener los horarios de un médico en específico  
+- [X] `GET /medicos/{id}/citas` - Obtener las citas de un medico
+- [X] `GET /medicos/{id}/pacientes` – Listar pacientes de un médico específico  
 
 #### Objeto Medico
 ```
@@ -32,7 +32,7 @@
 - [X] `POST /especialidades` – Crear una nueva especialidad  
 - [X] `PUT /especialidades/{id}` – Actualizar una especialidad  
 - [X] `DELETE /especialidades/{id}` – Eliminar una especialidad  
-- [ ] `GET /especialidades/{id}/medicos` – Listar médicos por especialidad  
+- [X] `GET /especialidades/{id}/medicos` – Listar médicos por especialidad  
 
 #### Objeto Especialidad:
 ```
@@ -51,7 +51,7 @@
 - [X] `POST /pacientes` – Registrar un nuevo paciente  
 - [X] `PUT /pacientes/{id}` – Actualizar información de un paciente  
 - [X] `DELETE /pacientes/{id}` – Borrar un paciente  
-- [ ] `GET /pacientes/{id}/citas` – Listar citas de un paciente  
+- [X] `GET /pacientes/{id}/citas` – Listar citas de un paciente  
 
 #### Objeto Paciente:
 ```

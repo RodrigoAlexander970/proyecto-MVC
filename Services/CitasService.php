@@ -1,14 +1,19 @@
 <?php
-include_once(__DIR__ . '/../Models/Citas.php');
 include_once(__DIR__ . '/Service.php');
+include_once (__DIR__.'/MedicosService.php');
+include_once(__DIR__.'/PacientesService.php');
+include_once(__DIR__ . '/../Models/Citas.php');
 
 class CitasService extends Service
 {
     private $citas;
-
+    private $medicosService;
+    private $pacienteService;
     public function __construct()
     {
         $this->citas = new Citas();
+        $this->medicosService = new MedicosService();
+        $this->pacienteService = new PacientesService();
         parent::__construct($this->citas);
     }
 
@@ -116,5 +121,44 @@ class CitasService extends Service
                 "Error al borrar la cita"
             );
         }
+    }
+
+    public function porMedico($idMedico) {
+        // Comprobamos que exista el médico
+        $medicoExiste = $this->medicosService->obtener([$idMedico]);
+
+        if (!$medicoExiste) {
+            throw new ExcepcionApi(Response::STATUS_NOT_FOUND, "Médico no encontrado");
+        }
+
+        $citas = $this->citas->porMedico($idMedico);
+        
+        if($citas === null) {
+            return Response::formatearRespuesta(
+                Response::STATUS_NOT_FOUND,
+                "Citas no encontradas"
+            );
+        }
+
+        return Response::formatearRespuesta(
+            Response::STATUS_OK,
+            "Citas obtenidos correctamente",
+            $citas
+        );
+    }
+
+    public function porPaciente($idPaciente) {
+        if(!$this->pacienteService->existe($idPaciente)) {
+            throw new ExcepcionApi(
+                Response::STATUS_NOT_FOUND,
+                'El paciente no existe'
+            );
+        }
+
+        return Response::formatearRespuesta(
+            Response::STATUS_OK,
+            "Citas conseguidas por paciente",
+            $this->citas->porPaciente($idPaciente)
+        );
     }
 }

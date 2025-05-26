@@ -33,4 +33,18 @@ class Medico extends DAO
             'telefono'
         ];
     }
+
+    public function porEspecialidad($idEspecialidad) {
+        $sql = 'SELECT * FROM ' . self::NOMBRE_TABLA . ' WHERE ' . self::ID_MEDICO . ' = ?';
+
+        // Preparamos la consulta
+        $stmt = $this->conexion->prepare($sql);
+        $stmt -> bindParam(1,$idEspecialidad, PDO::PARAM_INT);
+        $stmt -> execute();
+
+        // Obtenemos los resultados
+        $resultados = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+
+        return $resultados;
+    }
 }

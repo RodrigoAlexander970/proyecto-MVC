@@ -1,5 +1,6 @@
 <?php
 include_once (__DIR__.'/Service.php');
+include_once (__DIR__.'/EspecialidadesService.php');
 include_once (__DIR__.'/../Models/Medico.php');
 
 /**
@@ -8,9 +9,10 @@ include_once (__DIR__.'/../Models/Medico.php');
 class MedicosService extends Service
 {
     private $medico;
-
+    private $especialidadService;
     public function __construct() {
         $this -> medico = new Medico();
+        $this -> especialidadService = new EspecialidadesService();
         parent::__construct($this->medico);
      }
 
@@ -143,5 +145,20 @@ class MedicosService extends Service
                 "Error al eliminar el médico"
             );
         }
+    }
+
+    public function porEspecialidad($id_especialidad) {
+        if(!$this->especialidadService->existe($id_especialidad)) {
+            throw new ExcepcionApi(
+                Response::STATUS_NOT_FOUND,
+                'La especialidad no existe'
+            );
+        }
+
+        return Response::formatearRespuesta(
+            Response::STATUS_OK,
+            "Medicos obtenidos correctamente por especialidad",
+            $this -> medico -> porEspecialidad($id_especialidad)
+        );
     }
 }

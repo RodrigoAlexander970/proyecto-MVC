@@ -13,7 +13,7 @@ class PacientesService extends Service{
     
     public function __construct() {
         $this -> paciente = new Paciente();
-        //$this -> medicosService = new MedicosService();
+        $this -> medicosService = new MedicosService();
         parent::__construct($this->paciente);
      }
 
@@ -139,12 +139,17 @@ class PacientesService extends Service{
      */
     public function porMedico($id_medico) {
         // Buscamos si existe el medico
-        //$medico = $this->medicosService->obtener([$id_medico]);
+        if(!$this->medicosService->existe($id_medico)){
+            throw new ExcepcionApi(
+                Response::STATUS_NOT_FOUND,
+                'El medico no existe'
+            );
+        }
 
         return Response::formatearRespuesta(
             Response::STATUS_OK,
             "Pacientes conseguidos",
-            //$this->paciente->porMedico($id_medico)
+            $this->paciente->porMedico($id_medico)
         );
     }
 }

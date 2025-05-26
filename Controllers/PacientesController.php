@@ -23,7 +23,7 @@ class PacientesController extends Controller {
     {
         switch($subrecurso) {
             case 'citas':
-                return Response::formatearRespuesta(200,'Accediendo a citas del paciente '.$id);
+                return $this->citasService->porPaciente($id);
             break;
 
             default:
