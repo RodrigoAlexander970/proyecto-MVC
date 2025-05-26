@@ -49,7 +49,7 @@ class CitasService extends Service
         return 'creando';
     }
 
-    public function actualizar($params)
+    public function actualizar($id, $params)
     {
         return 'actualizando';
     }

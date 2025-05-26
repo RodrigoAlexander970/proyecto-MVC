@@ -14,6 +14,7 @@ class Response
 
     const STATUS_INTERNAL_SERVER_ERROR = 500;
 
+    const STATUS_NOT_IMPLEMENTED = 1;
     /**
      * Formatea la respuesta para mantener consistencia
      * 

@@ -26,5 +26,5 @@ class Citas extends DAO
 
     public function crear($data) {}
 
-    public function actualizar($data) {}
+    public function actualizar($id, $data) {}
 }

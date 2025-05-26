@@ -1,5 +1,6 @@
 <?php
 include_once (__DIR__.'/../Models/Medico.php');
+include_once (__DIR__.'/Service.php');
 
 /**
  * Servicio para operaciones con médicos
@@ -90,9 +91,9 @@ class MedicosService extends Service
      * @param Medico $medico Médico con datos actualizados
      * @return array Respuesta formateada
      */
-    public function actualizar($medico) {
+    public function actualizar($id, $medico) {
         // Llamamos a la función actualizar del DAO
-        $resultado = $this->medico->actualizar($medico);
+        $resultado = $this->medico->actualizar($id, $medico);
 
         if ($resultado) {
             return Response::formatearRespuesta(

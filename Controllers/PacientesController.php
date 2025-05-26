@@ -1,29 +1,33 @@
 <?php
+include_once(__DIR__.'/Controller.php');
 include_once (__DIR__ . '/../Services/PacientesService.php');
-include_once(__DIR__.'/../Utilities/Response.php');
-include_once(__DIR__.'/../Utilities/ExcepcionApi.php');
+include_once (__DIR__.'/../Services/CitasService.php');
 
-class PacientesController {
+/**
+ * Controlador para la gestión de pacientes
+ */
+class PacientesController extends Controller {
     // Almacena el servicio de médicos
     private $pacientesService;
+    private $citasService;
 
-    public function __construct() {
-        $this->pacientesService = new PacientesService();
+    protected function inicializarServicio() {
+        $this -> pacientesService = new PacientesService();
+        $this -> citasService = new CitasService();
+
+        $this -> service = $this->pacientesService;
+        $this -> recursosValidos = ['citas'];
     }
 
-    /**
-     * Procesa la solicitud GET
-     * 
-     * @param array $params Parámetros de la solicitud
-     * @return array|object Respuesta para el cliente
-     * @throws ExcepcionApi Si el recurso no es válido
-     */
-    public function get($params){
-        switch(count($params)) {
-            case 0:
-            case 1:
-                return $this->pacientesService->obtener($params);
+    protected function manejarSubrecurso($id, $subrecurso)
+    {
+        switch($subrecurso) {
+            case 'citas':
+                return Response::formatearRespuesta(200,'Accediendo a citas del paciente '.$id);
             break;
+
+            default:
+            return parent::manejarSubrecurso($id, $subrecurso);
         }
     }
- }
+}

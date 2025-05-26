@@ -69,7 +69,7 @@ abstract class Service {
      * Método abstracto para actualizar un registro existente.
      * Debe ser implementado por las clases hijas.
      */
-    abstract public function actualizar($params);
+    abstract public function actualizar($id, $data);
 
     /**
      * Método abstracto para borrar un registro.

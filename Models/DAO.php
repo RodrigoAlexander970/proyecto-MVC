@@ -90,7 +90,7 @@ abstract class DAO
      */
     // Métodos abstractos para crear y actualizar, porque dependen de los campos
     abstract public function crear($data);
-    abstract public function actualizar($data);
+    abstract public function actualizar($id, $data);
 
     /**
      * Obtiene los campos requeridos para la entidad.

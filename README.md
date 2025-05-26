@@ -1,6 +1,6 @@
 ## Endpoints de la API
 
-### 🩺 Médicos
+### 🩺 Médicos (Refactorizar)
 
 - [X] `GET /medicos` – Listar todos los médicos (con filtros opcionales)  
 - [X] `GET /medicos/{id}` – Obtener detalles de un médico específico  
@@ -24,7 +24,7 @@
 ```
 
 ---
-### 🧬 Especialidades
+### 🧬 Especialidades (Refactorizar)
 
 - [X] `GET /especialidades` – Listar todas las especialidades  
 - [X] `GET /especialidades/{id}` – Obtener detalles de una especialidad  
@@ -43,15 +43,14 @@
 ```
 ---
 
-### 🧑‍🤝‍🧑 Pacientes
+### 🧑‍🤝‍🧑 Pacientes (En proceso)
 
 - [X] `GET /pacientes` – Listar todos los pacientes  
 - [X] `GET /pacientes/{id}` – Obtener detalles de un paciente específico  
-- [ ] `POST /pacientes` – Registrar un nuevo paciente  
-- [ ] `PUT /pacientes/{id}` – Actualizar información de un paciente  
-- [ ] `DELETE /pacientes/{id}` – Desactivar un paciente  
+- [X] `POST /pacientes` – Registrar un nuevo paciente  
+- [X] `PUT /pacientes/{id}` – Actualizar información de un paciente  
+- [X] `DELETE /pacientes/{id}` – Borrar un paciente  
 - [ ] `GET /pacientes/{id}/citas` – Listar citas de un paciente  
-- [ ] `GET /pacientes/{id}/historiales` – Listar historiales médicos de un paciente  
 
 #### Objeto Paciente:
 ```
@@ -70,7 +69,7 @@
 
 ---
 
-### ⏰ Horarios
+### ⏰ Horarios (Refactorizar)
 
 - [X] `GET /horarios` – Listar todos los horarios  
 - [X] `GET /horarios/{id}` – Obtener un horario específico  
@@ -91,7 +90,7 @@
 ```
 ---
 
-### 📅 Citas
+### 📅 Citas (Refactorizar)
 
 - [X] `GET /citas` – Listar todas las citas  
 - [ ] `GET /citas/{id}` – Obtener detalles de una cita específica  
@@ -119,7 +118,7 @@
 
 ---
 
-### 👥 Usuarios y Roles
+### 👥 Usuarios y Roles (por hacer)
 
 - [ ] `GET /usuarios` – Listar todos los usuarios  
 - [ ] `GET /usuarios/{id}` – Obtener detalles de un usuario específico  
@@ -134,7 +133,7 @@
 
 ---
 
-### 📊 Reportes
+### 📊 Reportes (por hacer)
 
 - [ ] `GET /reportes/citas-por-medico` – Reporte de citas por médico  
 - [ ] `GET /reportes/citas-por-especialidad` – Reporte de citas por especialidad  

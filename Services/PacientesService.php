@@ -1,20 +1,20 @@
 <?php
 include_once (__DIR__.'/../Models/Paciente.php');
 include_once (__DIR__.'/MedicosService.php');
-include_once (__DIR__.'/../Utilities/Response.php');
-include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
+include_once (__DIR__.'/Service.php');
 
 /**
  * Servicio para operaciones con pacientes
  * Interactua con el DAO de Paciente
  */
-class PacientesService {
+class PacientesService extends Service{
     private $paciente;
     private $medicosService;
     
     public function __construct() {
         $this -> paciente = new Paciente();
         $this -> medicosService = new MedicosService();
+        parent::__construct($this->paciente);
      }
 
      /**
@@ -61,6 +61,79 @@ class PacientesService {
                     Response::STATUS_TOO_MANY_PARAMETERS,
                     'Ruta no reconocida'
                 );
+        }
+    }
+
+    public function crear($paciente)
+    {
+        $this->validarCamposObligatorios($paciente);
+
+        $resultado = $this->paciente->crear($paciente);
+
+        // Verificamos si se creó correctamente
+        if ($resultado) {
+            return Response::formatearRespuesta(
+                Response::STATUS_CREATED,
+                "Paciente creado correctamente",
+                $resultado
+            );
+        } else {
+            throw new ExcepcionApi(
+                Response::STATUS_INTERNAL_SERVER_ERROR,
+                "Error al crear el Paciente"
+            );
+        }
+    }
+
+    public function actualizar($id, $paciente) {
+        $this->validarCamposObligatorios($paciente);
+        
+        // Revisamos si existe el registro en la base
+        if(!$this->existe($id)){
+            throw new ExcepcionApi(
+                Response::STATUS_NOT_FOUND,
+                'El paciente no existe'
+            );
+        }
+
+        $resultado = $this->paciente->actualizar($id, $paciente);
+
+        if($resultado) {
+            return Response::formatearRespuesta(
+                Response::STATUS_CREATED,
+                "Paciente actualizado correctamente",
+                $resultado
+            );
+        } else {
+            throw new ExcepcionApi(
+                Response::STATUS_INTERNAL_SERVER_ERROR,
+                "Error al actualizar el Paciente"
+            );
+        }
+    }
+
+    public function borrar($id) {
+        // Revisamos si no existe el registro en la base
+        if(!$this->existe($id)){
+            throw new ExcepcionApi(
+                Response::STATUS_NOT_FOUND,
+                'El paciente no existe'
+            );
+        }
+
+        $resultado = $this->paciente->borrar($id);
+
+        if($resultado) {
+            return Response::formatearRespuesta(
+                Response::STATUS_CREATED,
+                "Paciente borrado correctamente",
+                $resultado
+            );
+        } else {
+            throw new ExcepcionApi(
+                Response::STATUS_INTERNAL_SERVER_ERROR,
+                "Error al borrar el Paciente"
+            );
         }
     }
 

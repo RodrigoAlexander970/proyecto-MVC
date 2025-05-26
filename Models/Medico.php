@@ -1,5 +1,5 @@
 <?php
-include_once(__DIR__.'/DAO.php');
+include_once(__DIR__ . '/DAO.php');
 
 
 /**
@@ -19,32 +19,41 @@ class Medico extends DAO
     const FECHA_REGISTRO = 'fecha_registro';
     const ACTIVO = 'activo';
 
-    public function __construct() {
-       parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
         $this->NOMBRE_TABLA = self::NOMBRE_TABLA;
         $this->LLAVE_PRIMARIA = self::ID_MEDICO;
-        $this->camposRequeridos = ['id_especialidad', 'nombre', 'apellidos', 'cedula_profesional',
-        'email', 'telefono', 'fecha_registro'];
+        $this->camposRequeridos = [
+            'id_especialidad',
+            'nombre',
+            'apellidos',
+            'cedula_profesional',
+            'email',
+            'telefono',
+            'fecha_registro'
+        ];
     }
-    
+
     /**
      * Crea un medico en la base de datos
      * @param Medico $medico Objeto Medico a registrar
      * @return boolean 
      */
-     public function crear($medico) {
+    public function crear($medico)
+    {
         // Elaboramos la consulta
-        $sql = "INSERT INTO ". self::NOMBRE_TABLA . " ("
-        . self::ID_ESPECIALIDAD . ", "
-        . self::NOMBRE . ", "
-        . self::APELLIDOS . ", "
-        . self::CEDULA_PROFESIONAL . ", "
-        . self::EMAIL . ", "
-        . self::TELEFONO . ") VALUES (?, ?, ?, ?, ?, ?)";
-        
+        $sql = "INSERT INTO " . self::NOMBRE_TABLA . " ("
+            . self::ID_ESPECIALIDAD . ", "
+            . self::NOMBRE . ", "
+            . self::APELLIDOS . ", "
+            . self::CEDULA_PROFESIONAL . ", "
+            . self::EMAIL . ", "
+            . self::TELEFONO . ") VALUES (?, ?, ?, ?, ?, ?)";
+
         // Preparamos la consulta
         $stmt = $this->conexion->prepare($sql);
-        
+
         // Recuperamos variables del objeto Medico
         $idEspecialidad = $medico['id_especialidad'];
         $nombre = $medico['nombre'];
@@ -60,7 +69,7 @@ class Medico extends DAO
         $stmt->bindParam(4, $cedulaProfesional, PDO::PARAM_STR);
         $stmt->bindParam(5, $email, PDO::PARAM_STR);
         $stmt->bindParam(6, $telefono, PDO::PARAM_STR);
-        
+
         try {
             // Ejecutamos la consulta
             $stmt->execute();
@@ -73,30 +82,31 @@ class Medico extends DAO
         } catch (PDOException $e) {
             throw new ExcepcionApi(Response::STATUS_INTERNAL_SERVER_ERROR, "Error al crear el médico");
         }
-     }
+    }
 
-     /**
-      * Actualiza un médico en la base de datos
-      * @param Medico $medico Objeto Medico a actualizar
-      * @return bool true si se actualizó correctamente, false en caso contrario
-      */
-      public function actualizar($medico) {
+    /**
+     * Actualiza un médico en la base de datos
+     * @param Medico $medico Objeto Medico a actualizar
+     * @return bool true si se actualizó correctamente, false en caso contrario
+     */
+    public function actualizar($id, $medico)
+    {
 
         // Verificar primero si el médico existe
         $medicoExistente = $this->porID($medico['id_medico']);
-        
+
         if (!$medicoExistente) {
             throw new ExcepcionApi(Response::STATUS_NOT_FOUND, "Médico no encontrado");
         }
-    
+
         // Elaboramos la consulta
-        $sql = "UPDATE ". self::NOMBRE_TABLA . " SET "
-        . self::ID_ESPECIALIDAD . " = ?, "
-        . self::NOMBRE . " = ?, "
-        . self::APELLIDOS . " = ?, "
-        . self::CEDULA_PROFESIONAL . " = ?, "
-        . self::EMAIL . " = ?, "
-        . self::TELEFONO . " = ? WHERE ". self::ID_MEDICO . " = ?";
+        $sql = "UPDATE " . self::NOMBRE_TABLA . " SET "
+            . self::ID_ESPECIALIDAD . " = ?, "
+            . self::NOMBRE . " = ?, "
+            . self::APELLIDOS . " = ?, "
+            . self::CEDULA_PROFESIONAL . " = ?, "
+            . self::EMAIL . " = ?, "
+            . self::TELEFONO . " = ? WHERE " . self::ID_MEDICO . " = ?";
 
         // Preparamos la consulta
         $stmt = $this->conexion->prepare($sql);
@@ -128,5 +138,5 @@ class Medico extends DAO
         } else {
             return false;
         }
-      }
+    }
 }

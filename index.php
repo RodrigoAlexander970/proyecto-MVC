@@ -24,7 +24,7 @@
 	}
 
 	// Definimos el manejador de excepciones
-	definirManejadorExcepciones($vista);
+	//definirManejadorExcepciones($vista);
 
 	// Arreglo con los recursos existentes de la api
 	$recursos_validos = array('medicos', 'pacientes', 'citas', 'especialidades', 'historiales', 'especialidades', 'horarios', 'reporte');
