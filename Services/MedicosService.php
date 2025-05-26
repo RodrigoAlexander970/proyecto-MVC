@@ -1,6 +1,6 @@
 <?php
-include_once (__DIR__.'/../Models/Medico.php');
 include_once (__DIR__.'/Service.php');
+include_once (__DIR__.'/../Models/Medico.php');
 
 /**
  * Servicio para operaciones con médicos
@@ -70,8 +70,7 @@ class MedicosService extends Service
         if ($resultado) {
             return Response::formatearRespuesta(
                 Response::STATUS_CREATED,
-                "Médico creado correctamente",
-                $resultado
+                "Médico creado correctamente"
             );
         } else {
             throw new ExcepcionApi(

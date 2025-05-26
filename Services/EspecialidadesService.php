@@ -1,6 +1,6 @@
 <?php
+include_once (__DIR__.'/Service.php');
 include_once (__DIR__.'/../Models/Especialidad.php');
-
 /**
  * Servicio para operaciones con especialidades
  * Interactua con el DAO de Especialidad
@@ -8,8 +8,9 @@ include_once (__DIR__.'/../Models/Especialidad.php');
 class EspecialidadesService extends Service {
     private $especialidad;
 
-    public function __construct(Especialidad $especialidad = null) {
-        $this -> especialidad = $especialidad ?: new Especialidad();
+    public function __construct() {
+        $this -> especialidad =  new Especialidad();
+        parent::__construct($this->especialidad);
      }
     
     /**
@@ -33,18 +34,21 @@ class EspecialidadesService extends Service {
             break;
 
             case 1:
+                $especialidad = $this->especialidad->porId($params[0]);
+                
+                if($especialidad === null) {
+                    throw new ExcepcionApi(
+                        Response::STATUS_NOT_FOUND,
+                        "Especialidad no encontrada"
+                    );
+                }
+
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     'Especialidad obtenida correctamente',
-                    $this->especialidad->porId($params[0])
+                    $especialidad
                 );
             break;
-
-            default:
-                throw new ExcepcionApi(
-                    Response::STATUS_TOO_MANY_PARAMETERS,
-                    'Ruta no reconocida'
-                );
         }
     }
 
@@ -53,8 +57,10 @@ class EspecialidadesService extends Service {
      * @param Especialidad Especialidad a crear
      * @return array Respuesta
      */
-    public function crear($especialidad){
-        $resultado = $this->especialidad->crear($especialidad);
+    public function crear($especialidadData){
+        $this->validarCamposObligatorios($especialidadData);
+
+        $resultado = $this->especialidad->crear($especialidadData);
 
         // Verificamos si se creó correctamente
         if($resultado) {
@@ -76,17 +82,18 @@ class EspecialidadesService extends Service {
      * @return Respuesta formateada
      * @throws ExcepcionApi
      */
-    public function actualizar($especialidad) {
+    public function actualizar($id, $especialidadData) {
 
-        // Revisamos si no existe
-        if(!self::existe($especialidad['id_especialidad'])){
+        $this->validarCamposObligatorios($especialidadData);
+
+        if(!$this->existe($id)){
             throw new ExcepcionApi(
                 Response::STATUS_NOT_FOUND,
-                "Especialidad no existente"
+                'La especialidad no existe'
             );
         }
 
-        $resultado = $this->especialidad->actualizar($especialidad);
+        $resultado = $this->especialidad->actualizar($id, $especialidadData);
 
         if($resultado) {
             return Response::formatearRespuesta(
@@ -101,22 +108,26 @@ class EspecialidadesService extends Service {
     }
 
     public function borrar($id) {
+        // Revisamos si no existe el registro en la base
+        if(!$this->existe($id)){
+            throw new ExcepcionApi(
+                Response::STATUS_NOT_FOUND,
+                'La especialidad no existe'
+            );
+        }
+
         $seBorro = $this->especialidad->borrar($id);
 
-        if ($seBorro === 'constraint_violation') {
-            throw new ExcepcionApi(
-                Response::STATUS_CONFLICT,
-                "No se puede eliminar la especialidad porque tiene elementos asociados."
-            );
-        } elseif ($seBorro) {
+        // Verificamos si se borró correctamente
+        if ($seBorro) {
             return Response::formatearRespuesta(
                 Response::STATUS_OK,
-                'Especialidad eliminada correctamente'
+                "Especialidad borrada correctamente"
             );
         } else {
             throw new ExcepcionApi(
-                Response::STATUS_NOT_FOUND,
-                "Especialidad no encontrada"
+                Response::STATUS_INTERNAL_SERVER_ERROR,
+                "Error al eliminar la especialidad"
             );
         }
     }
