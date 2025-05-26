@@ -52,11 +52,6 @@ class MedicosService extends Service
                     $medico
                 );
             break;
-            default:
-                throw new ExcepcionApi(
-                    Response::STATUS_BAD_REQUEST, 
-                    "Número de parámetros inválido"
-                );
         }
     }
 
@@ -65,10 +60,11 @@ class MedicosService extends Service
      * @param Medico $medico Médico a crear.
      * @return array Respuesta formateada
      */
-    public function crear($medico)
+    public function crear($medicoData)
     {
+        $this->validarCamposObligatorios($medicoData);
         // Llamamos a la función crear del DAO
-        $resultado = $this->medico->crear($medico);
+        $resultado = $this->medico->crear($medicoData);
 
         // Verificamos si se creó correctamente
         if ($resultado) {
@@ -91,9 +87,18 @@ class MedicosService extends Service
      * @param Medico $medico Médico con datos actualizados
      * @return array Respuesta formateada
      */
-    public function actualizar($id, $medico) {
-        // Llamamos a la función actualizar del DAO
-        $resultado = $this->medico->actualizar($id, $medico);
+    public function actualizar($id, $medicoData) {
+        $this->validarCamposObligatorios($medicoData);
+
+        if(!$this->existe($id)){
+            throw new ExcepcionApi(
+                Response::STATUS_NOT_FOUND,
+                'El medico no existe'
+            );
+        }
+
+                // Llamamos a la función actualizar del DAO
+        $resultado = $this->medico->actualizar($id, $medicoData);
 
         if ($resultado) {
             return Response::formatearRespuesta(
@@ -116,6 +121,14 @@ class MedicosService extends Service
      * @return array Respuesta formateada
      */
     public function borrar($id){
+        // Revisamos si no existe el registro en la base
+        if(!$this->existe($id)){
+            throw new ExcepcionApi(
+                Response::STATUS_NOT_FOUND,
+                'El medico no existe'
+            );
+        }
+
         // Llamamos a la función borrar del DAO
         $resultado = $this->medico->borrar($id);
 

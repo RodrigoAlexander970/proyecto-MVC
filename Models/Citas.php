@@ -21,6 +21,13 @@ class Citas extends DAO
         parent::__construct();
         $this->NOMBRE_TABLA = self::NOMBRE_TABLA;
         $this->LLAVE_PRIMARIA = self::ID_CITA;
-        $this->camposTabla = ['id_paciente', 'id_medico', 'fecha', 'hora_inicio', 'hora_fin', 'motivo', 'estado', 'observaciones'];
+        $this->camposTabla = ['id_paciente',
+                            'id_medico',
+                            'fecha',
+                            'hora_inicio',
+                            'hora_fin',
+                            'motivo',
+                            'estado',
+                            'observaciones'];
     }
 }
