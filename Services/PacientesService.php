@@ -25,9 +25,6 @@ class PacientesService extends Service{
      * @throws ExcepcionApi Si los parámetros son inválidos
      */
     public function obtener($params) {
-        // 0 parametros para todos
-        // 1 parametro para subrecurso
-
         switch(count($params)) {
             case 0:
                 return Response::formatearRespuesta(
@@ -64,11 +61,11 @@ class PacientesService extends Service{
         }
     }
 
-    public function crear($paciente)
+    public function crear($datosPaciente)
     {
-        $this->validarCamposObligatorios($paciente);
+        $this->validarCamposObligatorios($datosPaciente);
 
-        $resultado = $this->paciente->crear($paciente);
+        $resultado = $this->paciente->crear($datosPaciente);
 
         // Verificamos si se creó correctamente
         if ($resultado) {
@@ -85,8 +82,8 @@ class PacientesService extends Service{
         }
     }
 
-    public function actualizar($id, $paciente) {
-        $this->validarCamposObligatorios($paciente);
+    public function actualizar($id, $datosPaciente) {
+        $this->validarCamposObligatorios($datosPaciente);
         
         // Revisamos si existe el registro en la base
         if(!$this->existe($id)){
@@ -96,7 +93,7 @@ class PacientesService extends Service{
             );
         }
 
-        $resultado = $this->paciente->actualizar($id, $paciente);
+        $resultado = $this->paciente->actualizar($id, $datosPaciente);
 
         if($resultado) {
             return Response::formatearRespuesta(

@@ -1,8 +1,6 @@
 <?php
 include_once(__DIR__ . '/../Models/Citas.php');
 include_once(__DIR__ . '/Service.php');
-include_once(__DIR__ . '/../Utilities/Response.php');
-include_once(__DIR__ . '/../Utilities/ExcepcionApi.php');
 
 class CitasService extends Service
 {
@@ -25,9 +23,11 @@ class CitasService extends Service
                 );
                 break;
             case 1:
+                // Intentamos obtener la cita
+                $cita = $this->citas->porId($params[0]);
 
                 // Revisamos que el objeto no exista
-                if(!$this->existe($params[0])) {
+                if($cita == null) {
                     throw new ExcepcionApi(
                         Response::STATUS_NOT_FOUND,
                         'La cita no existe'
@@ -37,25 +37,84 @@ class CitasService extends Service
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     'Cita obtenida correctamente',
-                    $this->citas->porID($params[0])
+                    $cita
                 );
                 break;
         }
     }
 
-    public function crear($params) {
-        // Llamamos a la función de creado
-        $resultado = $this->citas->crear($params);
-        return 'creando';
+    public function crear($datosCita) {
+        $this->validarCamposObligatorios($datosCita);
+
+        $resultado = $this->citas->crear($datosCita);
+        
+        // Verificamos si se creó correctamente
+        if ($resultado) {
+            return Response::formatearRespuesta(
+                Response::STATUS_CREATED,
+                "Cita creado correctamente",
+                $resultado
+            );
+        } else {
+            throw new ExcepcionApi(
+                Response::STATUS_INTERNAL_SERVER_ERROR,
+                "Error al crear la cita"
+            );
+        }
     }
 
-    public function actualizar($id, $params)
+    public function actualizar($id, $datosCita)
     {
-        return 'actualizando';
+        $this->validarCamposObligatorios($datosCita);
+
+        // Revisamos si existe el registro en la base
+               // Revisamos si existe el registro en la base
+        if(!$this->existe($id)){
+            throw new ExcepcionApi(
+                Response::STATUS_NOT_FOUND,
+                'La cita no existe'
+            );
+        }
+
+        $resultado = $this->citas->actualizar($id, $datosCita);
+
+        if($resultado) {
+            return Response::formatearRespuesta(
+                Response::STATUS_CREATED,
+                "Cita actualizada correctamente",
+                $resultado
+            );
+        } else {
+            throw new ExcepcionApi(
+                Response::STATUS_INTERNAL_SERVER_ERROR,
+                "Error al actualizar la cita"
+            );
+        }
     }
 
-    public function borrar($params)
+    public function borrar($id)
     {
-        return 'borrando';
+        // Revisamos si no existe el registro en la base
+        if(!$this->existe($id)){
+            throw new ExcepcionApi(
+                Response::STATUS_NOT_FOUND,
+                'La cita no existe'
+            );
+        }
+
+        $resultado = $this->citas->borrar($id);
+
+        if($resultado) {
+            return Response::formatearRespuesta(
+                Response::STATUS_CREATED,
+                "Cita borrada correctamente",
+                $resultado
+            );
+        } else {
+            throw new ExcepcionApi(
+                Response::STATUS_INTERNAL_SERVER_ERROR,
+                "Error al borrar la cita"
+            );
+        }
     }
 }

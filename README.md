@@ -90,15 +90,13 @@
 ```
 ---
 
-### 📅 Citas (Refactorizar)
+### 📅 Citas
 
 - [X] `GET /citas` – Listar todas las citas  
-- [ ] `GET /citas/{id}` – Obtener detalles de una cita específica  
-- [ ] `POST /citas` – Programar una nueva cita  
-- [ ] `PUT /citas/{id}` – Actualizar información de una cita  
-- [ ] `DELETE /citas/{id}` – Cancelar una cita  
-- [ ] `PATCH /citas/{id}/estado` – Actualizar estado de una cita  
-- [ ] `GET /citas/fecha/{fecha}` – Listar citas por fecha  
+- [X] `GET /citas/{id}` – Obtener detalles de una cita específica  
+- [X] `POST /citas` – Programar una nueva cita  
+- [X] `PUT /citas/{id}` – Actualizar información de una cita  
+- [X] `DELETE /citas/{id}` – Cancelar una cita
 
 #### Objeto Cita
 ```
