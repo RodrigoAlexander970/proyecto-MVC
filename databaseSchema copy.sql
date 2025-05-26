@@ -1,4 +1,3 @@
-
 DROP DATABASE IF EXISTS gestion_citas_medicas;
 
 CREATE DATABASE IF NOT EXISTS gestion_citas_medicas;
@@ -7,8 +6,7 @@ USE gestion_citas_medicas;
 CREATE TABLE especialidades (
     id_especialidad INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    descripcion TEXT,
-    activo BOOLEAN DEFAULT TRUE
+    descripcion TEXT
 );
 
 CREATE TABLE medicos (
@@ -20,7 +18,6 @@ CREATE TABLE medicos (
     email VARCHAR(100) NOT NULL UNIQUE,
     telefono VARCHAR(20),
     fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
-    activo BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (id_especialidad) REFERENCES especialidades(id_especialidad)
 );
 
@@ -33,8 +30,7 @@ CREATE TABLE pacientes (
     email VARCHAR(100) UNIQUE,
     telefono VARCHAR(20) NOT NULL,
     direccion TEXT,
-    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
-    activo BOOLEAN DEFAULT TRUE
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE horarios_disponibles (
@@ -43,7 +39,6 @@ CREATE TABLE horarios_disponibles (
     dia_semana ENUM('Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo') NOT NULL,
     hora_inicio TIME NOT NULL,
     hora_fin TIME NOT NULL,
-    activo BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (id_medico) REFERENCES medicos(id_medico),
     UNIQUE KEY unique_horario_medico (id_medico, dia_semana, hora_inicio)
 );
@@ -63,29 +58,21 @@ CREATE TABLE citas (
     FOREIGN KEY (id_medico) REFERENCES medicos(id_medico)
 );
 
-CREATE TABLE roles (
-    id_rol INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL UNIQUE,
-    descripcion TEXT
-);
-
 CREATE TABLE usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
-    id_rol INT NOT NULL,
+    claveAPI VARCHAR(255),
     id_medico INT NULL,
     id_paciente INT NULL,
     fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
     ultimo_acceso DATETIME,
-    activo BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (id_rol) REFERENCES roles(id_rol),
     FOREIGN KEY (id_medico) REFERENCES medicos(id_medico),
     FOREIGN KEY (id_paciente) REFERENCES pacientes(id_paciente)
 );
 
-
+-- Los inserts permanecen igual
 INSERT INTO especialidades (nombre, descripcion) VALUES
 ('Medicina General', 'Atención médica primaria y preventiva'),
 ('Cardiología', 'Especialidad en el sistema cardiovascular'),
@@ -171,16 +158,10 @@ INSERT INTO citas (id_paciente, id_medico, fecha, hora_inicio, hora_fin, motivo,
 (4, 5, '2025-05-23', '09:00:00', '09:30:00', 'Consulta ginecológica', 'Completada'),
 (5, 4, '2025-05-24', '11:00:00', '11:30:00', 'Seguimiento tratamiento dermatológico', 'Completada');
 
-INSERT INTO roles (nombre, descripcion) VALUES
-('admin', 'Administrador del sistema con acceso total'),
-('medico', 'Médico con acceso a sus pacientes y citas'),
-('recepcionista', 'Personal para gestión de citas y pacientes'),
-('paciente', 'Acceso limitado a su información y citas');
-
-INSERT INTO usuarios (username, password, email, id_rol, id_medico, id_paciente) VALUES
-('admin', '$2y$10$abcdefghijklmnopqrstuv', 'admin@clinica.com', 1, NULL, NULL),
-('carlos.gonzalez', '$2y$10$abcdefghijklmnopqrstuv', 'carlos.gonzalez@clinica.com', 2, 1, NULL),
-('laura.martinez', '$2y$10$abcdefghijklmnopqrstuv', 'laura.martinez@clinica.com', 2, 2, NULL),
-('recepcion1', '$2y$10$abcdefghijklmnopqrstuv', 'recepcion1@clinica.com', 3, NULL, NULL),
-('juan.perez', '$2y$10$abcdefghijklmnopqrstuv', 'juan.perez@email.com', 4, NULL, 1),
-('maria.garcia', '$2y$10$abcdefghijklmnopqrstuv', 'maria.garcia@email.com', 4, NULL, 2);
+INSERT INTO usuarios (username, password, email, claveAPI, id_medico, id_paciente) VALUES
+('admin', '$2y$10$abcdefghijklmnopqrstuv', 'admin@clinica.com', 'APIKEY-ADMIN-001', NULL, NULL),
+('carlos.gonzalez', '$2y$10$abcdefghijklmnopqrstuv', 'carlos.gonzalez@clinica.com', 'APIKEY-MEDICO-001', 1, NULL),
+('laura.martinez', '$2y$10$abcdefghijklmnopqrstuv', 'laura.martinez@clinica.com', 'APIKEY-MEDICO-002', 2, NULL),
+('recepcion1', '$2y$10$abcdefghijklmnopqrstuv', 'recepcion1@clinica.com', 'APIKEY-RECEP-001', NULL, NULL),
+('juan.perez', '$2y$10$abcdefghijklmnopqrstuv', 'juan.perez@email.com', 'APIKEY-PACIENTE-001', NULL, 1),
+('maria.garcia', '$2y$10$abcdefghijklmnopqrstuv', 'maria.garcia@email.com', 'APIKEY-PACIENTE-002', NULL, 2);
