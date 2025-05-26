@@ -1,19 +1,21 @@
 <?php
-include_once (__DIR__.'/../Models/Horario.php');
-include_once (__DIR__.'/../Utilities/Response.php');
-include_once (__DIR__.'/../Utilities/ExcepcionApi.php');
+include_once(__DIR__.'/Service.php');
 include_once (__DIR__.'/MedicosService.php');
+include_once (__DIR__.'/../Models/Horario.php');
+
 
 /**
  * Servicio para operaciones con horarios.
  */
-class HorariosService
+class HorariosService extends Service
 {
     private $horario;
     private $medicosService;
     public function __construct() {
         $this -> horario = new Horario();
         $this -> medicosService = new MedicosService();
+
+        parent::__construct($this->horario);
      }
 
      /**
@@ -30,8 +32,10 @@ class HorariosService
             break;
 
             case 1:
-                if(!self::existe($params[0])) {
-                    return Response::formatearRespuesta(
+                $horario = $this->horario->porId($params[0]);
+
+                if($horario == null) {
+                    throw new ExcepcionApi(
                         Response::STATUS_NOT_FOUND,
                         "Horario no encontrado"
                     );
@@ -40,7 +44,7 @@ class HorariosService
                 return Response::formatearRespuesta(
                     Response::STATUS_OK,
                     "Horario obtenido correctamente",
-                    $this->horario->porId($params[0])
+                    $horario
                 );
             break;
             default:
@@ -54,15 +58,16 @@ class HorariosService
     /**
      * Crea un nuevo horario
      */
-    public function crear($horario) {
-        $resultado = $this->horario->crear($horario);
+    public function crear($datosHorario) {
+        $this->validarCamposObligatorios($datosHorario);
+
+        $resultado = $this->horario->crear($datosHorario);
 
         // Verificamos si se creó correctamente
         if ($resultado) {
             return Response::formatearRespuesta(
                 Response::STATUS_CREATED,
-                "Horario creado correctamente",
-                $resultado
+                "Horario creado correctamente"
             );
         } else {
             throw new ExcepcionApi(
@@ -73,17 +78,18 @@ class HorariosService
     }
 
 
-    public function actualizar($horario) {
-
-        if(!self::existe($horario['id_horario'])){
+    public function actualizar($id, $datosHorario) {
+        $this->validarCamposObligatorios($datosHorario);
+        
+        if(!$this->existe($id)) {
             throw new ExcepcionApi(
                 Response::STATUS_NOT_FOUND,
                 "Horario no existente"
             );
         }
-        
+
         // Llamamos a la función actualizar del DAO
-        $resultado = $this->horario->actualizar($horario);
+        $resultado = $this->horario->actualizar($id, $datosHorario);
 
         if ($resultado) {
             return Response::formatearRespuesta(
@@ -101,7 +107,7 @@ class HorariosService
 
     public function borrar($id) {
         
-        if(!self::existe($id)){
+        if(!$this->existe($id)){
             throw new ExcepcionApi(
                 Response::STATUS_NOT_FOUND,
                 "Horario no existente"
@@ -110,15 +116,15 @@ class HorariosService
 
         $seBorro = $this->horario->borrar($id);
 
-        if ($seBorro === 'constraint_violation') {
-            throw new ExcepcionApi(
-                Response::STATUS_CONFLICT,
-                "No se puede eliminar el horario porque tiene elementos asociados."
-            );
-        } elseif ($seBorro) {
+        if ($seBorro) {
             return Response::formatearRespuesta(
-                Response::STATUS_OK,
-                'Horario eliminado correctamente'
+                Response::STATUS_CREATED,
+                "Horario eliminado correctamente"
+            );
+        } else {
+            throw new ExcepcionApi(
+                Response::STATUS_INTERNAL_SERVER_ERROR,
+                "Error al eliminar el horario"
             );
         } 
     }
@@ -151,14 +157,5 @@ class HorariosService
             "Horarios obtenidos correctamente",
             $horarios
         );
-    }
-
-    private function existe($id) {
-        $horario = $this->horario->porId($id);
-        if($horario){
-            return true;
-        } else {
-            return false;
-        }
     }
 }

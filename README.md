@@ -44,7 +44,7 @@
 ```
 ---
 
-### 🧑‍🤝‍🧑 Pacientes (En proceso)
+### 🧑‍🤝‍🧑 Pacientes
 
 - [X] `GET /pacientes` – Listar todos los pacientes  
 - [X] `GET /pacientes/{id}` – Obtener detalles de un paciente específico  
@@ -70,14 +70,13 @@
 
 ---
 
-### ⏰ Horarios (Refactorizar)
+### ⏰ Horarios
 
 - [X] `GET /horarios` – Listar todos los horarios  
 - [X] `GET /horarios/{id}` – Obtener un horario específico  
 - [X] `POST /horarios` – Crear un nuevo horario  
 - [X] `PUT /horarios/{id}` – Actualizar un horario existente  
 - [X] `DELETE /horarios/{id}` – Eliminar un horario  
-- [ ] `GET /medicos/{id}/horarios` – Listar horarios de un médico específico  
 
 #### Objeto Horario
 ```  
