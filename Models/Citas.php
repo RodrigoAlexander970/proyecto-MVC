@@ -58,4 +58,16 @@ class Citas extends DAO
 
         return $resultados;
     }
+
+    public function todosDetalle() {
+        $sql = "SELECT c.*, 
+                   p.nombre AS paciente_nombre, p.apellidos AS paciente_apellidos, 
+                   m.nombre AS medico_nombre, m.apellidos AS medico_apellidos
+            FROM citas c
+            INNER JOIN pacientes p ON c.id_paciente = p.id_paciente
+            INNER JOIN medicos m ON c.id_medico = m.id_medico";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

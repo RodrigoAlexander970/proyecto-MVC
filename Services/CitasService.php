@@ -161,4 +161,12 @@ class CitasService extends Service
             $this->citas->porPaciente($idPaciente)
         );
     }
+
+    public function obtenerCitasDetalladas() {
+        return Response::formatearRespuesta(
+            Response::STATUS_OK,
+            'Citas obtenidas correctamente',
+            $this->citas->todosDetalle()
+        );
+    }
 }

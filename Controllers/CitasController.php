@@ -13,4 +13,15 @@ class CitasController extends Controller {
 
         $this->recursosValidos = [];
     }
+
+    public function get($params)
+    {
+        // Solo para /citas?detalle=1
+        if (count($params) === 0 && isset($_GET['detalle']) && $_GET['detalle'] == 'true') {
+            return $this->citasService->obtenerCitasDetalladas();
+        }
+
+        // Si la URL es /citas
+        return parent::get($params); // O tu lógica base
+    }
 }
