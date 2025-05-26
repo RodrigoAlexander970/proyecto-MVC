@@ -12,7 +12,7 @@ class Especialidad extends DAO {
     public function __construct() {
         parent::__construct();
         $this->NOMBRE_TABLA = self::NOMBRE_TABLA;
-        $this->LLAVE_PRIMARIA = 'id_especialidad';
+        $this->LLAVE_PRIMARIA = self::ID_ESPECIALIDAD;
         $this->camposTabla = ['nombre', 'descripcion'];
     }
 }

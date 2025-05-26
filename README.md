@@ -25,7 +25,7 @@
 ```
 
 ---
-### 🧬 Especialidades (Refactorizar)
+### 🧬 Especialidades
 
 - [X] `GET /especialidades` – Listar todas las especialidades  
 - [X] `GET /especialidades/{id}` – Obtener detalles de una especialidad  

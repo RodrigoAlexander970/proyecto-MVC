@@ -71,8 +71,7 @@ class PacientesService extends Service{
         if ($resultado) {
             return Response::formatearRespuesta(
                 Response::STATUS_CREATED,
-                "Paciente creado correctamente",
-                $resultado
+                "Paciente creado correctamente"
             );
         } else {
             throw new ExcepcionApi(
@@ -98,8 +97,7 @@ class PacientesService extends Service{
         if($resultado) {
             return Response::formatearRespuesta(
                 Response::STATUS_CREATED,
-                "Paciente actualizado correctamente",
-                $resultado
+                "Paciente actualizado correctamente"
             );
         } else {
             throw new ExcepcionApi(
@@ -123,8 +121,7 @@ class PacientesService extends Service{
         if($resultado) {
             return Response::formatearRespuesta(
                 Response::STATUS_CREATED,
-                "Paciente borrado correctamente",
-                $resultado
+                "Paciente borrado correctamente"
             );
         } else {
             throw new ExcepcionApi(
