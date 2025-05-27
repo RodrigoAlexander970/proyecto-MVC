@@ -21,6 +21,11 @@ class CitasController extends Controller {
             return $this->citasService->obtenerCitasDetalladas();
         }
 
+        // Solo para /citas?reporte=true
+        if (count($params) === 0 && isset($_GET['reporte']) && $_GET['reporte'] == 'true') {
+            return $this->citasService->obtenerReporte();
+        }
+
         // Si la URL es /citas
         return parent::get($params); // O tu lógica base
     }

@@ -169,4 +169,12 @@ class CitasService extends Service
             $this->citas->todosDetalle()
         );
     }
+
+    public function obtenerReporte(){
+        return Response::formatearRespuesta(
+            Response::STATUS_OK,
+            'Reporte generado correctamente',
+            $this->citas->obtenerReporte()
+        );
+    }
 }

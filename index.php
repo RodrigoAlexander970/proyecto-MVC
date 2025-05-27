@@ -26,7 +26,7 @@
 	definirManejadorExcepciones($vista);
 
 	// Arreglo con los recursos existentes de la api
-	$recursos_validos = array('medicos', 'pacientes', 'citas', 'especialidades', 'historiales', 'especialidades', 'horarios', 'reporte', 'usuarios');
+	$recursos_validos = array('medicos', 'pacientes', 'citas', 'especialidades', 'historiales', 'especialidades', 'horarios', 'reporte', 'usuarios', 'notificar');
 
 	// Obtenemos la URL solucitada
 	$url = $_GET['PATH_INFO'];
