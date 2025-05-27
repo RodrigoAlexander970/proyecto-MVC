@@ -15,6 +15,11 @@ class UsuariosController extends Controller {
     }
 
     public function post($params) {
+
+        if(count($params) == 0) {
+            //return $this->usuariosService->registrar();
+        }
+
         switch ($params[0]) {
             case 'login':
                 $credenciales = $this->getRequestBody();
