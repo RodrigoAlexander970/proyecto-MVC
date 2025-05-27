@@ -46,7 +46,7 @@ abstract class Controller
      * @param array $params Parámetros de la URL
      * @return array Respuesta
      */
-    public function post($params = [])
+    public function post($params)
     {
         $data = $this->getRequestBody();
         return $this->service->crear($data);
