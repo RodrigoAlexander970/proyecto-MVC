@@ -4,7 +4,7 @@ include_once(__DIR__. '/../Services/UsuariosService.php');
 
 class UsuariosController extends Controller {
     // Almacenamos el servicio de usuarios
-    private $usuariosService;
+    protected $usuariosService;
 
     protected function inicializarServicio()
     {
