@@ -64,12 +64,7 @@ CREATE TABLE usuarios (
     password VARCHAR(255) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     claveAPI VARCHAR(255),
-    id_medico INT NULL,
-    id_paciente INT NULL,
-    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
-    ultimo_acceso DATETIME,
-    FOREIGN KEY (id_medico) REFERENCES medicos(id_medico),
-    FOREIGN KEY (id_paciente) REFERENCES pacientes(id_paciente)
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Los inserts permanecen igual
@@ -158,10 +153,10 @@ INSERT INTO citas (id_paciente, id_medico, fecha, hora_inicio, hora_fin, motivo,
 (4, 5, '2025-05-23', '09:00:00', '09:30:00', 'Consulta ginecológica', 'Completada'),
 (5, 4, '2025-05-24', '11:00:00', '11:30:00', 'Seguimiento tratamiento dermatológico', 'Completada');
 
-INSERT INTO usuarios (username, password, email, claveAPI, id_medico, id_paciente) VALUES
-('admin', '$2y$10$iMa3ZbKpYl4HwtxTvH0/JezjKSd1Q2VEjAVlVa62.NT5eZT8zGtKK', 'admin@clinica.com', 'APIKEY-ADMIN-001', NULL, NULL),
-('carlos.gonzalez', '$2y$10$iMa3ZbKpYl4HwtxTvH0/JezjKSd1Q2VEjAVlVa62.NT5eZT8zGtKK', 'carlos.gonzalez@clinica.com', 'APIKEY-MEDICO-001', 1, NULL),
-('laura.martinez', '$2y$10$iMa3ZbKpYl4HwtxTvH0/JezjKSd1Q2VEjAVlVa62.NT5eZT8zGtKK', 'laura.martinez@clinica.com', 'APIKEY-MEDICO-002', 2, NULL),
-('recepcion1', '$2y$10$iMa3ZbKpYl4HwtxTvH0/JezjKSd1Q2VEjAVlVa62.NT5eZT8zGtKK', 'recepcion1@clinica.com', 'APIKEY-RECEP-001', NULL, NULL),
-('juan.perez', '$2y$10$iMa3ZbKpYl4HwtxTvH0/JezjKSd1Q2VEjAVlVa62.NT5eZT8zGtKK', 'juan.perez@email.com', 'APIKEY-PACIENTE-001', NULL, 1),
-('maria.garcia', '$2y$10$iMa3ZbKpYl4HwtxTvH0/JezjKSd1Q2VEjAVlVa62.NT5eZT8zGtKK', 'maria.garcia@email.com', 'APIKEY-PACIENTE-002', NULL, 2);
+INSERT INTO usuarios (username, password, email, claveAPI) VALUES
+('admin', '$2y$10$iMa3ZbKpYl4HwtxTvH0/JezjKSd1Q2VEjAVlVa62.NT5eZT8zGtKK', 'admin@clinica.com', 'APIKEY-ADMIN-001'),
+('carlos.gonzalez', '$2y$10$iMa3ZbKpYl4HwtxTvH0/JezjKSd1Q2VEjAVlVa62.NT5eZT8zGtKK', 'carlos.gonzalez@clinica.com', 'APIKEY-MEDICO-001'),
+('laura.martinez', '$2y$10$iMa3ZbKpYl4HwtxTvH0/JezjKSd1Q2VEjAVlVa62.NT5eZT8zGtKK', 'laura.martinez@clinica.com', 'APIKEY-MEDICO-002'),
+('recepcion1', '$2y$10$iMa3ZbKpYl4HwtxTvH0/JezjKSd1Q2VEjAVlVa62.NT5eZT8zGtKK', 'recepcion1@clinica.com', 'APIKEY-RECEP-001'),
+('juan.perez', '$2y$10$iMa3ZbKpYl4HwtxTvH0/JezjKSd1Q2VEjAVlVa62.NT5eZT8zGtKK', 'juan.perez@email.com', 'APIKEY-PACIENTE-001'),
+('maria.garcia', '$2y$10$iMa3ZbKpYl4HwtxTvH0/JezjKSd1Q2VEjAVlVa62.NT5eZT8zGtKK', 'maria.garcia@email.com', 'APIKEY-PACIENTE-002');
