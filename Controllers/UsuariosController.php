@@ -17,7 +17,8 @@ class UsuariosController extends Controller {
     public function post($params) {
 
         if(count($params) == 0) {
-            //return $this->usuariosService->registrar();
+            $userData = $this->getRequestBody();
+            return $this->usuariosService->registrar($userData);
         }
 
         switch ($params[0]) {
@@ -32,7 +33,10 @@ class UsuariosController extends Controller {
                 return['message' => 'Logout!'];
 
             default:
-                return parent::get($params);
+                throw new ExcepcionApi(
+                    Response::STATUS_BAD_REQUEST,
+                    'Ruta no encontrada'
+                );
         } 
     }
 }

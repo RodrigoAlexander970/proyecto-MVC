@@ -57,6 +57,32 @@ class UsuariosService extends Service
         );
     }
 
+    public function registrar($userData) {
+        $this->validarDatosUsuarios($userData);
+
+        // Hashear la contraseña antes de crear el usuario
+        if (isset($userData['password'])) {
+            $userData['password'] = password_hash($userData['password'], PASSWORD_DEFAULT);
+        }
+
+        // Creamos la api key
+        $userData['apiKey'] = md5(microtime() . rand());
+
+        $resultado = $this->usuario->crear($userData);
+
+        if($resultado) {
+            return Response::formatearRespuesta(
+                Response::STATUS_CREATED,
+                "Usuario registrado correctamente"
+            );
+        } else {
+            throw new ExcepcionApi(
+                Response::STATUS_INTERNAL_SERVER_ERROR,
+                "Error al crear al usuario"
+            );
+        }
+    }
+
     public function validarCredenciales($credenciales)
     {
         if (empty($credenciales['email'])) {
@@ -82,5 +108,17 @@ class UsuariosService extends Service
             throw new ExcepcionApi(Response::STATUS_UNAUTHORIZED, 'Token inválido');
         }
         return $usuario;
+    }
+
+    public function validarDatosUsuarios($userData) {
+        $camposRequeridos = ['username', 'password', 'email'];
+
+        foreach ($camposRequeridos as $campo) {
+            if (empty($userData[$campo])) {
+                throw new ExcepcionApi(
+                    Response::STATUS_BAD_REQUEST,
+                    "Falta el campo obligatorio: $campo");
+            }
+        }
     }
 }

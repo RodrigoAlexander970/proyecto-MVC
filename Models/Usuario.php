@@ -9,7 +9,23 @@ class Usuario extends DAO
         parent::__construct();
         $this->NOMBRE_TABLA = self::NOMBRE_TABLA;
         $this->LLAVE_PRIMARIA = 'id_usuario';
-        $this->camposTabla = ['nombre', 'email', 'password', 'rol', 'fecha_registro'];
+        $this->camposTabla = ['username', 'email', 'password', 'fecha_registro'];
+    }
+
+    public function crear($userData) {
+        $sql = "INSERT INTO " . self::NOMBRE_TABLA . " (username, email, password, claveAPI) VALUES (?,?,?,?)";
+        $stmt = $this->conexion->prepare($sql);
+        
+        $stmt->bindValue(1, $userData['username'], PDO::PARAM_STR);
+        $stmt->bindValue(2, $userData['email'], PDO::PARAM_STR);
+        $stmt->bindValue(3, $userData['password'], PDO::PARAM_STR);
+        $stmt->bindValue(4, $userData['apiKey'], PDO::PARAM_STR);
+        try {
+            $stmt->execute();
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            throw new ExcepcionApi(Response::STATUS_INTERNAL_SERVER_ERROR, "Error al crear el registro:" . $e->getMessage());
+        }
     }
 
     public function porEmail($email)
