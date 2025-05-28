@@ -16,6 +16,7 @@ class CitasController extends Controller {
 
     public function get($params)
     {
+        $this->autenticar();
         // Solo para /citas?detalle=1
         if (count($params) === 0 && isset($_GET['detalle']) && $_GET['detalle'] == 'true') {
             return $this->citasService->obtenerCitasDetalladas();

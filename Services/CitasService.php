@@ -19,6 +19,7 @@ class CitasService extends Service
 
     public function obtener($params)
     {
+
         switch (count($params)) {
             case 0:
                 return Response::formatearRespuesta(

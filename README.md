@@ -118,24 +118,5 @@
 
 ### 👥 Usuarios y Roles (por hacer)
 
-- [ ] `GET /usuarios` – Listar todos los usuarios  
-- [ ] `GET /usuarios/{id}` – Obtener detalles de un usuario específico  
-- [ ] `POST /usuarios` – Crear un nuevo usuario  
-- [ ] `PUT /usuarios/{id}` – Actualizar información de un usuario  
-- [ ] `DELETE /usuarios/{id}` – Desactivar un usuario  
-- [ ] `GET /roles` – Listar todos los roles  
-- [ ] `GET /roles/{id}` – Obtener detalles de un rol específico  
-- [ ] `POST /roles` – Crear un nuevo rol  
-- [ ] `PUT /roles/{id}` – Actualizar un rol  
-- [ ] `DELETE /roles/{id}` – Eliminar un rol  
-
----
-
-### 📊 Reportes (por hacer)
-
-- [ ] `GET /reportes/citas-por-medico` – Reporte de citas por médico  
-- [ ] `GET /reportes/citas-por-especialidad` – Reporte de citas por especialidad  
-- [ ] `GET /reportes/pacientes-frecuentes` – Reporte de pacientes frecuentes  
-- [ ] `GET /reportes/ocupacion-medicos` – Reporte de ocupación de médicos  
 
 ---
