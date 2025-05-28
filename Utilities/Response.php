@@ -16,6 +16,7 @@ class Response
 
     const STATUS_NOT_IMPLEMENTED = 1;
     const STATUS_UNAUTHORIZED = 401;
+    const STATUS_DUPLICATED_ENTRY = 409;
     /**
      * Formatea la respuesta para mantener consistencia
      * 

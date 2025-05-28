@@ -37,7 +37,7 @@ class VistaJson extends VistaApi
         $response = [
             'success' => true,
             'status' => $status,
-            'menssage' => $mensaje
+            'message' => $mensaje
         ];
 
         if ($data !== null) {

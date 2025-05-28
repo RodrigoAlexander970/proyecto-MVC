@@ -103,7 +103,10 @@ abstract class DAO
             $stmt->execute();
             return $stmt->rowCount() > 0;
         } catch (PDOException $e) {
-            throw new ExcepcionApi(Response::STATUS_INTERNAL_SERVER_ERROR, "Error al crear el registro:" . $e->getMessage());
+            if ($e->getCode() == '23000') { // Código SQLSTATE para violación de restricción de integridad (duplicado)
+            throw new ExcepcionApi(409, "Ya existe un registro con los mismos datos únicos.", $e->getCode());
+            }
+            throw new ExcepcionApi(Response::STATUS_INTERNAL_SERVER_ERROR, "Error al crear el registro: " . $e->getMessage());
         }
     }
 
@@ -135,8 +138,11 @@ abstract class DAO
         try {
             $stmt->execute();
             return $stmt->rowCount() > 0;
-        } catch (PDOException $e) {
-            throw new ExcepcionApi(Response::STATUS_INTERNAL_SERVER_ERROR, "Error al actualizar el registro");
+        }  catch (PDOException $e) {
+            if ($e->getCode() == '23000') { // Código SQLSTATE para violación de restricción de integridad (duplicado)
+            throw new ExcepcionApi(409, "Ya existe un registro con los mismos datos únicos.", $e->getCode());
+            }
+            throw new ExcepcionApi(Response::STATUS_INTERNAL_SERVER_ERROR, "Error al crear el registro: " . $e->getMessage());
         }
     }
 

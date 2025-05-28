@@ -143,7 +143,7 @@ class CitasService extends Service
 
         return Response::formatearRespuesta(
             Response::STATUS_OK,
-            "Citas obtenidos correctamente",
+            "Citas obtenidas correctamente",
             $citas
         );
     }
