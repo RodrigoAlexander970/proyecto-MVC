@@ -1,4 +1,6 @@
-## Endpoints de la API
+## Endpoints de la API de gestión medica
+- Tipo de autenticación: Bearer Token
+- Content-Type: application/json
 
 ### 🩺 Médicos
 
@@ -116,6 +118,8 @@
 
 ---
 
-### 👥 Usuarios y Roles (por hacer)
+### 👥 Usuarios
+- [X] `POST /usuarios/login` - Se hace un login
+- [X] `POST /usuarios` - Para crear un usuario
 
 ---
