@@ -56,6 +56,7 @@
 		case 'delete':{
 			$controller = new $nombre_clase();
 			$respuesta = $controller->$request_method($parameters);
+			http_response_code($respuesta['status'] ?? 500);
 			//devolver la vista de la respuesta
 			$vista->responder(
 				$respuesta['status'] ?? null,
@@ -82,6 +83,7 @@
 	function definirManejadorExcepciones($vista) {
 		set_exception_handler(function ($exception) use ($vista) {
 		
+			http_response_code($exception->status ?? 500);
 			$cuerpo = array(
 				"success" => false,
 				"status" => $exception->status ?? '500',

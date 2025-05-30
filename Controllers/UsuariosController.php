@@ -1,8 +1,9 @@
 <?php
-include_once(__DIR__.'/Controller.php');
-include_once(__DIR__. '/../Services/UsuariosService.php');
+include_once(__DIR__ . '/Controller.php');
+include_once(__DIR__ . '/../Services/UsuariosService.php');
 
-class UsuariosController extends Controller {
+class UsuariosController extends Controller
+{
     // Almacenamos el servicio de usuarios
     protected $usuariosService;
 
@@ -14,9 +15,10 @@ class UsuariosController extends Controller {
         $this->recursosValidos = [];
     }
 
-    public function post($params) {
+    public function post($params)
+    {
 
-        if(count($params) == 0) {
+        if (count($params) == 0) {
             $userData = $this->getRequestBody();
             return $this->usuariosService->registrar($userData);
         }
@@ -26,17 +28,11 @@ class UsuariosController extends Controller {
                 $credenciales = $this->getRequestBody();
                 return $this->usuariosService->login($credenciales);
 
-            case 'register':
-                return ['message' => 'Register!'];
-
-            case 'logout':
-                return['message' => 'Logout!'];
-
             default:
                 throw new ExcepcionApi(
                     Response::STATUS_BAD_REQUEST,
                     'Ruta no encontrada'
                 );
-        } 
+        }
     }
 }

@@ -8,15 +8,14 @@ class Response
     const STATUS_CREATED = 201;
 
     const STATUS_BAD_REQUEST = 400;
+    const STATUS_UNAUTHORIZED = 401;
     const STATUS_NOT_FOUND = 404;
+    const STATUS_DUPLICATED_ENTRY = 409;
     const STATUS_CONFLICT = 409;
     const STATUS_TOO_MANY_PARAMETERS = 422;
 
     const STATUS_INTERNAL_SERVER_ERROR = 500;
-
-    const STATUS_NOT_IMPLEMENTED = 1;
-    const STATUS_UNAUTHORIZED = 401;
-    const STATUS_DUPLICATED_ENTRY = 409;
+    const STATUS_NOT_IMPLEMENTED = 501;
     /**
      * Formatea la respuesta para mantener consistencia
      * 
