@@ -1130,7 +1130,6 @@ Actualizar un horario existente
 #### Solicitud
 ```json
 {
-
     "id_medico": "10",
     "dia_semana": "Jueves",
     "hora_inicio": "10:00:00",
@@ -1139,21 +1138,44 @@ Actualizar un horario existente
 ```
 
 #### Respuesta
-RESPUESTA_JSON_HORARIO_ACTUALIZADO
+```json
+{
+    "success": true,
+    "status": 200,
+    "message": "Horario actualizado correctamente"
+}
+```
 
 #### Errores
 Horario no existente
-ERROR_JSON_HORARIO_NO_ENCONTRADO
+```json
+{
+    "success": false,
+    "status": 404,
+    "message": "Horario no encontrado"
+}
+```
 
 ### DELETE /horarios/{id}
 Eliminar un horario  
 #### Respuesta
-RESPUESTA_JSON_HORARIO_ELIMINADO
+```json
+{
+    "success": true,
+    "status": 201,
+    "message": "Horario eliminado correctamente"
+}
+```
 
 #### Errores
 Horario no existente
-ERROR_JSON_HORARIO_NO_ENCONTRADO
-
+```json
+{
+    "success": false,
+    "status": 404,
+    "message": "Horario no encontrado"
+}
+```
 ---
 
 ## Citas
@@ -1167,51 +1189,324 @@ ERROR_JSON_HORARIO_NO_ENCONTRADO
 ### GET /citas
 Listar todas las citas.
 #### Respuesta
-RESPUESTA_JSON_CITAS
+```json
+{
+    "success": true,
+    "status": 200,
+    "message": "Citas obtenidas correctamente",
+    "data": [
+        {
+            "id_cita": "1",
+            "id_paciente": "1",
+            "id_medico": "1",
+            "fecha": "2025-05-26",
+            "hora_inicio": "09:00:00",
+            "hora_fin": "09:30:00",
+            "motivo": "Chequeo general",
+            "estado": "Programada",
+            "observaciones": null,
+            "fecha_registro": "2025-05-27 15:09:49"
+        },
+        {
+            "id_cita": "2",
+            "id_paciente": "2",
+            "id_medico": "3",
+            "fecha": "2025-05-26",
+            "hora_inicio": "15:00:00",
+            "hora_fin": "15:30:00",
+            "motivo": "Dolor de garganta",
+            "estado": "Confirmada",
+            "observaciones": null,
+            "fecha_registro": "2025-05-27 15:09:49"
+        },
+        {
+            "id_cita": "3",
+            "id_paciente": "3",
+            "id_medico": "5",
+            "fecha": "2025-05-27",
+            "hora_inicio": "08:00:00",
+            "hora_fin": "08:30:00",
+            "motivo": "Control de presión arterial",
+            "estado": "Programada",
+            "observaciones": null,
+            "fecha_registro": "2025-05-27 15:09:49"
+        },
+        {
+            "id_cita": "4",
+            "id_paciente": "4",
+            "id_medico": "2",
+            "fecha": "2025-05-27",
+            "hora_inicio": "10:00:00",
+            "hora_fin": "10:30:00",
+            "motivo": "Consulta de rutina",
+            "estado": "Confirmada",
+            "observaciones": null,
+            "fecha_registro": "2025-05-27 15:09:49"
+        },
+        {
+            "id_cita": "5",
+            "id_paciente": "5",
+            "id_medico": "4",
+            "fecha": "2025-05-28",
+            "hora_inicio": "09:00:00",
+            "hora_fin": "09:30:00",
+            "motivo": "Alergia en la piel",
+            "estado": "Programada",
+            "observaciones": null,
+            "fecha_registro": "2025-05-27 15:09:49"
+        },
+        {
+            "id_cita": "6",
+            "id_paciente": "6",
+            "id_medico": "6",
+            "fecha": "2025-05-28",
+            "hora_inicio": "10:00:00",
+            "hora_fin": "10:30:00",
+            "motivo": "Dolor en la rodilla",
+            "estado": "Confirmada",
+            "observaciones": null,
+            "fecha_registro": "2025-05-27 15:09:49"
+        },
+        {
+            "id_cita": "7",
+            "id_paciente": "7",
+            "id_medico": "8",
+            "fecha": "2025-05-29",
+            "hora_inicio": "08:00:00",
+            "hora_fin": "08:30:00",
+            "motivo": "Revisión de vista",
+            "estado": "Programada",
+            "observaciones": null,
+            "fecha_registro": "2025-05-27 15:09:49"
+        },
+        {
+            "id_cita": "8",
+            "id_paciente": "8",
+            "id_medico": "7",
+            "fecha": "2025-05-29",
+            "hora_inicio": "14:00:00",
+            "hora_fin": "14:30:00",
+            "motivo": "Dolor de cabeza frecuente",
+            "estado": "Confirmada",
+            "observaciones": null,
+            "fecha_registro": "2025-05-27 15:09:49"
+        },
+        {
+            "id_cita": "9",
+            "id_paciente": "9",
+            "id_medico": "9",
+            "fecha": "2025-05-30",
+            "hora_inicio": "17:00:00",
+            "hora_fin": "17:30:00",
+            "motivo": "Ansiedad",
+            "estado": "Programada",
+            "observaciones": null,
+            "fecha_registro": "2025-05-27 15:09:49"
+        },
+        {
+            "id_cita": "10",
+            "id_paciente": "10",
+            "id_medico": "10",
+            "fecha": "2025-05-30",
+            "hora_inicio": "09:00:00",
+            "hora_fin": "09:30:00",
+            "motivo": "Revisión dental",
+            "estado": "Confirmada",
+            "observaciones": null,
+            "fecha_registro": "2025-05-27 15:09:49"
+        },
+        {
+            "id_cita": "11",
+            "id_paciente": "1",
+            "id_medico": "2",
+            "fecha": "2025-05-20",
+            "hora_inicio": "11:00:00",
+            "hora_fin": "11:30:00",
+            "motivo": "Consulta por dolor en el pecho",
+            "estado": "Completada",
+            "observaciones": null,
+            "fecha_registro": "2025-05-27 15:09:49"
+        },
+        {
+            "id_cita": "12",
+            "id_paciente": "2",
+            "id_medico": "3",
+            "fecha": "2025-05-21",
+            "hora_inicio": "16:00:00",
+            "hora_fin": "16:30:00",
+            "motivo": "Control de crecimiento",
+            "estado": "Completada",
+            "observaciones": null,
+            "fecha_registro": "2025-05-27 15:09:49"
+        },
+        {
+            "id_cita": "13",
+            "id_paciente": "3",
+            "id_medico": "1",
+            "fecha": "2025-05-22",
+            "hora_inicio": "10:00:00",
+            "hora_fin": "10:30:00",
+            "motivo": "Seguimiento hipertensión",
+            "estado": "Completada",
+            "observaciones": null,
+            "fecha_registro": "2025-05-27 15:09:49"
+        },
+        {
+            "id_cita": "14",
+            "id_paciente": "4",
+            "id_medico": "5",
+            "fecha": "2025-05-23",
+            "hora_inicio": "09:00:00",
+            "hora_fin": "09:30:00",
+            "motivo": "Consulta ginecológica",
+            "estado": "Completada",
+            "observaciones": null,
+            "fecha_registro": "2025-05-27 15:09:49"
+        },
+        {
+            "id_cita": "15",
+            "id_paciente": "5",
+            "id_medico": "4",
+            "fecha": "2025-05-24",
+            "hora_inicio": "11:00:00",
+            "hora_fin": "11:30:00",
+            "motivo": "Seguimiento tratamiento dermatológico",
+            "estado": "Completada",
+            "observaciones": null,
+            "fecha_registro": "2025-05-27 15:09:49"
+        }
+    ]
+}
+```
 
 ### GET /citas/{id}
 Obtener detalles de una cita específica
 #### Respuesta
-RESPUESTA_JSON_CITA
+```json
+{
+    "success": true,
+    "status": 200,
+    "message": "Cita obtenida correctamente",
+    "data": {
+        "id_cita": "1",
+        "id_paciente": "1",
+        "id_medico": "1",
+        "fecha": "2025-05-26",
+        "hora_inicio": "09:00:00",
+        "hora_fin": "09:30:00",
+        "motivo": "Chequeo general",
+        "estado": "Programada",
+        "observaciones": null,
+        "fecha_registro": "2025-05-27 15:09:49"
+    }
+}
+```
 
 #### Errores
 No existe la cita
-ERROR_JSON_CITA_NO_ENCONTRADA
+```json
+{
+    "success": false,
+    "status": 404,
+    "message": "La cita no existe"
+}
+```
 
 ### POST /citas
 Programar una nueva cita
 #### Solicitud
-SOLICITUD_JSON_NUEVA_CITA
+```json
+{
+    "id_paciente": "5",
+    "id_medico": "5",
+    "fecha": "2025-05-24",
+    "hora_inicio": "11:00:00",
+    "hora_fin": "11:30:00",
+    "motivo": "Seguimiento tratamiento dermatológico",
+    "estado": "Completada",
+    "observaciones": null,
+    "fecha_registro": "2025-05-27 15:09:49"
+}
+```
 
 #### Respuesta
-RESPUESTA_JSON_CITA_PROGRAMADA
+```json
+{
+    "success": true,
+    "status": 201,
+    "message": "Cita creado correctamente",
+    "data": true
+}
+```
 
 #### Errores
 Conflicto de horario
-ERROR_JSON_CONFLICTO_CITA
+```json
+{
+    "success": false,
+    "status": 400,
+    "message": "Datos JSON inválidos"
+}
+```
 
 ### PUT /citas/{id}
 Actualizar información de una cita  
 #### Solicitud
-SOLICITUD_JSON_ACTUALIZAR_CITA
+```json
+{
+    "id_paciente": "7",
+    "id_medico": "8",
+    "fecha": "2025-05-24",
+    "hora_inicio": "8:00:00",
+    "hora_fin": "8:30:00",
+    "motivo": "Seguimiento tratamiento dermatológico",
+    "estado": "Programada",
+    "observaciones": "Ninguna"
+}
+```
 
 #### Respuesta
-RESPUESTA_JSON_CITA_ACTUALIZADA
+```json
+{
+    "success": true,
+    "status": 201,
+    "message": "Cita actualizada correctamente",
+    "data": true
+}
+```
 
 #### Errores
 Cita no existente
-ERROR_JSON_CITA_NO_ENCONTRADA
+```json
+{
+    "success": false,
+    "status": 404,
+    "message": "La cita no existe"
+}
+```
 
 ### DELETE /citas/{id}
 Cancelar una cita  
 #### Respuesta
-RESPUESTA_JSON_CITA_CANCELADA
+```json
+{
+    "success": true,
+    "status": 201,
+    "message": "Cita borrada correctamente",
+    "data": true
+}
+```
 
 #### Errores
 Cita no existente
-ERROR_JSON_CITA_NO_ENCONTRADA
-Cita ya completada
-ERROR_JSON_CITA_COMPLETADA
+```json
+{
+    "success": false,
+    "status": 404,
+    "message": "La cita no existe"
+}
+```
+
 
 ---
 
