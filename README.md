@@ -1518,26 +1518,70 @@ Cita no existente
 ### POST /usuarios
 Registrar un nuevo usuario
 #### Solicitud
-SOLICITUD_JSON_NUEVO_USUARIO
+```json
+{
+    "id_Usuario": "7",
+    "username": "Rusell",
+    "password": "Rusell2345",
+    "email": "rusell@gmail.com",
+    "claveApi": "APIKEY-ADMIN-002"
+}
+```
 
 #### Respuesta
-RESPUESTA_JSON_USUARIO_CREADO
+```json
+{
+    "success": true,
+    "status": 201,
+    "message": "Usuario registrado correctamente"
+}
+```
 
 #### Errores
 Email duplicado
-ERROR_JSON_EMAIL_DUPLICADO
+```json
+{
+    "success": false,
+    "status": 500,
+    "message": "Error al crear el registro:SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'rusell@gmail.com' for key 'email'"
+}
+```
 
 ### POST /usuarios/login
 Autenticar usuario
 #### Solicitud
-SOLICITUD_JSON_LOGIN
+```json
+{
+    "username": "Rusell",
+    "password": "Rusell2345",
+    "email": "rusell@gmail.com"
+}
+```
 
 #### Respuesta
-RESPUESTA_JSON_LOGIN_EXITOSO
+```json
+{
+    "success": true,
+    "status": 200,
+    "message": "Login exitoso",
+    "data": {
+        "id_usuario": "7",
+        "username": "Rusell",
+        "email": "rusell@gmail.com",
+        "claveAPI": "05bcddc1aec69fcbd854050e710d583f"
+    }
+}
+```
 
 #### Errores
 Credenciales inválidas
-ERROR_JSON_CREDENCIALES_INVALIDAS
+```json
+{
+    "success": false,
+    "status": 404,
+    "message": "Credenciales inválidas"
+}
+```
 
 ---
 
